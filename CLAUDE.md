@@ -20,6 +20,14 @@ Mod 的成功标志是**游戏内可见的行为变化**,不是代码"看起来�
 
 - 每个游戏修改器一个独立子目录,独立 sln/csproj
 - 游戏 DLL 永远 **不入仓**(`.gitignore` 强制 `**/*.dll`),用 csproj `<Reference HintPath="...">` 引用本机游戏目录
-- 反编译笔记放 `<project>/refs/`,git 忽略
+- 反编译笔记放 `<project>/refs/`(**入仓**;模块代码消费这些笔记)
+- 反编译输出(ilspycmd 产物)放 `<project>/refs/decompiled/`,git 忽略(几千 .cs 文件,纯本地)
 - 设计文档放 `<project>/docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
 - 实施计划放 `<project>/docs/superpowers/plans/`
+- 每个项目自带 `<project>/ROADMAP.md`(状态、已知限制、下一版规划、版本历史)
+
+## 当前活跃项目
+
+| 项目 | 版本 | 状态 |
+|---|---|---|
+| `LordsAndVilleins/` | v0.1.0 | code complete,等游戏内冒烟。详见 `LordsAndVilleins/ROADMAP.md` |

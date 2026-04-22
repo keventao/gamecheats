@@ -1,8 +1,9 @@
 ---
 title: Lords & Villeins 修改器 — 设计文档
 date: 2026-04-22
-status: approved-for-planning
+status: implemented (v0.1.0, 2026-04-22)
 audience: 实施计划编写 (writing-plans 阶段)
+followup: 当前进度与下一版规划见 ../../../../ROADMAP.md
 ---
 
 # Lords & Villeins 修改器 — 设计文档

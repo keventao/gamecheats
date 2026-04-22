@@ -1,5 +1,7 @@
 # Lords & Villeins 修改器 — 实施计划
 
+> **Status:** EXECUTED 2026-04-22 — all 22 tasks complete, `Patch summary: 4/4 ok`. See `../../../ROADMAP.md` for current state and next-version plans.
+>
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 实现一个 BepInEx 5 + HarmonyX 的 Lords & Villeins 游戏内修改器,F1 弹出 IMGUI 面板,提供资源/人物/时间/建造四类作弊。

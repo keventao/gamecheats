@@ -6,9 +6,14 @@ In-game cheat panel for *Lords & Villeins*. Modular, IMGUI, F1 to toggle.
 
 ## Status
 
+**v0.1.0 — code complete, awaiting in-game smoke**
+
 - ✅ Loader / Core framework / save backup / version check
 - ✅ F1 panel with tabs and "Disable All" button
-- ⏳ Cheat modules (Economy / Pawn / Time / Build) — pending dnSpy reconnaissance of game internals
+- ✅ All 4 cheat modules implemented (Economy / Pawn / Time / Build) — `run-and-check.ps1` reports `Patch summary: 4/4 ok`
+- ⏳ Manual in-game smoke (see `docs/smoke-checklist.md`) — verifies that patches not only load but actually take effect
+
+See `ROADMAP.md` for known limitations, v0.2 plans, and version history.
 
 ## Install
 
@@ -29,6 +34,7 @@ In-game cheat panel for *Lords & Villeins*. Modular, IMGUI, F1 to toggle.
 - `docs/smoke-checklist.md` — manual smoke list to run before release
 - `docs/superpowers/specs/` — design spec
 - `docs/superpowers/plans/` — implementation plan
+- `ROADMAP.md` — current status, known limitations, next-version plans, version history
 
 ## Develop
 
