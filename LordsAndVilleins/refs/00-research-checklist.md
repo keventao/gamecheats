@@ -2,12 +2,12 @@
 
 每完成一项把 `[ ]` 改为 `[x]`,然后 commit 对应的 0X 文件。
 
-- [ ] 01 — Economy(金币、食物、木材、石材的存储与更新)
-- [ ] 02 — Pawn(村民/领主对象、属性、技能、状态字段)
-- [ ] 03 — Time(游戏时间、速度乘数、季节)
-- [ ] 04 — Build(蓝图、材料消耗、建造完成回调)
-- [ ] 05 — Bootstrap(获取上述单例的 Awake/Start 入口)
-- [ ] 06 — Version(`Application.version` 当前值,作为兼容白名单初值)
+- [x] 01 — Economy(金币、食物、木材、石材的存储与更新)
+- [x] 02 — Pawn(村民/领主对象、属性、技能、状态字段)
+- [x] 03 — Time(游戏时间、速度乘数、季节)
+- [x] 04 — Build(蓝图、材料消耗、建造完成回调)
+- [x] 05 — Bootstrap(获取上述单例的 Awake/Start 入口)
+- [x] 06 — Version(`Application.version` 当前值,作为兼容白名单初值)
 
 ## dnSpy 通用操作
 
