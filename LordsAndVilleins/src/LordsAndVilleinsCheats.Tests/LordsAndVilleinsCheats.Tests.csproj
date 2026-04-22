@@ -15,4 +15,15 @@
   <ItemGroup>
     <ProjectReference Include="..\LordsAndVilleinsCheats\LordsAndVilleinsCheats.csproj" />
   </ItemGroup>
+  <!-- Re-enable copy-local for Harmony and BepInEx DLLs stripped by BepInEx.Core.targets in the mod project.
+       The test host (net8.0) needs these DLLs present at runtime. -->
+  <Target Name="RestoreTestRuntimeRefs" AfterTargets="SkipBepinRefs">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Include="@(ReferencePath)"
+        Condition="'%(ReferencePath.NuGetPackageId)' == 'HarmonyX' OR
+                   '%(ReferencePath.NuGetPackageId)' == 'MonoMod.RuntimeDetour' OR
+                   '%(ReferencePath.NuGetPackageId)' == 'MonoMod.Utils' OR
+                   '%(ReferencePath.NuGetPackageId)' == 'Mono.Cecil'" />
+    </ItemGroup>
+  </Target>
 </Project>
