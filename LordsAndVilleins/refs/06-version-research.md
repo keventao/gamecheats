@@ -1,6 +1,6 @@
 # 06 — Version 调研
 
-> 调研于 2026-04-XX
+> 调研于 2026-04-22
 
 ## 当前安装版本
 
@@ -13,9 +13,9 @@ Get-FileHash "<LAV_GAME_ROOT>\Lords and Villeins_Data\Managed\Assembly-CSharp.dl
 
 填结果:
 
-- 游戏内显示版本(从主菜单或设置页):`<FILL_GAME_VERSION>`(例 `"1.4.2"`)
-- `Lords and Villeins.exe` FileVersion:`<FILL_EXE_FILEVERSION>`
-- `Assembly-CSharp.dll` SHA256:`<FILL_DLL_SHA256>`
+- 游戏内显示版本(从主菜单或设置页):`1.6.15`(来源: Player.log `Game version:` 字段)
+- `Lords and Villeins.exe` FileVersion:`2021.3.45.8976527`(Unity 引擎版本)
+- `Assembly-CSharp.dll` SHA256:`0051905181f064cb0487909da5e4898a7988e97c6064ec5402691a232274eebf`
 
 ## 兼容白名单(初始)
 
@@ -23,7 +23,7 @@ Phase 4 Plugin.cs 里 `KnownCompatibleVersions` 直接用本字段:
 
 ```csharp
 private static readonly string[] KnownCompatibleVersions = {
-    "<FILL_GAME_VERSION>",   // 例:"1.4.2"
+    "1.6.15",
 };
 ```
 
