@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/LordsAndVilleinsCheats.Tests/LordsAndVilleinsCheats.Tests.csproj" />
     <Project Path="src/LordsAndVilleinsCheats/LordsAndVilleinsCheats.csproj" />
   </Folder>
 </Solution>
