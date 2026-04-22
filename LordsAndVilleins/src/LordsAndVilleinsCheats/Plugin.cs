@@ -40,13 +40,14 @@ namespace LordsAndVilleinsCheats
                 HarmonyInstance = new Harmony(PluginId);
                 Registry        = new ModuleRegistry();
 
-                // Phase 5–8 will uncomment these:
-                // Registry.Add(new Modules.EconomyCheats());
-                // Registry.Add(new Modules.PawnCheats());
-                // Registry.Add(new Modules.TimeCheats());
-                // Registry.Add(new Modules.BuildCheats());
+                Registry.Add(new Modules.EconomyCheats());
+                Registry.Add(new Modules.PawnCheats());
+                Registry.Add(new Modules.TimeCheats());
+                Registry.Add(new Modules.BuildCheats());
 
                 Registry.RegisterAll(Cfg, HarmonyInstance);
+
+                Modules.BootstrapHooks.Register(HarmonyInstance);
 
                 HarmonyHelpers.SafeRun("Harmony.PatchAll", () => HarmonyInstance.PatchAll());
 
