@@ -12,9 +12,6 @@ obj/
 .idea/
 *.DotSettings.user
 
-# 反编译笔记 / 抠出的方法签名(项目内 refs/)
-**/refs/
-
 # 游戏 DLL(用 csproj HintPath 引本机游戏目录,永远不入仓)
 **/*.dll
 **/*.pdb
