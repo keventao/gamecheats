@@ -1,7 +1,7 @@
 # Roadmap — Lords & Villeins Cheats
 
-> 当前版本:**v0.1.0**
-> 状态:**Partially in-game verified** (Economy.Money / Economy.Food / Time pass;Pawn 和 Build 待测;Wood/Stone 已撤出 v0.1 范围)
+> 当前版本:**v0.1.1**
+> 状态:**Partially in-game verified** (Economy.Money / Economy.Food / Time / Royalty.FavorPoints pass;Pawn 和 Build 待测;Wood/Stone 已撤出 v0.1 范围)
 > 最后更新:2026-04-25
 
 ---
@@ -16,13 +16,14 @@
 - 游戏版本兼容白名单(当前 `1.6.15`),不在名单内仅 warning 不阻断
 - 启动期自动备份所有 Steam ID 下的 `.sgz` 存档
 
-### 4 个 CheatModule(均 `Status = Ok`)
+### 5 个 CheatModule(均 `Status = Ok`)
 | 模块 | 功能 | 钩子 |
 |---|---|---|
 | **Economy** | 一键 +100000 Money / +1000 Food(Wood/Stone 已撤,见下方限制) | `GameManager.Update` Postfix → `Inventory.AddResource` |
 | **Pawn** | 全家族:饱腹(Eat=1)、满血(HP=maxHP)、高心情(baseMood/Happiness=1)、解锁全技能 | `GameManager.Update` Postfix + `WorldNPC.aquiredSkills` |
 | **Time** | 速度倍率覆写(0–100x,vanilla max 32x) | `GameManager.Update` Postfix → 写 private `gameSpeedMultiplierBySpeedLvl` |
 | **Build** | 跳过材料检查(NPC 始终认为材料够) | `BuildBlueprint.HasResourcesForBlueprint` Prefix 短路 |
+| **Royalty** | 一键 +100 / +1000 / +10000 Favor Points(召唤工匠家族用) | 无 patch — 直接写 `RoyaltyManager.instance.favorPoints`,模仿游戏自带 `UICheatDialogue.OnFavorPointsGainClick` |
 
 ### 生命周期
 - `BootstrapHooks`(独立静态类,非 module): patch `LoadingManager.InitGame` Postfix → `GameRefs.IsReady = true`;`LoadingManager.ExitToMainMenu` Postfix → `GameRefs.Reset()`
@@ -43,7 +44,7 @@
 - BepInEx ConfigurationManager 兼容(用户可不依赖我们的 IMGUI 也能改值)
 
 ### 调研 + 文档
-- `refs/01..06-*.md` — ilspycmd 反编译产出的游戏内部架构笔记(全部入仓)
+- `refs/01..07-*.md` — ilspycmd 反编译产出的游戏内部架构笔记(全部入仓)
 - `docs/superpowers/specs/` — 设计文档(已 approved 并实施)
 - `docs/superpowers/plans/` — 实施计划(已执行)
 - `docs/smoke-checklist.md` — 手动冒烟清单(中文)
@@ -83,6 +84,7 @@
 | Economy | +1000 Food | ✅ pass | 第一个 inv reject(allowedResources),第二个 inv 接受 |
 | Economy | +1000 Wood / Stone | ❌ 撤出 v0.1 | 玩家个人 inventory 全 reject,见已知限制 |
 | Time | OverrideSpeed | ✅ pass | 游戏速度被实测覆写 |
+| Royalty | +100 / +1000 / +10000 Favor Points | ✅ pass | 直接写 `RoyaltyManager.instance.favorPoints`,UI 即时刷新 |
 | Pawn | Clear hunger / Max HP / Max mood / Max skills | ⏳ untested | 待 user 在 panel 试 |
 | Build | FreeBuilding | ⏳ untested | 待 user 造个建筑测 |
 
@@ -119,6 +121,13 @@
 ---
 
 ## 版本历史
+
+### v0.1.1 — 2026-04-25
+- **新增 Royalty 模块**:一键 +100 / +1000 / +10000 Favor Points,无 Harmony patch — 直接写 `RoyaltyManager.instance.favorPoints` 并 invoke `OnFavorPointsChange` 事件让 UI 刷新
+- 铁证来自游戏自带秘籍菜单 `UICheatDialogue.OnFavorPointsGainClick`(同款写法)
+- Plugin 模块计数 4 → 5,Patch summary 期望 `5/5 ok`
+- 新增 `refs/07-favor-research.md` 调研笔记
+- 游戏内冒烟通过(数额实时增长 + UI 即时刷新)
 
 ### v0.1.0 — 2026-04-22(code complete) → 2026-04-25(部分游戏内验证)
 - 项目从 0 到 4-module-Ok,1 天内完成
