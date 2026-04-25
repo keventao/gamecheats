@@ -11,7 +11,7 @@
 
 ## Loader
 
-- [x] BepInEx LogOutput.log 显示 `Patch summary: 4/4 ok, 0 broken`(2026-04-25)
+- [x] BepInEx LogOutput.log 显示 `Patch summary: 5/5 ok, 0 broken`(2026-04-25)
 - [x] **进存档**后 F1 弹出灰色面板(2026-04-25)
 - [ ] 主菜单 F1 ⛔ 不可用 — 这游戏 Player Loop 不调度 BepInEx GameObject,我们寄生在 `GameManager.gameObject`,主菜单 GameManager 还没实例化所以 F1 此时无效。规划在 v0.2 通过 hook `MainMenu`/`LoadingScreen` 类作为 fallback host
 - [ ] 顶栏 "Disable All" 按钮 — v0.1 自用阶段 Economy panel 未重显该控件;Time/Pawn/Build tab 仍可勾选具体 toggle
@@ -40,6 +40,11 @@
 
 - [ ] FreeBuilding OFF → 造一个建筑,材料正常扣
 - [ ] FreeBuilding ON → 造一个建筑,材料不扣
+
+## Royalty(2026-04-25 实测)
+
+- [x] Favor Points 顶部数字与游戏内一致
+- [x] +100 / +1000 / +10000 按钮 → favorPoints 实时增长,UI 即时刷新
 
 ## Disable All / 持久化
 
