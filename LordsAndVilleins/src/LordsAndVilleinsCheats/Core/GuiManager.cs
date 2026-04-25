@@ -13,6 +13,7 @@ namespace LordsAndVilleinsCheats.Core
         private bool _open;
         private int _activeTab;
         private Rect _windowRect;
+        private int _lastToggleFrame = -1;
         private const int WindowId = 0xCEA751;
 
         public GuiManager(ModuleRegistry registry, ModConfig config)
@@ -24,12 +25,30 @@ namespace LordsAndVilleinsCheats.Core
 
         public void HandleInput()
         {
-            if (Input.GetKeyDown(_config.ToggleKey.Value))
-                _open = !_open;
+            // OnGUI's Event.current is the toggle path; legacy Input would double-toggle within the same frame.
         }
 
         public void OnGUI()
         {
+            // Listen to IMGUI's own event stream — survives legacy Input being suppressed.
+            // Frame guard prevents multi-pass IMGUI (Layout/Repaint/KeyDown) from toggling more than once per key press.
+            var ev = Event.current;
+            if (ev != null && ev.type == EventType.KeyDown && ev.keyCode == _config.ToggleKey.Value
+                && Time.frameCount != _lastToggleFrame)
+            {
+                _lastToggleFrame = Time.frameCount;
+                _open = !_open;
+                CheatsRunner.WriteDiag($"[Input] OnGUI Event.KeyDown {ev.keyCode} -> open={_open} (frame={Time.frameCount})");
+                ev.Use();
+            }
+
+            // Always-on bright tag so it survives even if the game's UI overlays the corner.
+            var tagRect = new Rect(8, 8, 460, 22);
+            var prev = GUI.color;
+            GUI.color = Color.yellow;
+            GUI.Box(tagRect, $"LAV cheats v{Plugin.PluginVersion} — {_config.ToggleKey.Value} toggles panel  |  open={_open}");
+            GUI.color = prev;
+
             if (!_open) return;
             _windowRect = GUI.Window(WindowId, _windowRect, DrawWindow, "Lords & Villeins Cheats");
             _config.PanelWidth.Value  = (int)_windowRect.width;

@@ -25,6 +25,49 @@ namespace LordsAndVilleinsCheats
         internal static ModuleRegistry  Registry = null!;
         internal static GuiManager      Gui = null!;
         internal static Harmony         HarmonyInstance = null!;
+        // Holds the live runner; Unity's overloaded == treats destroyed objects as null,
+        // so a simple null check tells us when the host GameManager has been wiped (e.g. on save load).
+        private static CheatsRunner? _attachedRunner;
+
+        public static void AttachRunnerToGameHost()
+        {
+            try
+            {
+                var gm = UnityEngine.Object.FindObjectOfType<GameManager>();
+                if (gm == null) { CheatsRunner.WriteDiag("AttachRunnerToGameHost: FindObjectOfType<GameManager>() returned null."); return; }
+                AttachRunnerTo(gm);
+            }
+            catch (Exception ex)
+            {
+                CheatsRunner.WriteDiag($"AttachRunnerToGameHost EXCEPTION: {ex}");
+            }
+        }
+
+        public static void AttachRunnerTo(GameManager gm)
+        {
+            if (gm == null) return;
+            // Already attached and host is still alive — nothing to do.
+            if (_attachedRunner != null) return;
+            try
+            {
+                var hostGo = gm.gameObject;
+                CheatsRunner.WriteDiag($"AttachRunnerTo: host={hostGo.name}, scene={hostGo.scene.name}, active={hostGo.activeInHierarchy}");
+                var hostRunner = hostGo.AddComponent<CheatsRunner>();
+                hostRunner.Bind(Gui, Log);
+                _attachedRunner = hostRunner;
+                CheatsRunner.WriteDiag("CheatsRunner attached to GameManager host GameObject.");
+            }
+            catch (Exception ex)
+            {
+                CheatsRunner.WriteDiag($"AttachRunnerTo EXCEPTION: {ex}");
+            }
+        }
+
+        public static void NotifyRunnerDestroyed()
+        {
+            _attachedRunner = null;
+            CheatsRunner.WriteDiag("Plugin.NotifyRunnerDestroyed: cleared attached runner.");
+        }
 
         private void Awake()
         {
@@ -53,6 +96,16 @@ namespace LordsAndVilleinsCheats
 
                 Gui = new GuiManager(Registry, Cfg);
 
+                // BaseUnityPlugin.Update/OnGUI was not firing in this game host.
+                // Mount our own GameObject + DontDestroyOnLoad to guarantee the loop.
+                CheatsRunner.WriteDiag("About to create LAVCheatsRunner GameObject.");
+                var runnerGo = new GameObject("LAVCheatsRunner");
+                UnityEngine.Object.DontDestroyOnLoad(runnerGo);
+                CheatsRunner.WriteDiag($"GameObject created. activeInHierarchy={runnerGo.activeInHierarchy}, scene={runnerGo.scene.name}.");
+                var runner = runnerGo.AddComponent<CheatsRunner>();
+                CheatsRunner.WriteDiag("AddComponent<CheatsRunner> returned.");
+                runner.Bind(Gui, Log);
+
                 LogPatchSummary();
                 Log.LogInfo($"{PluginName} v{PluginVersion} ready (modules: {Registry.Modules.Count}).");
             }
@@ -60,16 +113,6 @@ namespace LordsAndVilleinsCheats
             {
                 Log.LogFatal($"Plugin failed to initialize: {ex}");
             }
-        }
-
-        private void Update()
-        {
-            try { Gui?.HandleInput(); } catch (Exception ex) { Log.LogError(ex); }
-        }
-
-        private void OnGUI()
-        {
-            try { Gui?.OnGUI(); } catch (Exception ex) { Log.LogError(ex); }
         }
 
         private void CheckGameVersion()
