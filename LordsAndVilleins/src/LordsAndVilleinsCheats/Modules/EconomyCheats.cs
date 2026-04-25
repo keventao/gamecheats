@@ -36,7 +36,7 @@ namespace LordsAndVilleinsCheats.Modules
             GUILayout.Space(8);
             using (new GUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("+10000 Money")) AddResource(ResourceName.Money, 10000);
+                if (GUILayout.Button("+100000 Money")) AddResource(ResourceName.Money, 100000);
                 if (GUILayout.Button("+1000 Food"))  AddResource(ResourceName.Grain, 1000);
             }
         }

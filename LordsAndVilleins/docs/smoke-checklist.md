@@ -18,7 +18,7 @@
 
 ## Economy(2026-04-25 实测)
 
-- [x] +10000 Money 按钮 → Money 数额实时增长,无回归
+- [x] +100000 Money 按钮 → Money 数额实时增长,无回归
 - [x] +1000 Food 按钮 → Food (Grain) 数额实时增长
 - [ ] Wood / Stone — ⛔ 不支持,见 ROADMAP "已知限制"。`Inventory.AddResource` 在玩家所有 personal inventory 全 reject(`allowedResources` 不含)
 - [ ] Lock 路径 — v0.1 panel 已删该 UI(自用阶段 user 只需要 +N 一次性按钮)。代码保留,v0.2 真锁需要补 `Inventory.SpendResources` patch
