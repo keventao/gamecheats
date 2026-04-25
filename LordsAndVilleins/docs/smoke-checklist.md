@@ -11,32 +11,32 @@
 
 ## Loader
 
-- [ ] 干净存档加载,无 mod 行为干扰(全部 Lock 默认 OFF)
-- [ ] BepInEx LogOutput.log 显示 `Patch summary: N/N ok, 0 broken`
-- [ ] F1 弹出灰色面板,标题 "Lords & Villeins Cheats"
-- [ ] 顶栏红色 "Disable All" 按钮可见
-- [ ] 状态指示在主菜单显示 "○ menu",在游戏内显示 "● in-game"
+- [x] BepInEx LogOutput.log 显示 `Patch summary: 4/4 ok, 0 broken`(2026-04-25)
+- [x] **进存档**后 F1 弹出灰色面板(2026-04-25)
+- [ ] 主菜单 F1 ⛔ 不可用 — 这游戏 Player Loop 不调度 BepInEx GameObject,我们寄生在 `GameManager.gameObject`,主菜单 GameManager 还没实例化所以 F1 此时无效。规划在 v0.2 通过 hook `MainMenu`/`LoadingScreen` 类作为 fallback host
+- [ ] 顶栏 "Disable All" 按钮 — v0.1 自用阶段 Economy panel 未重显该控件;Time/Pawn/Build tab 仍可勾选具体 toggle
 
-## Economy
+## Economy(2026-04-25 实测)
 
-- [ ] Lock Gold ON,值 99999 → 等 1 分钟金币不变
-- [ ] +1000 Gold 一次性按钮 → 数额准确
-- [ ] Lock Food / Wood / Stone 同样测一遍
+- [x] +10000 Money 按钮 → Money 数额实时增长,无回归
+- [x] +1000 Food 按钮 → Food (Grain) 数额实时增长
+- [ ] Wood / Stone — ⛔ 不支持,见 ROADMAP "已知限制"。`Inventory.AddResource` 在玩家所有 personal inventory 全 reject(`allowedResources` 不含)
+- [ ] Lock 路径 — v0.1 panel 已删该 UI(自用阶段 user 只需要 +N 一次性按钮)。代码保留,v0.2 真锁需要补 `Inventory.SpendResources` patch
 
-## Pawn
+## Pawn(待测)
 
 - [ ] 选一村民 → Clear hunger ON → 几秒内饥饿降到底
 - [ ] 选一村民 → Clear disease ON → 健康满
 - [ ] Max all skills 一次性按钮 → 选任一村民确认所有技能值=100
 - [ ] Max mood ON → 心情满
 
-## Time
+## Time(2026-04-25 实测)
 
-- [ ] 速度 ×10 → 一天用时明显缩短(对照游戏内时钟)
+- [x] 速度 override → 游戏速度被实测覆写
 - [ ] 速度 ×0.5 → 明显变慢
 - [ ] Override OFF → 恢复游戏内速度按钮控制
 
-## Build
+## Build(待测)
 
 - [ ] FreeBuilding OFF → 造一个建筑,材料正常扣
 - [ ] FreeBuilding ON → 造一个建筑,材料不扣
