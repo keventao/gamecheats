@@ -15,7 +15,7 @@ namespace LordsAndVilleinsCheats
     {
         public const string PluginId      = "com.kk.lav-cheats";
         public const string PluginName    = "Lords & Villeins Cheats";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "0.1.1";
 
         // Filled from refs/06-version-research.md
         private static readonly string[] KnownCompatibleVersions = { "1.6.15" };
@@ -87,6 +87,7 @@ namespace LordsAndVilleinsCheats
                 Registry.Add(new Modules.PawnCheats());
                 Registry.Add(new Modules.TimeCheats());
                 Registry.Add(new Modules.BuildCheats());
+                Registry.Add(new Modules.RoyaltyCheats());
 
                 Registry.RegisterAll(Cfg, HarmonyInstance);
 
