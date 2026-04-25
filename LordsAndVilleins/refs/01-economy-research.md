@@ -26,6 +26,12 @@
   - 木材：N/A — 无独立字段。使用 `ResourceName.Wood`（`ResourceType.Material`）
   - 石材：N/A — 无独立字段。使用 `ResourceName.Stone`（`ResourceType.Material`）
 
+> **2026-04-25 实测修正**:
+> - 玩家实际钱包用的是 `ResourceName.Money`(显示 120K+),不是 `GoldCoins`(显示 0)。`GoldCoins/SilverCoins/CopperCoins` 是货币系统的"硬币"枚举,但玩家通用钱包字段是 `Money`。EconomyCheats 已改用 `ResourceName.Money`。
+> - Food (Grain) 第一个 inventory 拒(`allowedResources` 不含),走到第二个 inventory 接受 — `WalkInventoryViews` 递归是必要的。
+> - **Wood / Stone 在玩家个人 inventory 全 reject**(实测 40+ 个 inv,`Inventory.AddResource` 第一行 `if (!allowedResources.Contains(name)) return false`)。Wood/Stone 必须存在 stockpile / lumberyard 类 storage building 的 inventory 里;`PlayerManager.playerInventory.GetInventory()` 走的是 person-carry inventory,不包含 stockpiles。
+> - 要支持 Wood/Stone:走 `FindObjectsOfType<Stockpile>()` 找世界级仓库,或 reflect 进 `existingResourceContent[Wood].Gain()` 绕过 allowedResources check。v0.1 已撤,见 ROADMAP "已知限制"。
+
   > **实际数据结构**：
   > - `Inventory` 类（`Inventory.cs`）内部维护 `private Dictionary<ResourceName, Resource> existingResourceContent`
   > - 主要 API：`GetExistingResourceAmount(ResourceName)` → `int`，`AddResource(ResourceName, int)` → `bool`

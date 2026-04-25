@@ -6,14 +6,15 @@ In-game cheat panel for *Lords & Villeins*. Modular, IMGUI, F1 to toggle.
 
 ## Status
 
-**v0.1.0 — code complete, awaiting in-game smoke**
+**v0.1.0 — partially in-game verified (2026-04-25)**
 
-- ✅ Loader / Core framework / save backup / version check
-- ✅ F1 panel with tabs and "Disable All" button
-- ✅ All 4 cheat modules implemented (Economy / Pawn / Time / Build) — `run-and-check.ps1` reports `Patch summary: 4/4 ok`
-- ⏳ Manual in-game smoke (see `docs/smoke-checklist.md`) — verifies that patches not only load but actually take effect
+- ✅ Loader: F1 panel toggles after entering a save (this game's Player Loop does not schedule BepInEx-owned GameObjects, so the panel attaches to `GameManager.gameObject` once a save is loaded; not available on the main menu)
+- ✅ Economy: `+10000 Money` and `+1000 Food` buttons add resources reliably
+- ✅ Time: speed override applies in real time
+- ⏳ Pawn / Build: in-game smoke pending
+- ❌ Economy / Wood / Stone: removed from v0.1 panel — player-personal `Inventory.allowedResources` rejects them. Will need a stockpile-aware path in v0.2.
 
-See `ROADMAP.md` for known limitations, v0.2 plans, and version history.
+See `ROADMAP.md` for the full known-limitations list, v0.2 plans, and version history.
 
 ## Install
 
