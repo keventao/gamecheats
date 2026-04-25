@@ -32,9 +32,11 @@ namespace LordsAndVilleinsCheats.Modules
         {
             HarmonyHelpers.SafeRun("OnLoadGame_Postfix", () =>
             {
+                CheatsRunner.WriteDiag($"BootstrapHooks.OnLoadGame_Postfix fired. IsInMainMenu={__instance.IsInMainMenu()}");
                 if (__instance.IsInMainMenu()) return;
                 GameRefs.IsReady = true;
                 Plugin.Registry?.NotifyGameReady();
+                Plugin.AttachRunnerToGameHost();
             });
         }
 
@@ -42,6 +44,7 @@ namespace LordsAndVilleinsCheats.Modules
         {
             HarmonyHelpers.SafeRun("OnExitToMainMenu_Postfix", () =>
             {
+                CheatsRunner.WriteDiag("BootstrapHooks.OnExitToMainMenu_Postfix fired.");
                 GameRefs.Reset();
                 Plugin.Registry?.ResetGameReady();
             });
