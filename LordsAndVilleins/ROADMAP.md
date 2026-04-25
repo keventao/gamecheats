@@ -19,7 +19,7 @@
 ### 4 个 CheatModule(均 `Status = Ok`)
 | 模块 | 功能 | 钩子 |
 |---|---|---|
-| **Economy** | 一键 +10000 Money / +1000 Food(Wood/Stone 已撤,见下方限制) | `GameManager.Update` Postfix → `Inventory.AddResource` |
+| **Economy** | 一键 +100000 Money / +1000 Food(Wood/Stone 已撤,见下方限制) | `GameManager.Update` Postfix → `Inventory.AddResource` |
 | **Pawn** | 全家族:饱腹(Eat=1)、满血(HP=maxHP)、高心情(baseMood/Happiness=1)、解锁全技能 | `GameManager.Update` Postfix + `WorldNPC.aquiredSkills` |
 | **Time** | 速度倍率覆写(0–100x,vanilla max 32x) | `GameManager.Update` Postfix → 写 private `gameSpeedMultiplierBySpeedLvl` |
 | **Build** | 跳过材料检查(NPC 始终认为材料够) | `BuildBlueprint.HasResourcesForBlueprint` Prefix 短路 |
@@ -79,7 +79,7 @@
 |---|---|---|---|
 | Loader | F1 弹窗(进存档后) | ✅ pass | 主菜单 GameManager 未实例化,F1 此时无效;进存档后 ~1s attach 上 |
 | Loader | "Disable All" 按钮 | ⏳ untested | 自用阶段降级,panel 暂未重显该按钮 |
-| Economy | +10000 Money | ✅ pass | `Inventory.AddResource(ResourceName.Money, ...)` 第一个 inv 即接受 |
+| Economy | +100000 Money | ✅ pass | `Inventory.AddResource(ResourceName.Money, ...)` 第一个 inv 即接受 |
 | Economy | +1000 Food | ✅ pass | 第一个 inv reject(allowedResources),第二个 inv 接受 |
 | Economy | +1000 Wood / Stone | ❌ 撤出 v0.1 | 玩家个人 inventory 全 reject,见已知限制 |
 | Time | OverrideSpeed | ✅ pass | 游戏速度被实测覆写 |
