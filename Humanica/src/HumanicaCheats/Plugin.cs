@@ -18,7 +18,7 @@ namespace HumanicaCheats
             Registry = new ModuleRegistry();
             Registry.Add(new TimeCheats());
             Registry.Add(new ResourceCheats());
-            // VillageCheats 在 Task 5 后添加
+            Registry.Add(new VillageCheats());
             Gui = new GuiManager(Registry);
             LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载 ({Registry.Modules.Count} 模块)。");
         }
