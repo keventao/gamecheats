@@ -45,6 +45,35 @@
 
 ---
 
+## TimeScaleIndex 成员名
+
+### 搜索结果
+
+PowerShell 在 `Assembly-CSharp.dll`（4.3 MB）中执行以下搜索：
+
+1. **`TimeScaleIndex_\w+` 模式** — 找到：
+   - `TimeScaleIndex_0`（占位名，IL2CPP proxy 自动生成的枚举成员占位符）
+   - `TimeScaleIndex_Public_get_TimeScaleIndex_0`（方法表条目，非成员名）
+
+2. **`TimeScale[0-9]\w*` 模式** — 找到：
+   - `TimeScale0Key`、`TimeScale1Key`、`TimeScale3Key`、`TimeScale6Key`（均为 `NativeFieldInfoPtr_SetTimeScaleXKey` 的键绑定字段，非枚举成员名）
+
+3. **`Pause|Normal|Fast|Slow|Stopped|Default` 与 TimeScaleIndex 相邻** — 找到：
+   - `Paused`、`Normal` 作为独立字符串存在，但上下文（`Normal_k__BackingField` 等）表明它们属于其他类型，与 TimeScaleIndex 无直接关联
+   - `DefaultScaleIndex`（字段名，为 TimeSystem 的默认档位存储字段）
+
+### 结论
+
+**TimeScaleIndex 的真正 C# 枚举成员名在二进制中不可见。**
+
+- IL2CPP proxy 仅生成了 `TimeScaleIndex_0` 占位符，说明枚举成员名没有以字符串形式单独写入 DLL
+- 能找到的证据只有键绑定字段名 `SetTimeScale0Key/1Key/3Key/6Key`，表明枚举的 **整数值** 为 0、1、3、6（4 个档位）
+- 具体成员名（例如 `Paused` / `Normal` / `Fast` / `VeryFast` 或其他命名）**需 dnSpy 确认**：在 dnSpy 中展开 `TimeScaleIndex` 枚举类型，查看其全部 field 成员
+
+> 对 Task 3 (TimeCheats) 的影响：v0.1.0 使用 `UnityEngine.Time.timeScale` 直接写入，不依赖 `TimeScaleIndex` 枚举，此问题不影响当前实现。若需要调用 `TimeSystem.SetTimeScale(TimeScaleIndex)` 则必须先通过 dnSpy 确认成员名。
+
+---
+
 ## 是否需要同时修改 Unity Time.timeScale
 
 ### 计划决定（来自设计文档 + 实施计划）
