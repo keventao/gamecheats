@@ -1,5 +1,6 @@
 using MelonLoader;
 using HumanicaCheats.Core;
+using HumanicaCheats.Modules;
 
 [assembly: MelonInfo(typeof(HumanicaCheats.Plugin), "HumanicaCheats", HumanicaCheats.Plugin.Version, "kk")]
 [assembly: MelonGame]
@@ -15,9 +16,10 @@ namespace HumanicaCheats
         public override void OnInitializeMelon()
         {
             Registry = new ModuleRegistry();
-            // 模块在 Task 3-6 中逐步添加
+            Registry.Add(new TimeCheats());
+            // ResourceCheats 和 VillageCheats 在 Task 4-5 后添加
             Gui = new GuiManager(Registry);
-            LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载。");
+            LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载 ({Registry.Modules.Count} 模块)。");
         }
 
         public override void OnGUI() => Gui?.OnGUI();
