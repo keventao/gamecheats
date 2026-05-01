@@ -28,6 +28,7 @@ Mod 的成功标志是**游戏内可见的行为变化**,不是代码"看起来�
 
 ## 当前活跃项目
 
-| 项目 | 版本 | 状态 |
-|---|---|---|
-| `LordsAndVilleins/` | v0.1.0 | code complete,等游戏内冒烟。详见 `LordsAndVilleins/ROADMAP.md` |
+| 项目 | 版本 | 引擎 | Mod loader | 状态 |
+|---|---|---|---|---|
+| `LordsAndVilleins/` | v0.1.0 | Unity (Mono) | BepInEx 5 + Harmony | code complete,等游戏内冒烟。详见 `LordsAndVilleins/ROADMAP.md` |
+| `Humanica/` | v0.1.0 | Unity (IL2CPP) | MelonLoader + HarmonyX | code complete,等游戏内冒烟。详见 `Humanica/ROADMAP.md` |

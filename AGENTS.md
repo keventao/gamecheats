@@ -10,7 +10,12 @@
 
 ## Project Structure & Module Organization
 
-This repository contains a BepInEx mod for *Lords & Villeins*.
+This repository hosts multiple game-specific cheat-tool projects, one subdirectory each. Active projects:
+
+- `LordsAndVilleins/` — BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
+- `Humanica/` — MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
+
+The sections below describe **LordsAndVilleins**; for Humanica, prefer `Humanica/README.md` and `Humanica/ROADMAP.md`.
 
 - `src/LordsAndVilleinsCheats/` contains the mod source. Core shared services live in `Core/`, feature modules live in `Modules/`, and utility code lives in `Util/`.
 - `src/LordsAndVilleinsCheats.Tests/` contains xUnit tests for logic that can run outside the game.
