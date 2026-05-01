@@ -56,7 +56,7 @@ namespace HumanicaCheats.Modules
                 var prodMethod = AccessTools.Method(buffType, "GetSumProduceMultiplier");
                 if (prodMethod == null) throw new Exception("GetSumProduceMultiplier not found");
                 harmony.Patch(prodMethod,
-                    postfix: new HarmonyMethod(typeof(VillageCheats), nameof(ProdMultiplier_Postfix)));
+                    postfix: new HarmonyMethod(typeof(VillageCheats), nameof(ProdSpeed_Postfix)));
                 _productionPatchOk = true;
                 MelonLogger.Msg("[VillageCheats] 生产速度 patch OK (BuffController.GetSumProduceMultiplier)");
             }
@@ -125,7 +125,7 @@ namespace HumanicaCheats.Modules
         // ── Harmony Postfix: 生产倍率 ────────────────────────────────
         // GetSumProduceMultiplier 返回当前生产速度倍率（基础值通常为 1.0）。
         // ×10 → 所有工坊生产速度 ×10。
-        static void ProdMultiplier_Postfix(ref float __result)
+        static void ProdSpeed_Postfix(ref float __result)
         {
             if (ProductionX10) __result *= 10f;
         }
