@@ -34,7 +34,9 @@ namespace HumanicaCheats.Modules
             }
             GUILayout.EndHorizontal();
             GUILayout.Space(4);
-            GUILayout.Label($"当前: Time.timeScale = {Time.timeScale:F1}");
+            // 显示"目标 vs 实际":若两值不一致,说明游戏内部每帧覆写 Time.timeScale,
+            // 此时需在 v0.2 用 OnUpdate 强写或 patch 覆写源。
+            GUILayout.Label($"目标: ×{Scales[_selected]:F0}   实际: Time.timeScale = {Time.timeScale:F1}");
 
             GUILayout.Space(8);
             if (GUILayout.Button("重置为 ×1"))
