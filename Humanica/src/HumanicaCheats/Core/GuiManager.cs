@@ -1,5 +1,3 @@
-using System;
-using Il2CppInterop.Runtime;
 using UnityEngine;
 
 namespace HumanicaCheats.Core
@@ -11,26 +9,45 @@ namespace HumanicaCheats.Core
         private int _activeTab;
         private Rect _windowRect = new Rect(40, 40, 480, 540);
         private int _lastToggleFrame = -1;
-        private readonly GUI.WindowFunction _drawWindowDelegate;
-        private const int WindowId = 0xC1EA75;
+        // 拖动状态:全部自实现,因 GUI.Window/GUI.DragWindow 不可信(见 Layout.cs 顶部注释)
+        private bool _dragging;
+        private Vector2 _dragOffset;
+        // 进入面板前的鼠标状态,关闭时还原
+        private CursorLockMode _prevLock;
+        private bool _prevCursorVisible;
 
         public GuiManager(ModuleRegistry registry)
         {
             _registry = registry;
-            _drawWindowDelegate = DelegateSupport.ConvertDelegate<GUI.WindowFunction>((Action<int>)DrawWindow)!;
         }
 
         public void OnGUI()
         {
             var ev = Event.current;
+
+            // ── F1 切换 ──
             if (ev != null && ev.type == EventType.KeyDown && ev.keyCode == KeyCode.F1
                 && UnityEngine.Time.frameCount != _lastToggleFrame)
             {
                 _lastToggleFrame = UnityEngine.Time.frameCount;
+                if (!_open)
+                {
+                    _prevLock = Cursor.lockState;
+                    _prevCursorVisible = Cursor.visible;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+                else
+                {
+                    Cursor.lockState = _prevLock;
+                    Cursor.visible = _prevCursorVisible;
+                    _dragging = false;
+                }
                 _open = !_open;
                 ev.Use();
             }
 
+            // ── 屏幕角永久标签 ──
             var tagRect = new Rect(8, 8, 380, 22);
             var prev = GUI.color;
             GUI.color = Color.yellow;
@@ -38,44 +55,80 @@ namespace HumanicaCheats.Core
             GUI.color = prev;
 
             if (!_open) return;
-            _windowRect = GUI.Window(WindowId, _windowRect, _drawWindowDelegate, "Humanica Cheats");
-        }
 
-        private void DrawWindow(int id)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label(GameRefs.IsReady ? "● 游戏中" : "○ 菜单", GUILayout.Width(80));
-            GUILayout.EndHorizontal();
-            GUILayout.Space(4);
+            // ── 自画窗口背景 ──
+            // 不用 GUI.Window 因其 Rect 返回值在本 IL2CPP 绑定下不回传(诊断证实拖动手势被
+            // GUI.DragWindow 抓但 _windowRect 永不更新)。改成 GUI.Box 画背景 + 自管拖动。
+            GUI.Box(_windowRect, "");
+            const float titleH = 22f;
+            var titleRect = new Rect(_windowRect.x, _windowRect.y, _windowRect.width, titleH);
+            var titlePrev = GUI.color;
+            GUI.color = new Color(0.2f, 0.5f, 0.9f, 1f);
+            GUI.Box(titleRect, "Humanica Cheats");
+            GUI.color = titlePrev;
+
+            // ── 拖动 ──
+            if (ev != null)
+            {
+                if (ev.type == EventType.MouseDown && ev.button == 0
+                    && titleRect.Contains(ev.mousePosition))
+                {
+                    _dragging = true;
+                    _dragOffset = new Vector2(_windowRect.x - ev.mousePosition.x,
+                                              _windowRect.y - ev.mousePosition.y);
+                    ev.Use();
+                }
+                else if (_dragging && ev.type == EventType.MouseDrag)
+                {
+                    _windowRect.x = ev.mousePosition.x + _dragOffset.x;
+                    _windowRect.y = ev.mousePosition.y + _dragOffset.y;
+                    ev.Use();
+                }
+                else if (_dragging && (ev.type == EventType.MouseUp
+                                       || ev.type == EventType.Ignore))
+                {
+                    _dragging = false;
+                }
+            }
+
+            // ── 状态指示 ──
+            GUI.Label(new Rect(_windowRect.xMax - 90, _windowRect.y + 2, 80, 20),
+                GameRefs.IsReady ? "● 游戏中" : "○ 菜单");
+
+            // ── Tabs ──
+            const float pad = 10f;
+            float contentX = _windowRect.x + pad;
+            float contentY = _windowRect.y + titleH + 6f;
+            float contentW = _windowRect.width - 2f * pad;
 
             if (_registry.Modules.Count == 0)
             {
-                GUILayout.Label("无模块已注册。");
-                GUI.DragWindow();
+                GUI.Label(new Rect(contentX, contentY, contentW, 22), "无模块已注册。");
                 return;
             }
 
-            var tabs = new string[_registry.Modules.Count];
+            const float tabH = 28f;
+            float tabW = (contentW - (_registry.Modules.Count - 1) * 4f) / _registry.Modules.Count;
             for (int i = 0; i < _registry.Modules.Count; i++)
             {
                 var m = _registry.Modules[i];
-                tabs[i] = m.Name + (m.Status == ModuleStatus.Broken ? " (!)" : "");
+                var label = m.Name + (m.Status == ModuleStatus.Broken ? " (!)" : "");
+                var r = new Rect(contentX + i * (tabW + 4f), contentY, tabW, tabH);
+                if (ImguiUtil.Button(r, label, i == _activeTab))
+                    _activeTab = i;
             }
-            _activeTab = GUILayout.Toolbar(_activeTab, tabs);
 
-            GUILayout.Space(4);
-            // 当前 4 个模块内容不超 540px,无需 scroll;若 v0.2 超出再加 scroll 状态字段。
+            // ── 模块内容 ──
+            float bodyY = contentY + tabH + 8f;
             if (_activeTab < _registry.Modules.Count)
             {
                 var mod = _registry.Modules[_activeTab];
+                var sub = new Layout(contentX, bodyY, contentW);
                 if (mod.Status == ModuleStatus.Broken)
-                    GUILayout.Label("该模块 Patch 失败。查看 MelonLoader 控制台。");
+                    sub.Label("该模块 Patch 失败。查看 MelonLoader 控制台。");
                 else
-                    mod.DrawGui();
+                    mod.DrawGui(sub);
             }
-
-            GUI.DragWindow(new Rect(0, 0, 10000, 20));
         }
     }
 }

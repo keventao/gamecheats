@@ -13,15 +13,15 @@ namespace HumanicaCheats.Modules
         // 无 Harmony patch 需要注册
         public void Register(HarmonyLib.Harmony harmony) { }
 
-        public void DrawGui()
+        public void DrawGui(Layout l)
         {
-            if (!GameRefs.IsReady) { GUILayout.Label("等待游戏加载…"); return; }
+            if (!GameRefs.IsReady) { l.Label("等待游戏加载…"); return; }
 
             // 建筑解锁由科技驱动，无独立建筑解锁系统（refs/01-resource-research.md 确认）
-            GUILayout.Label("[!] 建筑解锁由科技驱动，解锁全部科技后建筑自动可用");
-            GUILayout.Space(4);
+            l.Label("[!] 建筑解锁由科技驱动，解锁全部科技后建筑自动可用");
+            l.Space(4);
 
-            if (GUILayout.Button("解锁全部科技 (InstantResearchAll)"))
+            if (l.Button("解锁全部科技 (InstantResearchAll)", 28f))
                 TryUnlockAllTech();
         }
 

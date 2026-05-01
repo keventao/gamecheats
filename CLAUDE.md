@@ -31,4 +31,4 @@ Mod 的成功标志是**游戏内可见的行为变化**,不是代码"看起来�
 | 项目 | 版本 | 引擎 | Mod loader | 状态 |
 |---|---|---|---|---|
 | `LordsAndVilleins/` | v0.1.0 | Unity (Mono) | BepInEx 5 + Harmony | code complete,等游戏内冒烟。详见 `LordsAndVilleins/ROADMAP.md` |
-| `Humanica/` | v0.1.0 | Unity (IL2CPP) | MelonLoader + HarmonyX | code complete,等游戏内冒烟。详见 `Humanica/ROADMAP.md` |
+| `Humanica/` | v0.1.1 | Unity (IL2CPP) | MelonLoader 0.7.2 + HarmonyX | GUI / 时间 / 资源(5 槽 + 中英搜索 + 持久化)游戏内验证通过;村庄 / 解锁 待冒烟。详见 `Humanica/ROADMAP.md` |

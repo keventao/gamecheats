@@ -1,14 +1,16 @@
-# Humanica Cheats v0.1.0 冒烟清单
+# Humanica Cheats v0.1.1 冒烟清单
 
 > 每次版本更新后按顺序执行。"游戏中"= 已进入存档。
 > 标注"[!] 占位"的条目需额外记录实际游戏行为。
 
 ## 基础加载
 
-- [ ] MelonLoader 控制台显示 `HumanicaCheats v0.1.0 已加载 (4 模块)`
+- [ ] MelonLoader 控制台显示 `HumanicaCheats v0.1.1 已加载 (4 模块)`
+- [ ] 控制台显示 `[ResourceIndex.dump] enum values: 143`(启动 dump 跑过)
 - [ ] 游戏无崩溃,正常进入主菜单
-- [ ] 进入存档后按 **F1** → 黄色标签出现,面板弹出
-- [ ] 再按 **F1** → 面板关闭
+- [ ] 进入存档后按 **F1** → 左上角黄色标签出现,蓝色标题栏的窗口弹出
+- [ ] 抓住标题栏 → 窗口能拖动到任意位置
+- [ ] 再按 **F1** → 面板关闭,光标状态还原(进窗时强制 unlock + visible,关窗还原)
 - [ ] Tab 栏显示 **时间 / 资源 / 村庄 / 解锁** 四个标签
 
 ## 时间模块
@@ -18,23 +20,40 @@
 - [ ] 点击 **×5** → 更快
 - [ ] 点击 **×10** → 非常快
 - [ ] 面板显示 `目标: ×10   实际: Time.timeScale = 10.0`(值一致说明游戏未覆写)
-  - **若目标与实际不一致:** 记录到 refs/time-research.md,v0.2 需 OnUpdate 强写或 patch 覆写源
+  - **若目标与实际不一致:** 记录到 refs/03-time-research.md,v0.2 需 OnUpdate 强写或 patch 覆写源
 - [ ] 点击 **重置为 ×1** → 速度恢复正常,面板显示 `目标: ×1   实际: Time.timeScale = 1.0`
 
-## 资源模块
+## 资源模块(v0.1.1 重做)
 
-> [!] ResourceIndex 值为占位推断(LOG/STONE_BRICKS/BREAD/TECHNOLOGY_KNOWLEDGE)。
-> 点击后若仓库无变化,查看 MelonLoader 控制台 `[ResourceCheats]` 行并记录到 refs/01-resource-research.md。
+- [ ] 切换到"资源"Tab,显示 5 个槽,默认 `STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD`
+- [ ] 每个槽行格式:`EN / 中文 (idx)` 按钮 + `+5` + `+50` + `锁定≥50` toggle
 
-- [ ] 切换到"资源"Tab,面板显示 `[!] ResourceIndex 值为占位推断,需游戏内验证`
-- [ ] 点击 **木材 (LOG — 占位)** 行的 **+100** → 确认仓库中哪种资源增加 100
-  - 记录: LOG 对应资源名 = ___________
-- [ ] 点击 **+1000** → 同种资源再增加 1000
-- [ ] 点击 **石材 (STONE_BRICKS — 占位)** 行的 **+100** → 记录 STONE_BRICKS 对应资源名 = ___________
-- [ ] 点击 **食物 (BREAD — 占位)** 行的 **+100** → 记录 BREAD 对应资源名 = ___________
-- [ ] 点击 **金币 (TECHNOLOGY_KNOWLEDGE — 占位)** 行的 **+100** → 记录 TECHNOLOGY_KNOWLEDGE 对应资源名 = ___________
-  - **注意:** TECHNOLOGY_KNOWLEDGE 作为"金币"是不确定推断,游戏内可能是科技点数
-- [ ] 勾选 **锁定 ≥500**（任一资源）→ 消耗该资源后自动补充,始终不低于 500
+### 增量 +5 / +50
+
+- [ ] STICKS `+5` → 仓库 sticks +5,控制台 `[ResourceCheats] AddRes(STICKS idx=1 amt=5) OK`
+- [ ] LOG `+50` → 仓库 logs +50
+- [ ] COBBLESTONES `+50` → 仓库 cobblestones +50(不再被截到 +10,验证 createIfNeeded=true 修复)
+- [ ] RAW_PELT `+50` → 仓库 raw pelts +50
+- [ ] BREAD `+50` → 仓库 bread +50
+- [ ] 多次连点 +50 不应卡死游戏(回归 v0.1.0 卡死问题)
+
+### 资源选择器
+
+- [ ] 点击任一槽的资源名 → 弹出选择器,标题 `为槽 N 选资源`
+- [ ] 搜索框默认聚焦(cyan 边框 + `|` 光标)
+- [ ] 输入英文 `ax` → 列表过滤出全部 axes(STONE_AXE / COPPER_AXE / BRONZE_AXE / IRON_AXE)
+- [ ] 输入中文 `斧` → 同样过滤(IME 输入完成后字符进 search)
+- [ ] **Backspace** 删字,过滤恢复
+- [ ] **Esc** 清空 + 失焦
+- [ ] 鼠标滚轮在列表区滚动
+- [ ] 点击列表项 → 选定,选择器关闭,槽资源名更新
+- [ ] 重启游戏 → 槽配置保留(读 `<game>/UserData/MelonPreferences.cfg` 验证)
+
+### 资源锁定
+
+- [ ] 勾选任一槽的 **锁定≥50** toggle
+- [ ] 消耗该资源到 < 50 → 自动补到 50
+- [ ] 取消勾选 → 不再补充
 
 ## 村庄模块
 
@@ -62,7 +81,9 @@
 |------|------|------|
 | 基础加载 | ⬜ | |
 | 时间 | ⬜ | |
-| 资源 | ⬜ | ResourceIndex 需对照确认 |
+| 资源 — 增量 | ⬜ | |
+| 资源 — 选择器/搜索 | ⬜ | |
+| 资源 — 锁定 | ⬜ | |
 | 村庄 | ⬜ | 建造速度方向需确认 |
 | 解锁 | ⬜ | |
 

@@ -6,7 +6,8 @@ namespace HumanicaCheats.Core
         string Name   { get; }
         ModuleStatus Status { get; }
         void Register(HarmonyLib.Harmony harmony);
-        void DrawGui();
+        // 接收父级竖向 cursor。模块逐 widget 推进 l.Y;不许调 GUILayout.*。
+        void DrawGui(Layout l);
         void OnUpdate() { } // 默认空实现,需要的模块覆盖
     }
 }

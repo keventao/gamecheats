@@ -70,26 +70,26 @@ namespace HumanicaCheats.Modules
             Status = (_buildPatchOk || _productionPatchOk) ? ModuleStatus.Ok : ModuleStatus.Broken;
         }
 
-        public void DrawGui()
+        public void DrawGui(Layout l)
         {
-            if (!GameRefs.IsReady) { GUILayout.Label("等待游戏加载…"); return; }
+            if (!GameRefs.IsReady) { l.Label("等待游戏加载…"); return; }
 
             // ── 人口 ─────────────────────────────────────────────────
-            GUILayout.Label("人口");
-            if (GUILayout.Button("立即添加 1 名村民"))
+            l.Label("人口");
+            if (l.Button("立即添加 1 名村民", 26f))
                 TrySpawnVillager();
 
-            GUILayout.Space(8);
+            l.Space(8);
 
             // ── 建造速度 ─────────────────────────────────────────────
             if (!_buildPatchOk)
-                GUILayout.Label("[!] 建造 patch 未绑定 — 查看 MelonLoader 控制台");
-            BuildSpeedX10 = GUILayout.Toggle(BuildSpeedX10, "建造速度 ×10");
+                l.Label("[!] 建造 patch 未绑定 — 查看 MelonLoader 控制台");
+            BuildSpeedX10 = l.Toggle(BuildSpeedX10, "建造速度 ×10");
 
             // ── 生产速度 ─────────────────────────────────────────────
             if (!_productionPatchOk)
-                GUILayout.Label("[!] 生产 patch 未绑定 — 查看 MelonLoader 控制台");
-            ProductionX10 = GUILayout.Toggle(ProductionX10, "生产速度 ×10");
+                l.Label("[!] 生产 patch 未绑定 — 查看 MelonLoader 控制台");
+            ProductionX10 = l.Toggle(ProductionX10, "生产速度 ×10");
         }
 
         // ── 添加村民 ─────────────────────────────────────────────────

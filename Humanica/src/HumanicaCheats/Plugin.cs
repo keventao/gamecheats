@@ -9,7 +9,7 @@ namespace HumanicaCheats
 {
     public class Plugin : MelonMod
     {
-        public const string Version = "0.1.0";
+        public const string Version = "0.1.1";
         internal static ModuleRegistry Registry = null!;
         internal static GuiManager     Gui      = null!;
 
@@ -27,6 +27,9 @@ namespace HumanicaCheats
 
             Gui = new GuiManager(Registry);
             LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载 ({Registry.Modules.Count} 模块)。");
+
+            // 启动时 dump 全部 ResourceIndex 枚举名/idx 到日志,便于校准 ResourceCheats 配置。
+            ResourceCheats.DumpResourceIndex();
         }
 
         public override void OnGUI()    => Gui?.OnGUI();

@@ -52,19 +52,34 @@
 
 ## ResourceIndex 类型
 
-### 类型推断
-- 类型：**struct**（int 包装类型）— (推断)
-- 推断依据：
-  - 二进制中找到 `byref_ResourceIndex` 模式（4 次），说明该类型可以 by-ref 传递，符合 value type
-  - 没有找到 `ResourceIndex.Wood`、`ResourceIndex.Stone` 等枚举字段名（排除枚举可能）
-  - IL2CPP 将值类型 struct 命名为 `ResourceIndex`，方法签名中大量使用 `ResourceIndex` 作为参数类型
+### 类型(2026-05-02 运行时确认)
+- 类型:**enum**(int 底层),非 struct。原 v0.1.0 推断错误,实测 `typeof(Il2Cpp.ResourceIndex).IsEnum == true`
+- 共 **143** 个成员(含 `___DEPRECATED` 后缀的废弃项)
+- C# 直接 cast int → enum 即可:`var idx = (Il2Cpp.ResourceIndex)42;`
 
-### 资源名称（具体值）
-- 木材值：**需 dnSpy 确认** — dnSpy 中搜索 `ResourceIndex` 类型，查看其 `value__` 字段或预定义 static 成员
-- 石材值：**需 dnSpy 确认**
-- 食物值：**需 dnSpy 确认**
-- 金币值：**需 dnSpy 确认**
-- 完整资源列表：**需 dnSpy 确认** — 建议在 dnSpy 中搜索 `ResourceTypeData` 类，其中可能有资源名称数据
+### 资源名称(完整列表 — 启动 dump)
+启动时 `Plugin.OnInitializeMelon` 调 `ResourceCheats.DumpResourceIndex()` 把全部 143 项
+枚举名 + int 值写到 `MelonLoader/Latest.log` 的 `[ResourceIndex.dump]` 节。
+
+**已游戏内验证的关键 idx 映射(2026-05-02):**
+- `STICKS = 1` — 树枝
+- `COBBLESTONES = 2` — 鹅卵石
+- `LOG = 3` — 原木
+- `WILD_BERRIES = 4` — 野莓
+- `APPLE = 5`
+- `RAW_MEAT = 6`
+- `RAW_PELT = 7`
+- `BREAD = 32`
+- `TECHNOLOGY_KNOWLEDGE = 105` — 科技知识(原 v0.1.0 当"金币"用是错的)
+
+**完整 EN→中文翻译表:**`src/HumanicaCheats/Core/ResourceI18n.cs`,覆盖 ~100 项常用资源,
+缺失项 fallback 到 enum 名。
+
+### 重要参数:`AddResourceIntoFreeWarehouse` 第三参数
+**v0.1.1 游戏内确认:必须传 `true`**(原 v0.1.0 推断 `false` 错误)。
+- `false` = 只往现有仓库塞,容量不够静默丢弃。LOG 仓库大没事,
+  COBBLESTONES / RAW_PELT 等容量小的会被截到 ~10。累积过多还会让游戏 AI 死循环卡死。
+- `true` = 容量不够时自动开新仓库槽,正常工作。
 
 ### 相关类型
 - `ResourceType`：(已确认存在) `GetResourceAmount_Public_Int32_ResourceType_0`，可能是枚举
