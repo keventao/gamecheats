@@ -65,7 +65,9 @@ namespace HumanicaCheats.Modules
                 MelonLogger.Warning($"[VillageCheats] 生产速度 patch 失败（toggle 运行时无效）: {ex.Message}");
             }
 
-            Status = ModuleStatus.Ok;
+            // 全部 patch 失败 → Broken (UI 显示 (!) 警告)
+            // 部分失败 → Ok (toggle 部分可用)
+            Status = (_buildPatchOk || _productionPatchOk) ? ModuleStatus.Ok : ModuleStatus.Broken;
         }
 
         public void DrawGui()
@@ -115,17 +117,19 @@ namespace HumanicaCheats.Modules
         }
 
         // ── Harmony Postfix: 建造进度 ────────────────────────────────
-        // CalculateProgressPerTimeStep 返回每时间步的建造进度 float。
-        // ×10 → 工期缩短至 1/10。
-        static void BuildTime_Postfix(ref float __result)
+        // 假设 CalculateProgressPerTimeStep 返回"每步进度速率"(非剩余工期)。
+        // 若假设成立: __result *= 10f → 进度速率 ×10 → 工期缩短至 1/10。
+        // TODO: 游戏内需确认 — 启用 toggle 后建筑完成时间是否变短(而非变长)。
+        // 若变长说明返回的是工期而非进度,改为 __result /= 10f。
+        private static void BuildTime_Postfix(ref float __result)
         {
             if (BuildSpeedX10) __result *= 10f;
         }
 
         // ── Harmony Postfix: 生产倍率 ────────────────────────────────
-        // GetSumProduceMultiplier 返回当前生产速度倍率（基础值通常为 1.0）。
+        // GetSumProduceMultiplier 返回当前生产速度倍率(基础值通常为 1.0)。
         // ×10 → 所有工坊生产速度 ×10。
-        static void ProdSpeed_Postfix(ref float __result)
+        private static void ProdSpeed_Postfix(ref float __result)
         {
             if (ProductionX10) __result *= 10f;
         }
