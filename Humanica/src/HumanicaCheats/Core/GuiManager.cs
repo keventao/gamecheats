@@ -1,3 +1,5 @@
+using System;
+using Il2CppInterop.Runtime;
 using UnityEngine;
 
 namespace HumanicaCheats.Core
@@ -9,10 +11,14 @@ namespace HumanicaCheats.Core
         private int _activeTab;
         private Rect _windowRect = new Rect(40, 40, 480, 540);
         private int _lastToggleFrame = -1;
-        private Vector2 _scrollPos;
+        private readonly GUI.WindowFunction _drawWindowDelegate;
         private const int WindowId = 0xC1EA75;
 
-        public GuiManager(ModuleRegistry registry) => _registry = registry;
+        public GuiManager(ModuleRegistry registry)
+        {
+            _registry = registry;
+            _drawWindowDelegate = DelegateSupport.ConvertDelegate<GUI.WindowFunction>((Action<int>)DrawWindow)!;
+        }
 
         public void OnGUI()
         {
@@ -32,7 +38,7 @@ namespace HumanicaCheats.Core
             GUI.color = prev;
 
             if (!_open) return;
-            _windowRect = GUI.Window(WindowId, _windowRect, (GUI.WindowFunction)(new System.Action<int>(DrawWindow)), "Humanica Cheats");
+            _windowRect = GUI.Window(WindowId, _windowRect, _drawWindowDelegate, "Humanica Cheats");
         }
 
         private void DrawWindow(int id)
@@ -59,7 +65,7 @@ namespace HumanicaCheats.Core
             _activeTab = GUILayout.Toolbar(_activeTab, tabs);
 
             GUILayout.Space(4);
-            _scrollPos = GUILayout.BeginScrollView(_scrollPos);
+            GUILayout.BeginScrollView(Vector2.zero);
             if (_activeTab < _registry.Modules.Count)
             {
                 var mod = _registry.Modules[_activeTab];
