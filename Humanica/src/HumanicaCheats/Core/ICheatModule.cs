@@ -7,5 +7,6 @@ namespace HumanicaCheats.Core
         ModuleStatus Status { get; }
         void Register(HarmonyLib.Harmony harmony);
         void DrawGui();
+        void OnUpdate() { } // 默认空实现,需要的模块覆盖
     }
 }

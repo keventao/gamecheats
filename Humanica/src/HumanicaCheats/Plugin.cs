@@ -17,11 +17,13 @@ namespace HumanicaCheats
         {
             Registry = new ModuleRegistry();
             Registry.Add(new TimeCheats());
-            // ResourceCheats 和 VillageCheats 在 Task 4-5 后添加
+            Registry.Add(new ResourceCheats());
+            // VillageCheats 在 Task 5 后添加
             Gui = new GuiManager(Registry);
             LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载 ({Registry.Modules.Count} 模块)。");
         }
 
-        public override void OnGUI() => Gui?.OnGUI();
+        public override void OnGUI()    => Gui?.OnGUI();
+        public override void OnUpdate() { foreach (var m in Registry.Modules) m.OnUpdate(); }
     }
 }
