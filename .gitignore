@@ -29,6 +29,9 @@ Thumbs.db
 .DS_Store
 desktop.ini
 
+# Git worktrees
+.worktrees/
+
 # 临时
 *.log
 *.tmp
