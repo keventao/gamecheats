@@ -20,6 +20,11 @@ namespace HumanicaCheats
             Registry.Add(new ResourceCheats());
             Registry.Add(new VillageCheats());
             Registry.Add(new UnlockCheats());
+
+            // 触发各模块的 Harmony patch 注册 (VillageCheats 依赖)
+            var harmony = new HarmonyLib.Harmony("com.kk.humanica-cheats");
+            Registry.RegisterAll(harmony);
+
             Gui = new GuiManager(Registry);
             LoggerInstance.Msg($"HumanicaCheats v{Version} 已加载 ({Registry.Modules.Count} 模块)。");
         }

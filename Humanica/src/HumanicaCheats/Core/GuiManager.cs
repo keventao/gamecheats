@@ -65,7 +65,7 @@ namespace HumanicaCheats.Core
             _activeTab = GUILayout.Toolbar(_activeTab, tabs);
 
             GUILayout.Space(4);
-            GUILayout.BeginScrollView(Vector2.zero);
+            // 当前 4 个模块内容不超 540px,无需 scroll;若 v0.2 超出再加 scroll 状态字段。
             if (_activeTab < _registry.Modules.Count)
             {
                 var mod = _registry.Modules[_activeTab];
@@ -74,7 +74,6 @@ namespace HumanicaCheats.Core
                 else
                     mod.DrawGui();
             }
-            GUILayout.EndScrollView();
 
             GUI.DragWindow(new Rect(0, 0, 10000, 20));
         }
