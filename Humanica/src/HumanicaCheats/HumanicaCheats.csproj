@@ -28,6 +28,10 @@
       <HintPath>$(GameRoot)\MelonLoader\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(GameRoot)\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(GameRoot)\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>

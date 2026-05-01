@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using HarmonyLib;
 
 namespace HumanicaCheats.Core
 {
@@ -10,7 +9,7 @@ namespace HumanicaCheats.Core
 
         public void Add(ICheatModule m) => _modules.Add(m);
 
-        public void RegisterAll(Harmony harmony)
+        public void RegisterAll(HarmonyLib.Harmony harmony)
         {
             foreach (var m in _modules) m.Register(harmony);
         }
