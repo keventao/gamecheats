@@ -38,7 +38,10 @@ namespace HumanicaCheats.Modules
         {
             try
             {
-                var candidates = FindCandidates().ToList();
+                var candidates = FindCandidates()
+                    .GroupBy(MethodKey)
+                    .Select(g => g.First())
+                    .ToList();
                 if (candidates.Count == 0)
                 {
                     MelonLogger.Warning("[WarehouseCapacityPatch] No capacity candidates found.");
@@ -87,6 +90,11 @@ namespace HumanicaCheats.Modules
                     yield return method;
                 }
             }
+        }
+
+        private static string MethodKey(MethodInfo method)
+        {
+            return $"{method.Module.ModuleVersionId}:{method.MetadataToken}";
         }
 
         private static IEnumerable<Type> GetAssemblyCSharpTypes()
