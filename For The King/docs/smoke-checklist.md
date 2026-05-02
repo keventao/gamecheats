@@ -9,7 +9,7 @@
 
 ## In Game
 
-- BepInEx log contains `For The King Cheats v0.1.0 ready.`
+- BepInEx log contains `For The King Cheats ready.`
 - F1 opens and closes the cheat panel.
 - The panel can be dragged.
 - Time x2 visibly speeds up animations or world movement.
