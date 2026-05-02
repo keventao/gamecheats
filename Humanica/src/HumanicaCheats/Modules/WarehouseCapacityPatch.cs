@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using Il2CppInterop.Runtime.InteropTypes;
 using MelonLoader;
 using HumanicaCheats.Core;
 
@@ -30,33 +31,58 @@ namespace HumanicaCheats.Modules
             "CalculateMaxCapacity"
         };
 
+        private static readonly string[] FreeCapacityMethodNames =
+        {
+            "get_FreeCapacity",
+            "get_AvailableCapacity",
+            "get_RemainingCapacity",
+            "get_FreeSpace",
+            "get_AvailableSpace",
+            "GetFreeCapacity",
+            "GetAvailableCapacity",
+            "GetRemainingCapacity",
+            "GetFreeSpace",
+            "GetAvailableSpace",
+            "CalculateFreeCapacity",
+            "CalculateAvailableCapacity",
+            "CalculateRemainingCapacity"
+        };
+
         private static readonly PropertyInfo? WarehouseCapacityMultiplierProperty =
             typeof(ResourceCheats).GetProperty(
                 "WarehouseCapacityMultiplier",
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 
+        private static readonly Dictionary<IntPtr, int> LastIntCapacityByInstance = new Dictionary<IntPtr, int>();
+        private static readonly Dictionary<IntPtr, float> LastFloatCapacityByInstance = new Dictionary<IntPtr, float>();
+
         public static bool Register(HarmonyLib.Harmony harmony)
         {
             try
             {
-                var candidates = FindCandidates()
+                var capacityCandidates = FindCandidates(IsCapacityMethodName)
                     .GroupBy(MethodKey)
                     .Select(g => g.First())
                     .ToList();
-                if (candidates.Count == 0)
+                var freeCapacityCandidates = FindCandidates(IsFreeCapacityMethodName)
+                    .GroupBy(MethodKey)
+                    .Select(g => g.First())
+                    .ToList();
+
+                if (capacityCandidates.Count == 0)
                 {
                     MelonLogger.Warning("[WarehouseCapacityPatch] No capacity candidates found.");
                     return false;
                 }
 
                 int patched = 0;
-                foreach (var candidate in candidates)
+                foreach (var candidate in capacityCandidates)
                 {
                     try
                     {
                         var postfix = candidate.ReturnType == typeof(int)
-                            ? new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(IntPostfix))
-                            : new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(FloatPostfix));
+                            ? new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(IntCapacityPostfix))
+                            : new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(FloatCapacityPostfix));
 
                         harmony.Patch(candidate, postfix: postfix);
                         patched++;
@@ -68,7 +94,31 @@ namespace HumanicaCheats.Modules
                     }
                 }
 
-                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s).");
+                int freePatched = 0;
+                foreach (var candidate in freeCapacityCandidates)
+                {
+                    try
+                    {
+                        var postfix = candidate.ReturnType == typeof(int)
+                            ? new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(IntFreeCapacityPostfix))
+                            : new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(FloatFreeCapacityPostfix));
+
+                        harmony.Patch(candidate, postfix: postfix);
+                        freePatched++;
+                        MelonLogger.Msg($"[WarehouseCapacityPatch] Patched free {candidate.DeclaringType?.FullName}.{candidate.Name} -> {candidate.ReturnType.Name}");
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Warning($"[WarehouseCapacityPatch] Skipped free {candidate.DeclaringType?.FullName}.{candidate.Name}: {ex.Message}");
+                    }
+                }
+
+                if (freePatched == 0)
+                {
+                    MelonLogger.Warning("[WarehouseCapacityPatch] No free-capacity candidates found. Used-capacity display may be wrong.");
+                }
+
+                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s), {freePatched} free-capacity method(s).");
                 return patched > 0;
             }
             catch (Exception ex)
@@ -78,7 +128,7 @@ namespace HumanicaCheats.Modules
             }
         }
 
-        private static IEnumerable<MethodInfo> FindCandidates()
+        private static IEnumerable<MethodInfo> FindCandidates(Func<string, bool> methodNameFilter)
         {
             foreach (var type in GetAssemblyCSharpTypes())
             {
@@ -87,7 +137,7 @@ namespace HumanicaCheats.Modules
 
                 foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    if (!IsCapacityCandidate(method)) continue;
+                    if (!IsCapacityCandidate(method, methodNameFilter)) continue;
                     yield return method;
                 }
             }
@@ -119,7 +169,7 @@ namespace HumanicaCheats.Modules
             }
         }
 
-        private static bool IsCapacityCandidate(MethodInfo method)
+        private static bool IsCapacityCandidate(MethodInfo method, Func<string, bool> methodNameFilter)
         {
             if (method.IsStatic) return false;
             if (method.IsAbstract) return false;
@@ -129,7 +179,7 @@ namespace HumanicaCheats.Modules
 
             string name = method.Name;
             if (name.StartsWith("set_", StringComparison.Ordinal)) return false;
-            return IsCapacityMethodName(name);
+            return methodNameFilter(name);
         }
 
         private static bool IsCapacityMethodName(string name)
@@ -137,6 +187,16 @@ namespace HumanicaCheats.Modules
             for (int i = 0; i < CapacityMethodNames.Length; i++)
             {
                 if (string.Equals(name, CapacityMethodNames[i], StringComparison.Ordinal))
+                    return true;
+            }
+            return false;
+        }
+
+        private static bool IsFreeCapacityMethodName(string name)
+        {
+            for (int i = 0; i < FreeCapacityMethodNames.Length; i++)
+            {
+                if (string.Equals(name, FreeCapacityMethodNames[i], StringComparison.Ordinal))
                     return true;
             }
             return false;
@@ -168,21 +228,57 @@ namespace HumanicaCheats.Modules
             }
         }
 
-        private static void IntPostfix(ref int __result)
+        private static IntPtr InstancePointer(object? instance)
+        {
+            return instance is Il2CppObjectBase obj ? obj.Pointer : IntPtr.Zero;
+        }
+
+        private static void IntCapacityPostfix(object __instance, ref int __result)
         {
             int multiplier = GetWarehouseCapacityMultiplier();
             if (multiplier <= 1 || __result <= 0) return;
+
+            var pointer = InstancePointer(__instance);
+            if (pointer != IntPtr.Zero) LastIntCapacityByInstance[pointer] = __result;
 
             long scaled = (long)__result * multiplier;
             __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
         }
 
-        private static void FloatPostfix(ref float __result)
+        private static void FloatCapacityPostfix(object __instance, ref float __result)
         {
             int multiplier = GetWarehouseCapacityMultiplier();
             if (multiplier <= 1 || __result <= 0f) return;
 
+            var pointer = InstancePointer(__instance);
+            if (pointer != IntPtr.Zero) LastFloatCapacityByInstance[pointer] = __result;
+
             __result *= multiplier;
+        }
+
+        private static void IntFreeCapacityPostfix(object __instance, ref int __result)
+        {
+            int multiplier = GetWarehouseCapacityMultiplier();
+            if (multiplier <= 1 || __result < 0) return;
+
+            var pointer = InstancePointer(__instance);
+            if (pointer == IntPtr.Zero || !LastIntCapacityByInstance.TryGetValue(pointer, out int capacity) || capacity <= 0)
+                return;
+
+            long scaled = (long)__result + (long)capacity * (multiplier - 1);
+            __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
+        }
+
+        private static void FloatFreeCapacityPostfix(object __instance, ref float __result)
+        {
+            int multiplier = GetWarehouseCapacityMultiplier();
+            if (multiplier <= 1 || __result < 0f) return;
+
+            var pointer = InstancePointer(__instance);
+            if (pointer == IntPtr.Zero || !LastFloatCapacityByInstance.TryGetValue(pointer, out float capacity) || capacity <= 0f)
+                return;
+
+            __result += capacity * (multiplier - 1);
         }
     }
 }
