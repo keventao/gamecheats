@@ -48,13 +48,6 @@ namespace HumanicaCheats.Modules
             "CalculateRemainingCapacity"
         };
 
-        private static readonly string[] PackSizeMethodNames =
-        {
-            "get_PackSize",
-            "GetPackSize",
-            "CalculatePackSize"
-        };
-
         private static readonly PropertyInfo? WarehouseCapacityMultiplierProperty =
             typeof(ResourceCheats).GetProperty(
                 "WarehouseCapacityMultiplier",
@@ -62,8 +55,6 @@ namespace HumanicaCheats.Modules
 
         private static readonly Dictionary<IntPtr, int> LastIntCapacityByInstance = new Dictionary<IntPtr, int>();
         private static readonly Dictionary<IntPtr, float> LastFloatCapacityByInstance = new Dictionary<IntPtr, float>();
-        private static readonly Dictionary<IntPtr, int> OriginalStoredPackSizeByInstance = new Dictionary<IntPtr, int>();
-        private static readonly HashSet<string> LoggedStoredPackSizeFailures = new HashSet<string>();
 
         public static bool Register(HarmonyLib.Harmony harmony)
         {
@@ -74,10 +65,6 @@ namespace HumanicaCheats.Modules
                     .Select(g => g.First())
                     .ToList();
                 var freeCapacityCandidates = FindCandidates(IsFreeCapacityMethodName)
-                    .GroupBy(MethodKey)
-                    .Select(g => g.First())
-                    .ToList();
-                var packSizeCandidates = FindCandidates(IsPackSizeMethodName)
                     .GroupBy(MethodKey)
                     .Select(g => g.First())
                     .ToList();
@@ -131,31 +118,7 @@ namespace HumanicaCheats.Modules
                     MelonLogger.Warning("[WarehouseCapacityPatch] No free-capacity candidates found. Used-capacity display may be wrong.");
                 }
 
-                int packPatched = 0;
-                foreach (var candidate in packSizeCandidates)
-                {
-                    try
-                    {
-                        var postfix = candidate.ReturnType == typeof(int)
-                            ? new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(IntPackSizePostfix))
-                            : new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(FloatPackSizePostfix));
-
-                        harmony.Patch(candidate, postfix: postfix);
-                        packPatched++;
-                        MelonLogger.Msg($"[WarehouseCapacityPatch] Patched pack-size {candidate.DeclaringType?.FullName}.{candidate.Name} -> {candidate.ReturnType.Name}");
-                    }
-                    catch (Exception ex)
-                    {
-                        MelonLogger.Warning($"[WarehouseCapacityPatch] Skipped pack-size {candidate.DeclaringType?.FullName}.{candidate.Name}: {ex.Message}");
-                    }
-                }
-
-                if (packPatched == 0)
-                {
-                    MelonLogger.Warning("[WarehouseCapacityPatch] No pack-size candidates found. Slots may still cap storage.");
-                }
-
-                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s), {freePatched} free-capacity method(s), {packPatched} pack-size method(s).");
+                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s), {freePatched} free-capacity method(s).");
                 return patched > 0;
             }
             catch (Exception ex)
@@ -239,16 +202,6 @@ namespace HumanicaCheats.Modules
             return false;
         }
 
-        private static bool IsPackSizeMethodName(string name)
-        {
-            for (int i = 0; i < PackSizeMethodNames.Length; i++)
-            {
-                if (string.Equals(name, PackSizeMethodNames[i], StringComparison.Ordinal))
-                    return true;
-            }
-            return false;
-        }
-
         private static bool HasAnyHint(string value, string[] hints)
         {
             for (int i = 0; i < hints.Length; i++)
@@ -285,7 +238,6 @@ namespace HumanicaCheats.Modules
             int multiplier = GetWarehouseCapacityMultiplier();
             if (__result <= 0) return;
 
-            ApplyStoredPackSizeMultiplier(__instance, multiplier);
             if (multiplier <= 1) return;
 
             var pointer = InstancePointer(__instance);
@@ -300,7 +252,6 @@ namespace HumanicaCheats.Modules
             int multiplier = GetWarehouseCapacityMultiplier();
             if (__result <= 0f) return;
 
-            ApplyStoredPackSizeMultiplier(__instance, multiplier);
             if (multiplier <= 1) return;
 
             var pointer = InstancePointer(__instance);
@@ -318,9 +269,8 @@ namespace HumanicaCheats.Modules
             if (pointer == IntPtr.Zero || !LastIntCapacityByInstance.TryGetValue(pointer, out int capacity) || capacity <= 0)
                 return;
 
-            long scaledCapacity = (long)capacity * multiplier;
-            if (__result > scaledCapacity)
-                __result = scaledCapacity > int.MaxValue ? int.MaxValue : (int)scaledCapacity;
+            long scaled = (long)__result + (long)capacity * (multiplier - 1);
+            __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
         }
 
         private static void FloatFreeCapacityPostfix(object __instance, ref float __result)
@@ -332,68 +282,7 @@ namespace HumanicaCheats.Modules
             if (pointer == IntPtr.Zero || !LastFloatCapacityByInstance.TryGetValue(pointer, out float capacity) || capacity <= 0f)
                 return;
 
-            float scaledCapacity = capacity * multiplier;
-            if (__result > scaledCapacity) __result = scaledCapacity;
-        }
-
-        private static void IntPackSizePostfix(ref int __result)
-        {
-            int multiplier = GetWarehouseCapacityMultiplier();
-            if (multiplier <= 1 || __result <= 0) return;
-
-            long scaled = (long)__result * multiplier;
-            __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
-        }
-
-        private static void FloatPackSizePostfix(ref float __result)
-        {
-            int multiplier = GetWarehouseCapacityMultiplier();
-            if (multiplier <= 1 || __result <= 0f) return;
-
-            __result *= multiplier;
-        }
-
-        private static void ApplyStoredPackSizeMultiplier(object instance, int multiplier)
-        {
-            try
-            {
-                var pointer = InstancePointer(instance);
-                if (pointer == IntPtr.Zero) return;
-
-                var type = instance.GetType();
-                var property = type.GetProperty("storedPackSize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (property == null || !property.CanRead || !property.CanWrite)
-                {
-                    LogStoredPackSizeFailure(type.FullName ?? type.Name, "storedPackSize property with getter/setter not found");
-                    return;
-                }
-
-                object? raw = property.GetValue(instance);
-                if (!(raw is int current) || current <= 0) return;
-
-                if (!OriginalStoredPackSizeByInstance.TryGetValue(pointer, out int original))
-                {
-                    original = current;
-                    OriginalStoredPackSizeByInstance[pointer] = original;
-                }
-
-                long scaled = multiplier <= 1 ? original : (long)original * multiplier;
-                int target = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
-                if (current != target) property.SetValue(instance, target);
-            }
-            catch (Exception ex)
-            {
-                LogStoredPackSizeFailure(instance.GetType().FullName ?? instance.GetType().Name, ex.Message);
-            }
-        }
-
-        private static void LogStoredPackSizeFailure(string typeName, string message)
-        {
-            string key = typeName + "|" + message;
-            if (LoggedStoredPackSizeFailures.Add(key))
-            {
-                MelonLogger.Warning($"[WarehouseCapacityPatch] storedPackSize update skipped for {typeName}: {message}");
-            }
+            __result += capacity * (multiplier - 1);
         }
     }
 }
