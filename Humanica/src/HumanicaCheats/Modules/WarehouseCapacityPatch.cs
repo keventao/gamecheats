@@ -283,11 +283,13 @@ namespace HumanicaCheats.Modules
         private static void IntCapacityPostfix(object __instance, ref int __result)
         {
             int multiplier = GetWarehouseCapacityMultiplier();
-            if (multiplier <= 1 || __result <= 0) return;
+            if (__result <= 0) return;
+
+            ApplyStoredPackSizeMultiplier(__instance, multiplier);
+            if (multiplier <= 1) return;
 
             var pointer = InstancePointer(__instance);
             if (pointer != IntPtr.Zero) LastIntCapacityByInstance[pointer] = __result;
-            ApplyStoredPackSizeMultiplier(__instance, multiplier);
 
             long scaled = (long)__result * multiplier;
             __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
@@ -296,11 +298,13 @@ namespace HumanicaCheats.Modules
         private static void FloatCapacityPostfix(object __instance, ref float __result)
         {
             int multiplier = GetWarehouseCapacityMultiplier();
-            if (multiplier <= 1 || __result <= 0f) return;
+            if (__result <= 0f) return;
+
+            ApplyStoredPackSizeMultiplier(__instance, multiplier);
+            if (multiplier <= 1) return;
 
             var pointer = InstancePointer(__instance);
             if (pointer != IntPtr.Zero) LastFloatCapacityByInstance[pointer] = __result;
-            ApplyStoredPackSizeMultiplier(__instance, multiplier);
 
             __result *= multiplier;
         }
@@ -314,8 +318,9 @@ namespace HumanicaCheats.Modules
             if (pointer == IntPtr.Zero || !LastIntCapacityByInstance.TryGetValue(pointer, out int capacity) || capacity <= 0)
                 return;
 
-            long scaled = (long)__result + (long)capacity * (multiplier - 1);
-            __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
+            long scaledCapacity = (long)capacity * multiplier;
+            if (__result > scaledCapacity)
+                __result = scaledCapacity > int.MaxValue ? int.MaxValue : (int)scaledCapacity;
         }
 
         private static void FloatFreeCapacityPostfix(object __instance, ref float __result)
@@ -327,7 +332,8 @@ namespace HumanicaCheats.Modules
             if (pointer == IntPtr.Zero || !LastFloatCapacityByInstance.TryGetValue(pointer, out float capacity) || capacity <= 0f)
                 return;
 
-            __result += capacity * (multiplier - 1);
+            float scaledCapacity = capacity * multiplier;
+            if (__result > scaledCapacity) __result = scaledCapacity;
         }
 
         private static void IntPackSizePostfix(ref int __result)
