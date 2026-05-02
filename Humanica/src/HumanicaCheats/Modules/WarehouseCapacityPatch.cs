@@ -50,6 +50,8 @@ namespace HumanicaCheats.Modules
 
         private static readonly string[] PackSizeMethodNames =
         {
+            "get_storedPackSize",
+            "storedPackSize",
             "get_PackSize",
             "GetPackSize",
             "CalculatePackSize"
