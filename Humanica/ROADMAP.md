@@ -30,6 +30,7 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 - 选定持久化到 `UserData/MelonPreferences.cfg`,跨会话保留
 - +5 / +50 量级(原 +100/+1000;游戏资源消耗量小)
 - 锁定 ≥50(原 ≥500)
+- 资源 Tab 增加仓库容量倍率 ×1/×5/×10/×50;patch 绑定需在当前 IL2CPP 容量方法上做游戏内验证
 - 默认槽位:STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD
 
 新增 `Core/ResourceI18n.cs`,~100 项 EN → 中文翻译表,缺失项 fallback 到 enum 名。
@@ -49,6 +50,7 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 ### 待游戏内确认项
 - ⏳ 村庄 Tab:添加村民、建造 ×10、生产 ×10
 - ⏳ 解锁 Tab:InstantResearchAll
+- ⏳ 资源 Tab: 仓库容量倍率 patch 绑定、持久化、刷新/重载后的容量倍率行为
 - ⏳ 资源锁定 toggle 在低消耗游戏下行为(LockMin=50 是否合适)
 
 ---
