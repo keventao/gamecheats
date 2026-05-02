@@ -186,3 +186,21 @@ TechManager.TechManager.InstantResearchAll();
 - `AddRecipeProgressesPerDayFromConsole_Public_Void_Int32_0` — (已确认)，在命名空间 `Il2CppHumanica.CommandConsole` 下
 - `SetDayFromConsole_Public_Void_Int32_0` — (已确认)
 - 访问：`ConsoleController_Public_Static_get_ConsoleController_0` — (已确认) 单例存在
+
+---
+
+## Warehouse Capacity
+
+### Patch targets(2026-05-03 游戏内验证)
+- `Il2CppGameCore.Features.ResourceManagement.Inventory.GetCapacity()` — (已确认) 返回 `int`,控制仓库容量上限。
+- 剩余容量/可用容量方法 — (推断) 需和 `GetCapacity()` 成对 patch,否则 UI 会把新增容量反算成已占用容量。
+
+### 实测行为
+- 原始仓库容量显示:`4/96`
+- 开启 `×5` 后显示:`4/480`
+- 结论:现有仓库无需新建即可受容量倍率影响;成对处理剩余容量后,已用容量保持不变,容量上限正确放大。
+
+### 修复记录
+- 初版只 patch `GetCapacity()` 时,`4/96` 会变成 `392/480`。
+- 根因:游戏 UI 近似使用 `已用 = 总容量 - 剩余容量`;只放大总容量会导致剩余容量未同步增加。
+- 当前实现对容量和剩余/可用容量做成对缩放,保持已用容量稳定。

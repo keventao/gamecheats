@@ -46,11 +46,12 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 - ✅ `AddResourceIntoFreeWarehouse` 第三参 `createIfNeeded`:**必须传 `true`**。
   传 `false` 会截到现有仓库剩余容量(LOG 仓库大没事;COBBLESTONES/RAW_PELT 等
   容量小的被截到 ~10),累积过多还会让游戏 AI 死循环卡死
+- ✅ 仓库容量倍率 `×5` 已游戏内验证:现有仓库从 `4/96` 变为 `4/480`,无需新建仓库,已用容量保持不变
 
 ### 待游戏内确认项
 - ⏳ 村庄 Tab:添加村民、建造 ×10、生产 ×10
 - ⏳ 解锁 Tab:InstantResearchAll
-- ⏳ 资源 Tab: 仓库容量倍率 patch 绑定、持久化、刷新/重载后的容量倍率行为
+- ⏳ 资源 Tab: 仓库容量倍率持久化、升级仓库、切回 ×1 后刷新/重载行为
 - ⏳ 资源锁定 toggle 在低消耗游戏下行为(LockMin=50 是否合适)
 
 ---
