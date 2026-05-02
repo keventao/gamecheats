@@ -43,3 +43,10 @@
 - `[x]` 已确认（二进制直接证据）
 - `[~]` 推断（间接证据，置信度中等）
 - `[ ]` 需 dnSpy 确认
+## 2026-05-03 Warehouse Capacity Follow-Up
+
+- [x] Confirmed `Inventory.GetCapacity()` and free-space display behavior.
+- [x] Confirmed real usable storage depends on pack arrays, not display capacity only.
+- [x] Rejected per-pack amount scaling because it can corrupt saves.
+- [x] Rejected always-on ResizeInventory getter patch because it caused repeatable combat crashes.
+- [ ] Research a safe way to enumerate only real warehouse inventories for a manual one-shot expansion command.

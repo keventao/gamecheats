@@ -204,3 +204,20 @@ TechManager.TechManager.InstantResearchAll();
 - 初版只 patch `GetCapacity()` 时,`4/96` 会变成 `392/480`。
 - 根因:游戏 UI 近似使用 `已用 = 总容量 - 剩余容量`;只放大总容量会导致剩余容量未同步增加。
 - 当前实现对容量和剩余/可用容量做成对缩放,保持已用容量稳定。
+## 2026-05-03 Warehouse Capacity / Slot Expansion Findings
+
+- `Inventory.GetCapacity()` controls displayed capacity, but scaling it alone does not create usable storage slots.
+- Scaling free-space alongside capacity fixed the `392/480` display bug, but slot count still limited storage.
+- Increasing per-pack stored amounts above the game's original pack size is unsafe. It caused save-load failures / corrupted saves and must not be used.
+- Runtime diagnostics showed the true storage shape:
+  - `storedPacksAmount`, `StoredVal.Length`, `StoredRes.Length`, and `Slots.Length` matched.
+  - Examples: `packs=10 packSize=8 capacity=80`, `packs=12 packSize=8 capacity=96`, `packs=6 packSize=10 capacity=60`.
+- Calling `Inventory.ResizeInventory(newPacksAmount)` can expand real slots in memory.
+- A ResizeInventory-based patch passed short save/reload testing but caused repeatable combat crashes:
+  - Windows crash module: `coreclr.dll`
+  - Exception code: `0xc0000005`
+  - Disabling `WarehouseCapacityPatch` allowed the same combat test to complete.
+- Current conclusion:
+  - Always-on Harmony prefixes on `GetCapacity`, `GetFreeSpace`, `get_PacksAmount`, or `GetFreePacksAmount` are too risky for this game.
+  - The current build disables warehouse resizing.
+  - Future work should investigate a manual one-shot command that enumerates only actual warehouse inventories and runs outside combat.

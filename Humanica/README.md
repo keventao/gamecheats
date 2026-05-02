@@ -107,3 +107,6 @@ See `ROADMAP.md`. Game updates may break Harmony patches and Il2CppInterop class
 ## License
 
 Personal use, no warranty.
+## 2026-05-03 Warehouse Capacity Note
+
+Warehouse capacity / slot resizing is currently disabled. The experimental `Inventory.ResizeInventory()` approach created usable extra slots and survived reload testing, but it also caused repeatable combat crashes. The current build keeps the Resource tab and add-resource controls available while `WarehouseCapacityPatch` returns disabled. See `refs/01-resource-research.md` and `docs/smoke-checklist.md` for details before re-enabling warehouse work.

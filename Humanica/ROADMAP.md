@@ -87,3 +87,20 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 |------|------|------|
 | v0.1.1 | 2026-05-02 | GUI 架构重写(绕 IL2CPP IMGUI 返回值坑) + 资源模块改 5 槽可选 + 中英搜索 + 持久化。游戏内基础功能验证通过。 |
 | v0.1.0 | 2026-05-01 | 初版合并到 main。4 模块实现(时间/资源/村庄/解锁)。代码完成,GUI 在 IL2CPP 下不可用。 |
+---
+
+## 2026-05-03 Warehouse Capacity Status
+
+- Warehouse capacity / slot resizing is currently disabled in code.
+- Verified behavior before disabling:
+  - Display-only capacity scaling could show larger capacity but did not create usable slots.
+  - Per-pack amount scaling corrupted saves and must not be reintroduced.
+  - Runtime `Inventory.ResizeInventory()` could create extra slots and survive save reload.
+  - The same ResizeInventory-based build caused repeatable combat crashes with Windows `coreclr.dll` `0xc0000005`.
+  - A crash-isolation build with `WarehouseCapacityPatch` disabled completed the same combat without crashing.
+- Current shipped state:
+  - Resource add buttons and other modules remain available.
+  - Warehouse multiplier UI remains visible, but the patch reports disabled and does not resize warehouses.
+- Next safe direction:
+  - Do not use always-on Harmony prefixes on warehouse getters.
+  - Investigate a manual, one-shot, non-combat warehouse expansion command only after identifying a stable way to enumerate actual warehouse inventories.

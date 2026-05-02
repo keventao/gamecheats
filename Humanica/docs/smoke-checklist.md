@@ -102,3 +102,18 @@
 **验证日期:** ___________  
 **MelonLoader 版本:** ___________  
 **游戏版本:** ___________
+## 2026-05-03 Warehouse Capacity Crash Isolation
+
+- Current expected state: `WarehouseCapacityPatch` is disabled.
+- Startup log should contain:
+  - `[WarehouseCapacityPatch] Disabled: runtime warehouse slot resizing caused repeatable combat crashes.`
+- Warehouse multiplier buttons may still appear in the Resource tab, but they must not resize warehouses in this build.
+- Regression notes:
+  - ResizeInventory-based slot expansion created usable slots and survived save reload.
+  - It also caused repeatable combat crashes (`coreclr.dll`, `0xc0000005`).
+  - Disabling the patch allowed the same combat scenario to complete without crashing.
+- Before re-enabling any warehouse expansion:
+  - Test only on disposable saves.
+  - Confirm save backup creation.
+  - Confirm no combat crash after waiting several minutes and fighting.
+  - Confirm save, reload, full restart, and reload again.
