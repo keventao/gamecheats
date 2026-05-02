@@ -13,6 +13,7 @@
 This repository hosts multiple game-specific cheat-tool projects, one subdirectory each. Active projects:
 
 - `LordsAndVilleins/` — BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
+- `For The King/` - BepInEx + Harmony mod for *For The King* (Unity Mono). See `For The King/README.md` for project-specific commands and structure.
 - `Humanica/` — MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
 
 The sections below describe **LordsAndVilleins**; for Humanica, prefer `Humanica/README.md` and `Humanica/ROADMAP.md`.
