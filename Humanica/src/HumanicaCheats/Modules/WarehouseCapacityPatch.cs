@@ -48,6 +48,13 @@ namespace HumanicaCheats.Modules
             "CalculateRemainingCapacity"
         };
 
+        private static readonly string[] PackSizeMethodNames =
+        {
+            "get_PackSize",
+            "GetPackSize",
+            "CalculatePackSize"
+        };
+
         private static readonly PropertyInfo? WarehouseCapacityMultiplierProperty =
             typeof(ResourceCheats).GetProperty(
                 "WarehouseCapacityMultiplier",
@@ -65,6 +72,10 @@ namespace HumanicaCheats.Modules
                     .Select(g => g.First())
                     .ToList();
                 var freeCapacityCandidates = FindCandidates(IsFreeCapacityMethodName)
+                    .GroupBy(MethodKey)
+                    .Select(g => g.First())
+                    .ToList();
+                var packSizeCandidates = FindCandidates(IsPackSizeMethodName)
                     .GroupBy(MethodKey)
                     .Select(g => g.First())
                     .ToList();
@@ -118,7 +129,31 @@ namespace HumanicaCheats.Modules
                     MelonLogger.Warning("[WarehouseCapacityPatch] No free-capacity candidates found. Used-capacity display may be wrong.");
                 }
 
-                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s), {freePatched} free-capacity method(s).");
+                int packPatched = 0;
+                foreach (var candidate in packSizeCandidates)
+                {
+                    try
+                    {
+                        var postfix = candidate.ReturnType == typeof(int)
+                            ? new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(IntPackSizePostfix))
+                            : new HarmonyMethod(typeof(WarehouseCapacityPatch), nameof(FloatPackSizePostfix));
+
+                        harmony.Patch(candidate, postfix: postfix);
+                        packPatched++;
+                        MelonLogger.Msg($"[WarehouseCapacityPatch] Patched pack-size {candidate.DeclaringType?.FullName}.{candidate.Name} -> {candidate.ReturnType.Name}");
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Warning($"[WarehouseCapacityPatch] Skipped pack-size {candidate.DeclaringType?.FullName}.{candidate.Name}: {ex.Message}");
+                    }
+                }
+
+                if (packPatched == 0)
+                {
+                    MelonLogger.Warning("[WarehouseCapacityPatch] No pack-size candidates found. Slots may still cap storage.");
+                }
+
+                MelonLogger.Msg($"[WarehouseCapacityPatch] Patched {patched} capacity method(s), {freePatched} free-capacity method(s), {packPatched} pack-size method(s).");
                 return patched > 0;
             }
             catch (Exception ex)
@@ -202,6 +237,16 @@ namespace HumanicaCheats.Modules
             return false;
         }
 
+        private static bool IsPackSizeMethodName(string name)
+        {
+            for (int i = 0; i < PackSizeMethodNames.Length; i++)
+            {
+                if (string.Equals(name, PackSizeMethodNames[i], StringComparison.Ordinal))
+                    return true;
+            }
+            return false;
+        }
+
         private static bool HasAnyHint(string value, string[] hints)
         {
             for (int i = 0; i < hints.Length; i++)
@@ -279,6 +324,23 @@ namespace HumanicaCheats.Modules
                 return;
 
             __result += capacity * (multiplier - 1);
+        }
+
+        private static void IntPackSizePostfix(ref int __result)
+        {
+            int multiplier = GetWarehouseCapacityMultiplier();
+            if (multiplier <= 1 || __result <= 0) return;
+
+            long scaled = (long)__result * multiplier;
+            __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
+        }
+
+        private static void FloatPackSizePostfix(ref float __result)
+        {
+            int multiplier = GetWarehouseCapacityMultiplier();
+            if (multiplier <= 1 || __result <= 0f) return;
+
+            __result *= multiplier;
         }
     }
 }
