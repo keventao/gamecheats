@@ -50,8 +50,6 @@ namespace HumanicaCheats.Modules
 
         private static readonly string[] PackSizeMethodNames =
         {
-            "get_storedPackSize",
-            "storedPackSize",
             "get_PackSize",
             "GetPackSize",
             "CalculatePackSize"
@@ -64,6 +62,8 @@ namespace HumanicaCheats.Modules
 
         private static readonly Dictionary<IntPtr, int> LastIntCapacityByInstance = new Dictionary<IntPtr, int>();
         private static readonly Dictionary<IntPtr, float> LastFloatCapacityByInstance = new Dictionary<IntPtr, float>();
+        private static readonly Dictionary<IntPtr, int> OriginalStoredPackSizeByInstance = new Dictionary<IntPtr, int>();
+        private static readonly HashSet<string> LoggedStoredPackSizeFailures = new HashSet<string>();
 
         public static bool Register(HarmonyLib.Harmony harmony)
         {
@@ -287,6 +287,7 @@ namespace HumanicaCheats.Modules
 
             var pointer = InstancePointer(__instance);
             if (pointer != IntPtr.Zero) LastIntCapacityByInstance[pointer] = __result;
+            ApplyStoredPackSizeMultiplier(__instance, multiplier);
 
             long scaled = (long)__result * multiplier;
             __result = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
@@ -299,6 +300,7 @@ namespace HumanicaCheats.Modules
 
             var pointer = InstancePointer(__instance);
             if (pointer != IntPtr.Zero) LastFloatCapacityByInstance[pointer] = __result;
+            ApplyStoredPackSizeMultiplier(__instance, multiplier);
 
             __result *= multiplier;
         }
@@ -343,6 +345,49 @@ namespace HumanicaCheats.Modules
             if (multiplier <= 1 || __result <= 0f) return;
 
             __result *= multiplier;
+        }
+
+        private static void ApplyStoredPackSizeMultiplier(object instance, int multiplier)
+        {
+            try
+            {
+                var pointer = InstancePointer(instance);
+                if (pointer == IntPtr.Zero) return;
+
+                var type = instance.GetType();
+                var property = type.GetProperty("storedPackSize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (property == null || !property.CanRead || !property.CanWrite)
+                {
+                    LogStoredPackSizeFailure(type.FullName ?? type.Name, "storedPackSize property with getter/setter not found");
+                    return;
+                }
+
+                object? raw = property.GetValue(instance);
+                if (!(raw is int current) || current <= 0) return;
+
+                if (!OriginalStoredPackSizeByInstance.TryGetValue(pointer, out int original))
+                {
+                    original = current;
+                    OriginalStoredPackSizeByInstance[pointer] = original;
+                }
+
+                long scaled = multiplier <= 1 ? original : (long)original * multiplier;
+                int target = scaled > int.MaxValue ? int.MaxValue : (int)scaled;
+                if (current != target) property.SetValue(instance, target);
+            }
+            catch (Exception ex)
+            {
+                LogStoredPackSizeFailure(instance.GetType().FullName ?? instance.GetType().Name, ex.Message);
+            }
+        }
+
+        private static void LogStoredPackSizeFailure(string typeName, string message)
+        {
+            string key = typeName + "|" + message;
+            if (LoggedStoredPackSizeFailures.Add(key))
+            {
+                MelonLogger.Warning($"[WarehouseCapacityPatch] storedPackSize update skipped for {typeName}: {message}");
+            }
         }
     }
 }
