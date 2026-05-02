@@ -17,6 +17,9 @@ namespace HumanicaCheats.Modules
         // ── 5 个用户可配置槽 ───────────────────────────────────────────
         private const int SlotCount = 5;
         private const int LockMin = 50;
+        private static readonly int[] SupportedCapacityMultipliers = { 1, 5, 10, 50 };
+
+        internal static int WarehouseCapacityMultiplier { get; private set; } = 1;
 
         // 默认槽:STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD
         private static readonly int[] DefaultSlotIdx = { 1, 3, 2, 7, 32 };
@@ -24,6 +27,8 @@ namespace HumanicaCheats.Modules
         // 持久化:MelonPreferences,自动写入 UserData/MelonPreferences.cfg
         private MelonPreferences_Category _prefs = null!;
         private MelonPreferences_Entry<int>[] _slotIdxPref = null!;
+        private MelonPreferences_Entry<int> _capacityMultiplierPref = null!;
+        private bool _warehouseCapacityPatchBound;
         private bool[] _lockEnabled = new bool[SlotCount];
 
         // 资源选择器状态:-1 = 关,0..N = 给某个槽选资源
@@ -51,7 +56,27 @@ namespace HumanicaCheats.Modules
                     description: $"Resource slot {i} ResourceIndex int value");
             }
 
+            _capacityMultiplierPref = _prefs.CreateEntry("warehouse_capacity_multiplier", 1,
+                description: "Warehouse capacity multiplier. Supported values: 1, 5, 10, 50.");
+            WarehouseCapacityMultiplier = NormalizeCapacityMultiplier(_capacityMultiplierPref.Value);
+            if (_capacityMultiplierPref.Value != WarehouseCapacityMultiplier)
+            {
+                _capacityMultiplierPref.Value = WarehouseCapacityMultiplier;
+                _prefs.SaveToFile(false);
+            }
+
+            _warehouseCapacityPatchBound = WarehouseCapacityPatch.Register(harmony);
+
             Status = ModuleStatus.Ok;
+        }
+
+        private static int NormalizeCapacityMultiplier(int value)
+        {
+            for (int i = 0; i < SupportedCapacityMultipliers.Length; i++)
+            {
+                if (SupportedCapacityMultipliers[i] == value) return value;
+            }
+            return 1;
         }
 
         private static List<(string, int)> LoadAllResources()
@@ -191,7 +216,37 @@ namespace HumanicaCheats.Modules
                 return;
             }
 
+            DrawWarehouseCapacity(l);
             DrawSlots(l);
+        }
+
+        private void DrawWarehouseCapacity(Layout l)
+        {
+            const float btnW = 50f;
+            const float btnH = 26f;
+            const float gap = 6f;
+
+            GUI.Label(new Rect(l.X, l.Y, 80f, btnH), "仓库容量:");
+            float x = l.X + 84f;
+            for (int i = 0; i < SupportedCapacityMultipliers.Length; i++)
+            {
+                int multiplier = SupportedCapacityMultipliers[i];
+                var r = new Rect(x + i * (btnW + gap), l.Y, btnW, btnH);
+                if (ImguiUtil.Button(r, $"x{multiplier}", WarehouseCapacityMultiplier == multiplier))
+                {
+                    WarehouseCapacityMultiplier = multiplier;
+                    _capacityMultiplierPref.Value = multiplier;
+                    _prefs.SaveToFile(false);
+                    MelonLogger.Msg($"[ResourceCheats] Warehouse capacity multiplier set to x{multiplier}");
+                }
+            }
+            l.Y += btnH + 4f;
+
+            if (!_warehouseCapacityPatchBound)
+            {
+                l.Label("[!] 仓库容量 patch 未绑定 — 查看 MelonLoader 控制台");
+            }
+            l.Space(4);
         }
 
         private void DrawSlots(Layout l)
