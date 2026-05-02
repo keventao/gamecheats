@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
+using HumanicaCheats.Core;
 
 namespace HumanicaCheats.Modules
 {
@@ -155,6 +156,7 @@ namespace HumanicaCheats.Modules
         {
             try
             {
+                if (!GameRefs.IsReady) return 1;
                 if (WarehouseCapacityMultiplierProperty == null) return 1;
 
                 object? value = WarehouseCapacityMultiplierProperty.GetValue(null);
