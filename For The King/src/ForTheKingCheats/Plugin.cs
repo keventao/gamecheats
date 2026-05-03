@@ -30,6 +30,7 @@ namespace ForTheKingCheats
 
                 HarmonyInstance = new Harmony(PluginId);
                 Registry = new ModuleRegistry();
+                Registry.Add(new Modules.PlayerCheats());
                 Registry.Add(new Modules.TimeCheats());
                 Registry.RegisterAll(HarmonyInstance);
                 HarmonyInstance.PatchAll();
