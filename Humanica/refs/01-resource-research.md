@@ -221,3 +221,19 @@ TechManager.TechManager.InstantResearchAll();
   - Always-on Harmony prefixes on `GetCapacity`, `GetFreeSpace`, `get_PacksAmount`, or `GetFreePacksAmount` are too risky for this game.
   - The current build disables warehouse resizing.
   - Future work should investigate a manual one-shot command that enumerates only actual warehouse inventories and runs outside combat.
+
+## 2026-05-03 Manual Warehouse Expansion
+
+- Safety rule: do not install always-on warehouse capacity or slot-count Harmony patches.
+- New approach: the Resource tab exposes a manual one-shot expansion action.
+- The action backs up saves before `x2`, `x5`, or `x10`, enumerates `Il2Cpp.S.VillageData.Warehouses`, and calls `Inventory.ResizeInventory(targetPacks)` once per current warehouse.
+- The action records attempted/expanded/skipped/error counts in the UI and logs per-inventory errors.
+- 2026-05-03 follow-up: one-shot expansion must be idempotent. Target packs are now calculated from saved or inferred baseline packs rather than current packs.
+- Re-clicking the same multiplier should skip instead of multiplying again.
+- Lowering from a larger multiplier to a smaller multiplier is allowed only when packs above the target are empty; otherwise the shrink is skipped to avoid resource loss or save corruption.
+- Migration behavior for saves already expanded by the old stacking logic: if no baseline exists but the selected UI multiplier is greater than `x1`, the current pack count is treated as already being at that selected multiplier so the next same-multiplier click does not grow again.
+- Remaining verification:
+  - disposable save backup path
+  - save/reload and full restart/reload
+  - several minutes of combat after expansion
+  - no per-pack stored amount above original pack size

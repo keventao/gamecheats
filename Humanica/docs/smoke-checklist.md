@@ -28,16 +28,21 @@
 - [ ] 切换到"资源"Tab,显示 5 个槽,默认 `STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD`
 - [ ] 每个槽行格式:`EN / 中文 (idx)` 按钮 + `+5` + `+50` + `锁定≥50` toggle
 
-### 仓库容量倍率
+### 手动仓库扩容
 
-- [ ] 资源 Tab 显示仓库容量倍率 **×1 / ×5 / ×10 / ×50**
-- [ ] 仓库容量倍率 patch 状态显示正确:成功绑定时无 warning,失败时显示 warning
-  - 若 patch 绑定失败:确认资源 `+5` / `+50` 和 `锁定≥50` 仍可正常使用
-- [ ] 点击 **×5 / ×10 / ×50** → active 高亮切换到对应倍率
-- [x] 现有仓库在 **×5** 下从 `4/96` 变为 `4/480`,已用容量保持不变
-- [ ] 重启游戏 → 仓库容量倍率选择保留
-- [ ] 新建/升级仓库保留原版容量变化,并在刷新后按当前倍率放大
-- [ ] 切回 **×1** → 刷新/重载后恢复正常倍率
+- [ ] 资源 Tab 显示手动扩容 **×1 / ×2 / ×5 / ×10** 和 **执行扩容** 按钮
+- [ ] 控制台显示 `[WarehouseCapacityPatch] Disabled: no always-on warehouse resize patches are installed.`
+- [ ] 点击倍率按钮 → active 高亮切换到对应倍率
+- [ ] 选择 **×1** 后点击 **执行扩容** → UI 显示 `x1 不需要扩容`
+- [ ] 在一次性测试存档中选择 **×2** 后点击 **执行扩容** → `UserData/HumanicaCheats/SaveBackups` 下创建备份
+- [ ] 执行后 UI 显示尝试/扩容/跳过/错误数量,控制台写入 `[WarehouseCapacityPatch] Manual expansion`
+- [ ] 重复点击同一倍率的 **执行扩容** → 容量不再继续叠乘,日志显示 already at / 跳过
+- [ ] 从 **×5** 切到 **×2** 后执行 → 若多余格子为空则缩到原始 baseline ×2
+- [ ] 从 **×5** 切到 **×2** 后执行 → 若多余格子有资源则拒绝缩容并显示错误数量
+- [ ] 仓库可用格子或容量在 UI 刷新/重载后增加,每格资源数量不超过原版上限
+- [ ] 从主菜单重载存档成功,无 `EndOfStreamException`
+- [ ] 完全重启游戏后再次载入存档成功
+- [ ] 扩容后进行几分钟战斗,不再复现 `coreclr.dll 0xc0000005` 崩溃
 
 ### 增量 +5 / +50
 
@@ -93,7 +98,7 @@
 | 基础加载 | ⬜ | |
 | 时间 | ⬜ | |
 | 资源 — 增量 | ⬜ | |
-| 资源 — 仓库容量倍率 | 🟨 | ×5 已确认:现有仓库 `4/96` → `4/480`;持久化/升级/×1 恢复待测 |
+| 资源 — 手动仓库扩容 | 🟨 | 常驻 ResizeInventory patch 已禁用;改为点击按钮一次性扩容,需一次性测试存档验证 |
 | 资源 — 选择器/搜索 | ⬜ | |
 | 资源 — 锁定 | ⬜ | |
 | 村庄 | ⬜ | 建造速度方向需确认 |
@@ -104,10 +109,10 @@
 **游戏版本:** ___________
 ## 2026-05-03 Warehouse Capacity Crash Isolation
 
-- Current expected state: `WarehouseCapacityPatch` is disabled.
+- Current expected state: always-on warehouse patches are disabled.
 - Startup log should contain:
   - `[WarehouseCapacityPatch] Disabled: runtime warehouse slot resizing caused repeatable combat crashes.`
-- Warehouse multiplier buttons may still appear in the Resource tab, but they must not resize warehouses in this build.
+- Resource tab now exposes manual one-shot expansion; warehouses resize only when the player clicks `执行扩容`.
 - Regression notes:
   - ResizeInventory-based slot expansion created usable slots and survived save reload.
   - It also caused repeatable combat crashes (`coreclr.dll`, `0xc0000005`).
