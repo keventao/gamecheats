@@ -15,14 +15,17 @@ This repository hosts multiple game-specific cheat-tool projects, one subdirecto
 - `LordsAndVilleins/` — BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
 - `For The King/` - BepInEx + Harmony mod for *For The King* (Unity Mono). See `For The King/README.md` for project-specific commands and structure.
 - `Humanica/` — MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
+- `fightlife mods/` — packaged Unity Mono managed-DLL cheat files for *FightLife Vanguard*. See `fightlife mods/README-安装说明.txt`.
+- `spacehaven/` — offline save editor for *Space Haven*. See `spacehaven/README.md`.
 
-The sections below describe **LordsAndVilleins**; for Humanica, prefer `Humanica/README.md` and `Humanica/ROADMAP.md`.
+The sections below describe **LordsAndVilleins**; for other projects, prefer their local README and roadmap/status docs.
 
 - `src/LordsAndVilleinsCheats/` contains the mod source. Core shared services live in `Core/`, feature modules live in `Modules/`, and utility code lives in `Util/`.
 - `src/LordsAndVilleinsCheats.Tests/` contains xUnit tests for logic that can run outside the game.
 - `tools/` contains PowerShell helper scripts for installing, launching, and reading logs.
 - `refs/` stores dnSpy/game research notes. Check these before changing Harmony patches or game API assumptions.
 - `docs/smoke-checklist.md` lists manual in-game checks for release confidence.
+- Root `ROADMAP.md` tracks repository-level status and cross-project follow-ups.
 
 ## Build, Test, and Development Commands
 
@@ -55,3 +58,4 @@ Recent commit history was not available in this environment, so use concise impe
 ## Security & Configuration Tips
 
 This mod backs up saves, but contributors should still test against disposable saves. Do not commit local game paths, copied game assemblies, BepInEx binaries, or save files.
+For packaged projects, do not commit `.bak` restore files, savegames, or OS metadata such as `.DS_Store`.
