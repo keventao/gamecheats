@@ -7,7 +7,7 @@ namespace ForTheKingCheats.Core
     {
         private readonly List<ICheatModule> _modules = new List<ICheatModule>();
 
-        public IReadOnlyList<ICheatModule> Modules => _modules;
+        public IList<ICheatModule> Modules => _modules;
 
         public void Add(ICheatModule module)
         {

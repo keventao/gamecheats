@@ -15,10 +15,10 @@ namespace ForTheKingCheats
         public const string PluginName = "For The King Cheats";
         public const string PluginVersion = "0.1.0";
 
-        internal static ManualLogSource Log = null!;
-        internal static Harmony HarmonyInstance = null!;
-        internal static ModuleRegistry Registry = null!;
-        internal static GuiManager Gui = null!;
+        internal static ManualLogSource Log;
+        internal static Harmony HarmonyInstance;
+        internal static ModuleRegistry Registry;
+        internal static GuiManager Gui;
 
         private void Awake()
         {

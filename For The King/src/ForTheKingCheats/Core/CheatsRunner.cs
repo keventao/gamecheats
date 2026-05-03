@@ -5,8 +5,8 @@ namespace ForTheKingCheats.Core
 {
     public sealed class CheatsRunner : MonoBehaviour
     {
-        private GuiManager? _gui;
-        private ManualLogSource? _log;
+        private GuiManager _gui;
+        private ManualLogSource _log;
 
         public void Bind(GuiManager gui, ManualLogSource log)
         {
@@ -19,13 +19,19 @@ namespace ForTheKingCheats.Core
             if (_gui != null && Input.GetKeyDown(KeyCode.F1))
             {
                 _gui.Visible = !_gui.Visible;
-                _log?.LogInfo($"GUI visible: {_gui.Visible}");
+                if (_log != null)
+                {
+                    _log.LogInfo($"GUI visible: {_gui.Visible}");
+                }
             }
         }
 
         private void OnGUI()
         {
-            _gui?.Draw();
+            if (_gui != null)
+            {
+                _gui.Draw();
+            }
         }
     }
 }

@@ -4,8 +4,8 @@
     <GameManaged>$(GameRoot)\FTK_Data\Managed</GameManaged>
     <BepInExPath>$(GameRoot)\BepInEx</BepInExPath>
     <PluginInstallDir>$(BepInExPath)\plugins\ForTheKingCheats</PluginInstallDir>
-    <LangVersion>10</LangVersion>
-    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 </Project>
