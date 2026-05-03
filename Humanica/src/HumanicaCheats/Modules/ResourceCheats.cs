@@ -6,6 +6,7 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using HumanicaCheats.Core;
+using HumanicaCheats.Util;
 
 namespace HumanicaCheats.Modules
 {
@@ -17,6 +18,9 @@ namespace HumanicaCheats.Modules
         // ── 5 个用户可配置槽 ───────────────────────────────────────────
         private const int SlotCount = 5;
         private const int LockMin = 50;
+        private static readonly int[] SupportedCapacityMultipliers = { 1, 2, 5, 10 };
+
+        internal static int WarehouseCapacityMultiplier { get; private set; } = 1;
 
         // 默认槽:STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD
         private static readonly int[] DefaultSlotIdx = { 1, 3, 2, 7, 32 };
@@ -24,7 +28,12 @@ namespace HumanicaCheats.Modules
         // 持久化:MelonPreferences,自动写入 UserData/MelonPreferences.cfg
         private MelonPreferences_Category _prefs = null!;
         private MelonPreferences_Entry<int>[] _slotIdxPref = null!;
+        private MelonPreferences_Entry<int> _capacityMultiplierPref = null!;
+        private MelonPreferences_Entry<int> _appliedCapacityMultiplierPref = null!;
+        private MelonPreferences_Entry<string> _capacityBaselinePacksPref = null!;
+        private bool _warehouseCapacityPatchBound;
         private bool[] _lockEnabled = new bool[SlotCount];
+        private string _lastWarehouseExpansionResult = "未执行手动扩容";
 
         // 资源选择器状态:-1 = 关,0..N = 给某个槽选资源
         private int _pickerForSlot = -1;
@@ -51,7 +60,38 @@ namespace HumanicaCheats.Modules
                     description: $"Resource slot {i} ResourceIndex int value");
             }
 
+            _capacityMultiplierPref = _prefs.CreateEntry("warehouse_capacity_multiplier", 1,
+                description: "Manual warehouse expansion multiplier. Supported values: 1, 2, 5, 10.");
+            _appliedCapacityMultiplierPref = _prefs.CreateEntry("warehouse_capacity_applied_multiplier", 1,
+                description: "Last manual warehouse expansion multiplier applied to saved baseline packs.");
+            _capacityBaselinePacksPref = _prefs.CreateEntry("warehouse_capacity_baseline_packs", "",
+                description: "Comma-separated original warehouse pack counts before manual expansion.");
+            WarehouseCapacityMultiplier = NormalizeCapacityMultiplier(_capacityMultiplierPref.Value);
+            if (_capacityMultiplierPref.Value != WarehouseCapacityMultiplier)
+            {
+                _capacityMultiplierPref.Value = WarehouseCapacityMultiplier;
+                _prefs.SaveToFile(false);
+            }
+            if (string.IsNullOrWhiteSpace(_capacityBaselinePacksPref.Value)
+                && _appliedCapacityMultiplierPref.Value <= 1
+                && WarehouseCapacityMultiplier > 1)
+            {
+                _appliedCapacityMultiplierPref.Value = WarehouseCapacityMultiplier;
+                _prefs.SaveToFile(false);
+            }
+
+            _warehouseCapacityPatchBound = WarehouseCapacityPatch.Register(harmony);
+
             Status = ModuleStatus.Ok;
+        }
+
+        private static int NormalizeCapacityMultiplier(int value)
+        {
+            for (int i = 0; i < SupportedCapacityMultipliers.Length; i++)
+            {
+                if (SupportedCapacityMultipliers[i] == value) return value;
+            }
+            return 1;
         }
 
         private static List<(string, int)> LoadAllResources()
@@ -191,7 +231,84 @@ namespace HumanicaCheats.Modules
                 return;
             }
 
+            DrawWarehouseCapacity(l);
             DrawSlots(l);
+        }
+
+        private void DrawWarehouseCapacity(Layout l)
+        {
+            const float btnW = 50f;
+            const float btnH = 26f;
+            const float gap = 6f;
+
+            GUI.Label(new Rect(l.X, l.Y, 92f, btnH), "手动扩容:");
+            float x = l.X + 96f;
+            for (int i = 0; i < SupportedCapacityMultipliers.Length; i++)
+            {
+                int multiplier = SupportedCapacityMultipliers[i];
+                var r = new Rect(x + i * (btnW + gap), l.Y, btnW, btnH);
+                if (ImguiUtil.Button(r, $"x{multiplier}", WarehouseCapacityMultiplier == multiplier))
+                {
+                    WarehouseCapacityMultiplier = multiplier;
+                    _capacityMultiplierPref.Value = multiplier;
+                    _prefs.SaveToFile(false);
+                    MelonLogger.Msg($"[ResourceCheats] Manual warehouse expansion multiplier set to x{multiplier}");
+                }
+            }
+            l.Y += btnH + 4f;
+
+            var runRect = new Rect(l.X, l.Y, 150f, btnH);
+            if (ImguiUtil.Button(runRect, "执行扩容"))
+            {
+                RunManualWarehouseExpansion();
+            }
+            GUI.Label(new Rect(l.X + 156f, l.Y + 3f, l.Width - 156f, btnH), _lastWarehouseExpansionResult);
+            l.Y += btnH + 4f;
+
+            if (!_warehouseCapacityPatchBound)
+            {
+                l.Label("[i] 无常驻仓库 patch;扩容只在点击按钮时执行");
+            }
+            l.Space(4);
+        }
+
+        private void RunManualWarehouseExpansion()
+        {
+            if (WarehouseCapacityMultiplier <= 1)
+            {
+                _lastWarehouseExpansionResult = "x1 不需要扩容";
+                return;
+            }
+
+            bool backedUp = SaveBackupService.BackupSaves("before-manual-warehouse-expansion");
+            int previousMultiplier = NormalizeCapacityMultiplier(_appliedCapacityMultiplierPref.Value);
+            var result = WarehouseCapacityPatch.ExpandWarehousesOnce(
+                WarehouseCapacityMultiplier,
+                previousMultiplier,
+                _capacityBaselinePacksPref.Value);
+            _capacityBaselinePacksPref.Value = result.BaselinePacksCsv;
+            if (!result.HasErrors)
+            {
+                _appliedCapacityMultiplierPref.Value = WarehouseCapacityMultiplier;
+            }
+            _prefs.SaveToFile(false);
+
+            string backupText = backedUp ? "已备份" : "备份失败";
+            _lastWarehouseExpansionResult =
+                $"{backupText};尝试 {result.Attempted},扩 {result.Expanded},缩 {result.Shrunk},跳 {result.Skipped},错 {result.Errors.Count}";
+
+            if (result.HasErrors)
+            {
+                MelonLogger.Warning($"[ResourceCheats] Manual warehouse expansion x{WarehouseCapacityMultiplier}: {_lastWarehouseExpansionResult}");
+                for (int i = 0; i < result.Errors.Count; i++)
+                {
+                    MelonLogger.Warning($"[ResourceCheats] Manual warehouse expansion error {i + 1}: {result.Errors[i]}");
+                }
+            }
+            else
+            {
+                MelonLogger.Msg($"[ResourceCheats] Manual warehouse expansion x{WarehouseCapacityMultiplier}: {_lastWarehouseExpansionResult}");
+            }
         }
 
         private void DrawSlots(Layout l)

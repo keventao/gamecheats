@@ -28,6 +28,22 @@
 - [ ] 切换到"资源"Tab,显示 5 个槽,默认 `STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD`
 - [ ] 每个槽行格式:`EN / 中文 (idx)` 按钮 + `+5` + `+50` + `锁定≥50` toggle
 
+### 手动仓库扩容
+
+- [ ] 资源 Tab 显示手动扩容 **×1 / ×2 / ×5 / ×10** 和 **执行扩容** 按钮
+- [ ] 控制台显示 `[WarehouseCapacityPatch] Disabled: no always-on warehouse resize patches are installed.`
+- [ ] 点击倍率按钮 → active 高亮切换到对应倍率
+- [ ] 选择 **×1** 后点击 **执行扩容** → UI 显示 `x1 不需要扩容`
+- [ ] 在一次性测试存档中选择 **×2** 后点击 **执行扩容** → `UserData/HumanicaCheats/SaveBackups` 下创建备份
+- [ ] 执行后 UI 显示尝试/扩容/跳过/错误数量,控制台写入 `[WarehouseCapacityPatch] Manual expansion`
+- [ ] 重复点击同一倍率的 **执行扩容** → 容量不再继续叠乘,日志显示 already at / 跳过
+- [ ] 从 **×5** 切到 **×2** 后执行 → 若多余格子为空则缩到原始 baseline ×2
+- [ ] 从 **×5** 切到 **×2** 后执行 → 若多余格子有资源则拒绝缩容并显示错误数量
+- [ ] 仓库可用格子或容量在 UI 刷新/重载后增加,每格资源数量不超过原版上限
+- [ ] 从主菜单重载存档成功,无 `EndOfStreamException`
+- [ ] 完全重启游戏后再次载入存档成功
+- [ ] 扩容后进行几分钟战斗,不再复现 `coreclr.dll 0xc0000005` 崩溃
+
 ### 增量 +5 / +50
 
 - [ ] STICKS `+5` → 仓库 sticks +5,控制台 `[ResourceCheats] AddRes(STICKS idx=1 amt=5) OK`
@@ -82,6 +98,7 @@
 | 基础加载 | ⬜ | |
 | 时间 | ⬜ | |
 | 资源 — 增量 | ⬜ | |
+| 资源 — 手动仓库扩容 | 🟨 | 常驻 ResizeInventory patch 已禁用;改为点击按钮一次性扩容,需一次性测试存档验证 |
 | 资源 — 选择器/搜索 | ⬜ | |
 | 资源 — 锁定 | ⬜ | |
 | 村庄 | ⬜ | 建造速度方向需确认 |
@@ -90,3 +107,18 @@
 **验证日期:** ___________  
 **MelonLoader 版本:** ___________  
 **游戏版本:** ___________
+## 2026-05-03 Warehouse Capacity Crash Isolation
+
+- Current expected state: always-on warehouse patches are disabled.
+- Startup log should contain:
+  - `[WarehouseCapacityPatch] Disabled: runtime warehouse slot resizing caused repeatable combat crashes.`
+- Resource tab now exposes manual one-shot expansion; warehouses resize only when the player clicks `执行扩容`.
+- Regression notes:
+  - ResizeInventory-based slot expansion created usable slots and survived save reload.
+  - It also caused repeatable combat crashes (`coreclr.dll`, `0xc0000005`).
+  - Disabling the patch allowed the same combat scenario to complete without crashing.
+- Before re-enabling any warehouse expansion:
+  - Test only on disposable saves.
+  - Confirm save backup creation.
+  - Confirm no combat crash after waiting several minutes and fighting.
+  - Confirm save, reload, full restart, and reload again.

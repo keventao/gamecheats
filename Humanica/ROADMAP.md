@@ -30,6 +30,7 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 - 选定持久化到 `UserData/MelonPreferences.cfg`,跨会话保留
 - +5 / +50 量级(原 +100/+1000;游戏资源消耗量小)
 - 锁定 ≥50(原 ≥500)
+- 资源 Tab 增加手动仓库扩容 ×1/×2/×5/×10;点击时备份存档并一次性扩容当前仓库
 - 默认槽位:STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD
 
 新增 `Core/ResourceI18n.cs`,~100 项 EN → 中文翻译表,缺失项 fallback 到 enum 名。
@@ -45,10 +46,12 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 - ✅ `AddResourceIntoFreeWarehouse` 第三参 `createIfNeeded`:**必须传 `true`**。
   传 `false` 会截到现有仓库剩余容量(LOG 仓库大没事;COBBLESTONES/RAW_PELT 等
   容量小的被截到 ~10),累积过多还会让游戏 AI 死循环卡死
+- ✅ 仓库容量研究:显示倍率、pack size、常驻 ResizeInventory 路线均已验证风险,当前改为手动一次性扩容路线
 
 ### 待游戏内确认项
 - ⏳ 村庄 Tab:添加村民、建造 ×10、生产 ×10
 - ⏳ 解锁 Tab:InstantResearchAll
+- ⏳ 资源 Tab: 手动仓库扩容备份、存档重载、完整重启重载、战斗稳定性
 - ⏳ 资源锁定 toggle 在低消耗游戏下行为(LockMin=50 是否合适)
 
 ---
@@ -84,3 +87,23 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 |------|------|------|
 | v0.1.1 | 2026-05-02 | GUI 架构重写(绕 IL2CPP IMGUI 返回值坑) + 资源模块改 5 槽可选 + 中英搜索 + 持久化。游戏内基础功能验证通过。 |
 | v0.1.0 | 2026-05-01 | 初版合并到 main。4 模块实现(时间/资源/村庄/解锁)。代码完成,GUI 在 IL2CPP 下不可用。 |
+---
+
+## 2026-05-03 Warehouse Capacity Status
+
+- Always-on warehouse capacity / slot resizing patches are currently disabled in code.
+- Verified behavior before disabling:
+  - Display-only capacity scaling could show larger capacity but did not create usable slots.
+  - Per-pack amount scaling corrupted saves and must not be reintroduced.
+  - Runtime `Inventory.ResizeInventory()` could create extra slots and survive save reload.
+  - The same ResizeInventory-based build caused repeatable combat crashes with Windows `coreclr.dll` `0xc0000005`.
+  - A crash-isolation build with `WarehouseCapacityPatch` disabled completed the same combat without crashing.
+- Current shipped state:
+  - Resource add buttons and other modules remain available.
+  - Resource tab exposes manual one-shot expansion buttons.
+  - Warehouses resize only when the player clicks the expansion button.
+  - Manual expansion records baseline pack counts and applies selected multipliers relative to that baseline, so repeated clicks no longer stack.
+  - Lowering the multiplier shrinks only when packs above the target are empty.
+- Next safe direction:
+  - Do not use always-on Harmony prefixes on warehouse getters.
+  - Verify manual one-shot expansion on disposable saves, including combat after expansion.
