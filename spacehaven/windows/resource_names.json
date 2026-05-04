@@ -1,0 +1,1094 @@
+{
+  "10": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "1000": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "1021": {
+    "cn": "狙击枪",
+    "en": "Sniper rifle",
+    "kind": "item",
+    "tid": "511"
+  },
+  "11": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "1152": {
+    "cn": "X1型哨戒炮",
+    "en": "Sentry gun X1",
+    "kind": "item",
+    "tid": "5262"
+  },
+  "121": {
+    "cn": "人类尸体",
+    "en": "Human Corpse",
+    "kind": "item",
+    "tid": "1807"
+  },
+  "127": {
+    "cn": "碎石",
+    "en": "Rubble",
+    "kind": "product",
+    "tid": "100"
+  },
+  "1397": {
+    "cn": "食物组",
+    "en": "Food group",
+    "kind": "product",
+    "tid": "817"
+  },
+  "1435": {
+    "cn": "被茧包裹",
+    "en": "Cocooned",
+    "kind": "item",
+    "tid": "830"
+  },
+  "1445": {
+    "cn": "建造工具",
+    "en": "Building tools",
+    "kind": "product",
+    "tid": "836"
+  },
+  "1494": {
+    "cn": "建造枪",
+    "en": "Construction gun",
+    "kind": "item",
+    "tid": "1234"
+  },
+  "1495": {
+    "cn": "建造枪",
+    "en": "Construction gun",
+    "kind": "item",
+    "tid": "1234"
+  },
+  "15": {
+    "cn": "根菜",
+    "en": "Root vegetables",
+    "kind": "product",
+    "tid": "61"
+  },
+  "155": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "156": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "157": {
+    "cn": "基础金属",
+    "en": "Base Metals",
+    "kind": "product",
+    "tid": "184"
+  },
+  "158": {
+    "cn": "能量水晶",
+    "en": "Energium",
+    "kind": "product",
+    "tid": "109"
+  },
+  "16": {
+    "cn": "水",
+    "en": "Water",
+    "kind": "product",
+    "tid": "64"
+  },
+  "162": {
+    "cn": "基础方块",
+    "en": "Infrablock",
+    "kind": "product",
+    "tid": "108"
+  },
+  "169": {
+    "cn": "贵金属",
+    "en": "Noble Metals",
+    "kind": "product",
+    "tid": "190"
+  },
+  "17": {
+    "cn": "根菜",
+    "en": "Root vegetables",
+    "kind": "product",
+    "tid": "61"
+  },
+  "170": {
+    "cn": "碳",
+    "en": "Carbon",
+    "kind": "product",
+    "tid": "191"
+  },
+  "171": {
+    "cn": "化学原料",
+    "en": "Raw Chemicals",
+    "kind": "product",
+    "tid": "197"
+  },
+  "172": {
+    "cn": "超能矿石",
+    "en": "Hyperium",
+    "kind": "product",
+    "tid": "198"
+  },
+  "173": {
+    "cn": "电子元件",
+    "en": "Electronics Component",
+    "kind": "product",
+    "tid": "199"
+  },
+  "1733": {
+    "cn": "灭火器",
+    "en": "Fire Extinguisher",
+    "kind": "item",
+    "tid": "1361"
+  },
+  "174": {
+    "cn": "能量棒",
+    "en": "Energy rod",
+    "kind": "product",
+    "tid": "200"
+  },
+  "175": {
+    "cn": "塑料",
+    "en": "Plastics",
+    "kind": "product",
+    "tid": "201"
+  },
+  "1759": {
+    "cn": "船体方块",
+    "en": "Hull Block",
+    "kind": "product",
+    "tid": "1393"
+  },
+  "176": {
+    "cn": "化学物质",
+    "en": "Chemicals",
+    "kind": "product",
+    "tid": "202"
+  },
+  "177": {
+    "cn": "布料",
+    "en": "Fabrics",
+    "kind": "product",
+    "tid": "203"
+  },
+  "178": {
+    "cn": "超能燃料",
+    "en": "Hyperfuel",
+    "kind": "product",
+    "tid": "204"
+  },
+  "179": {
+    "cn": "加工过的食品",
+    "en": "Processed Food",
+    "kind": "product",
+    "tid": "196"
+  },
+  "1819": {
+    "cn": "数据日志",
+    "en": "Data log",
+    "kind": "item",
+    "tid": "5568"
+  },
+  "1856": {
+    "cn": "货币",
+    "en": "Credits",
+    "kind": "item",
+    "tid": "1564"
+  },
+  "1858": {
+    "cn": "货币",
+    "en": "Credits",
+    "kind": "product",
+    "tid": "1564"
+  },
+  "1873": {
+    "cn": "基础废料",
+    "en": "Infra Scrap",
+    "kind": "product",
+    "tid": "1698"
+  },
+  "1874": {
+    "cn": "柔性废料",
+    "en": "Soft Scrap",
+    "kind": "product",
+    "tid": "1696"
+  },
+  "1886": {
+    "cn": "船体废料",
+    "en": "Hull Scrap",
+    "kind": "product",
+    "tid": "1724"
+  },
+  "1919": {
+    "cn": "能量方块",
+    "en": "Energy block",
+    "kind": "product",
+    "tid": "1771"
+  },
+  "1920": {
+    "cn": "超级方块",
+    "en": "Superblock",
+    "kind": "product",
+    "tid": "1773"
+  },
+  "1921": {
+    "cn": "柔性方块",
+    "en": "Soft block",
+    "kind": "product",
+    "tid": "1775"
+  },
+  "1922": {
+    "cn": "钢板",
+    "en": "Steel Plates",
+    "kind": "product",
+    "tid": "1778"
+  },
+  "1924": {
+    "cn": "光电元件",
+    "en": "Optronics Component",
+    "kind": "product",
+    "tid": "1780"
+  },
+  "1925": {
+    "cn": "量子电子元件",
+    "en": "Quantronics Component",
+    "kind": "product",
+    "tid": "1782"
+  },
+  "1926": {
+    "cn": "能量电池",
+    "en": "Energy Cell",
+    "kind": "product",
+    "tid": "1784"
+  },
+  "1932": {
+    "cn": "纤维",
+    "en": "Fibers",
+    "kind": "product",
+    "tid": "1786"
+  },
+  "1944": {
+    "cn": "纤维",
+    "en": "Fibers",
+    "kind": "product",
+    "tid": "1786"
+  },
+  "1946": {
+    "cn": "科技废料",
+    "en": "Tech Scrap",
+    "kind": "product",
+    "tid": "1800"
+  },
+  "1947": {
+    "cn": "能量废料",
+    "en": "Energy Scrap",
+    "kind": "product",
+    "tid": "1802"
+  },
+  "1954": {
+    "cn": "人类尸体",
+    "en": "Human Corpse",
+    "kind": "item",
+    "tid": "1807"
+  },
+  "1955": {
+    "cn": "爬行怪尸体",
+    "en": "Crawler Corpse",
+    "kind": "item",
+    "tid": "1805"
+  },
+  "1956": {
+    "cn": "机器人尸体",
+    "en": "Android Corpse",
+    "kind": "item",
+    "tid": "1809"
+  },
+  "2053": {
+    "cn": "医疗用品",
+    "en": "Medical Supplies",
+    "kind": "product",
+    "tid": "1888"
+  },
+  "2058": {
+    "cn": "静脉输液",
+    "en": "IV Fluid",
+    "kind": "product",
+    "tid": "1897"
+  },
+  "2419": {
+    "cn": "清洁工具",
+    "en": "Cleaning Tool",
+    "kind": "item",
+    "tid": "3576"
+  },
+  "2452": {
+    "cn": "水蒸汽",
+    "en": "Water Vapor",
+    "kind": "product",
+    "tid": "3630"
+  },
+  "2475": {
+    "cn": "肥料",
+    "en": "Fertilizer",
+    "kind": "product",
+    "tid": "3635"
+  },
+  "2540": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2541": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2542": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2543": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2657": {
+    "cn": "坚果和种子",
+    "en": "Nuts and seeds",
+    "kind": "product",
+    "tid": "3899"
+  },
+  "2658": {
+    "cn": "坚果和种子",
+    "en": "Nuts and seeds",
+    "kind": "product",
+    "tid": "3899"
+  },
+  "2714": {
+    "cn": "爆炸弹",
+    "en": "Explosive ammunition",
+    "kind": "item",
+    "tid": "268"
+  },
+  "2715": {
+    "cn": "爆炸弹",
+    "en": "Explosive ammunition",
+    "kind": "product",
+    "tid": "268"
+  },
+  "2774": {
+    "cn": "人类尸体",
+    "en": "Human Corpse",
+    "kind": "item",
+    "tid": "1807"
+  },
+  "2775": {
+    "cn": "人类尸体",
+    "en": "Human Corpse",
+    "kind": "item",
+    "tid": "1807"
+  },
+  "2797": {
+    "cn": "奴隶项圈",
+    "en": "Slave collar",
+    "kind": "item",
+    "tid": "4157"
+  },
+  "2851": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2853": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2854": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2855": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2856": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2857": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2858": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "2883": {
+    "cn": "物流机器人残骸",
+    "en": "Logistics bot rubble",
+    "kind": "item",
+    "tid": "4372"
+  },
+  "2884": {
+    "cn": "物流机器人",
+    "en": "Logistics Robot",
+    "kind": "item",
+    "tid": "4370"
+  },
+  "2899": {
+    "cn": "回收机器人残骸",
+    "en": "Salvage robot rubble",
+    "kind": "item",
+    "tid": "4423"
+  },
+  "2900": {
+    "cn": "回收机器人",
+    "en": "Salvage robot",
+    "kind": "item",
+    "tid": "4425"
+  },
+  "3069": {
+    "cn": "激光步枪",
+    "en": "Laser Rifle",
+    "kind": "item",
+    "tid": "5374"
+  },
+  "3070": {
+    "cn": "激光手枪",
+    "en": "Laser Pistol",
+    "kind": "item",
+    "tid": "5372"
+  },
+  "3071": {
+    "cn": "等离子集束枪",
+    "en": "Plasma Clustergun",
+    "kind": "item",
+    "tid": "5378"
+  },
+  "3072": {
+    "cn": "等离子步枪",
+    "en": "Plasma Rifle",
+    "kind": "item",
+    "tid": "5376"
+  },
+  "3077": {
+    "cn": "喷气怪尸体",
+    "en": "Hauler Corpse",
+    "kind": "item",
+    "tid": "4588"
+  },
+  "3079": {
+    "cn": "人类尸体（玩家阵营）",
+    "en": "Human Corpse (player)",
+    "kind": "item",
+    "tid": "4599"
+  },
+  "3081": {
+    "cn": "喷气怪尸体",
+    "en": "Hauler Corpse",
+    "kind": "item",
+    "tid": "4588"
+  },
+  "3196": {
+    "cn": "高级电力",
+    "en": "Advanced Power",
+    "kind": "product",
+    "tid": "4836"
+  },
+  "3366": {
+    "cn": "轻度酒精饮料",
+    "en": "Mild Alcohol",
+    "kind": "product",
+    "tid": "5136"
+  },
+  "3367": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "3378": {
+    "cn": "谷物和啤酒花",
+    "en": "Grains and Hops",
+    "kind": "product",
+    "tid": "5160"
+  },
+  "3379": {
+    "cn": "谷物和啤酒花",
+    "en": "Grains and Hops",
+    "kind": "product",
+    "tid": "5160"
+  },
+  "3383": {
+    "cn": "防弹背心",
+    "en": "Bulletproof Vest",
+    "kind": "item",
+    "tid": "5251"
+  },
+  "3384": {
+    "cn": "装甲背心",
+    "en": "Armored Vest",
+    "kind": "item",
+    "tid": "5252"
+  },
+  "3386": {
+    "cn": "遥控装置",
+    "en": "Remote Control",
+    "kind": "item",
+    "tid": "5260"
+  },
+  "3387": {
+    "cn": "氧气发生器",
+    "en": "Oxygen generator",
+    "kind": "item",
+    "tid": "5281"
+  },
+  "3388": {
+    "cn": "氧气罐",
+    "en": "Oxygen Tank",
+    "kind": "item",
+    "tid": "5442"
+  },
+  "34": {
+    "cn": "电力",
+    "en": "Power",
+    "kind": "product",
+    "tid": "3455"
+  },
+  "3419": {
+    "cn": "强化零件",
+    "en": "Augmentation Parts",
+    "kind": "product",
+    "tid": "5320"
+  },
+  "3512": {
+    "cn": "异星矿石",
+    "en": "Exotic ore",
+    "kind": "product",
+    "tid": "5531"
+  },
+  "3513": {
+    "cn": "基础矿石",
+    "en": "Basic ore",
+    "kind": "product",
+    "tid": "5533"
+  },
+  "3522": {
+    "cn": "空间站日志",
+    "en": "Station log",
+    "kind": "item",
+    "tid": "5556"
+  },
+  "3523": {
+    "cn": "飞船日志",
+    "en": "Ship log",
+    "kind": "item",
+    "tid": "5554"
+  },
+  "3524": {
+    "cn": "研究日志",
+    "en": "Research log",
+    "kind": "item",
+    "tid": "5558"
+  },
+  "3525": {
+    "cn": "货物清单",
+    "en": "Cargo manifest",
+    "kind": "item",
+    "tid": "5552"
+  },
+  "3526": {
+    "cn": "医疗日志",
+    "en": "Medical log",
+    "kind": "item",
+    "tid": "5560"
+  },
+  "3527": {
+    "cn": "奴役日志",
+    "en": "Enslavement log",
+    "kind": "item",
+    "tid": "5564"
+  },
+  "3528": {
+    "cn": "俘虏日志",
+    "en": "Prisoner log",
+    "kind": "item",
+    "tid": "5562"
+  },
+  "3529": {
+    "cn": "休眠日志",
+    "en": "Hypersleep log",
+    "kind": "item",
+    "tid": "5566"
+  },
+  "3620": {
+    "cn": "损坏的武器",
+    "en": "Broken weapon",
+    "kind": "item",
+    "tid": "5870"
+  },
+  "3621": {
+    "cn": "损坏的护甲",
+    "en": "Broken armor",
+    "kind": "item",
+    "tid": "5871"
+  },
+  "3658": {
+    "cn": "激光手枪",
+    "en": "Laser Pistol",
+    "kind": "item",
+    "tid": "5372"
+  },
+  "3670": {
+    "cn": "被茧包裹",
+    "en": "Cocooned",
+    "kind": "item",
+    "tid": "830"
+  },
+  "3702": {
+    "cn": "建造枪",
+    "en": "Construction gun",
+    "kind": "item",
+    "tid": "1234"
+  },
+  "3711": {
+    "cn": "进化中的外星生物核心残骸",
+    "en": "Evolving Alien Core Remains",
+    "kind": "item",
+    "tid": "5965"
+  },
+  "3712": {
+    "cn": "外星生物巢穴核心残骸",
+    "en": "Alien Hive Core Remains",
+    "kind": "item",
+    "tid": "5964"
+  },
+  "3713": {
+    "cn": "黑猩猩（步行机器人）残骸",
+    "en": "Chimp (Walkerbot) rubble",
+    "kind": "item",
+    "tid": "5966"
+  },
+  "3714": {
+    "cn": "仓鼠（飞行机器人）残骸",
+    "en": "Hamster (Flybot) rubble",
+    "kind": "item",
+    "tid": "5967"
+  },
+  "3728": {
+    "cn": "代码片段",
+    "en": "Code fragment",
+    "kind": "item",
+    "tid": "6009"
+  },
+  "3782": {
+    "cn": "喷气怪尸体",
+    "en": "Hauler Corpse",
+    "kind": "item",
+    "tid": "4588"
+  },
+  "3925": {
+    "cn": "ISP",
+    "en": "ISP",
+    "kind": "item",
+    "tid": "7564"
+  },
+  "3956": {
+    "cn": "冲锋枪",
+    "en": "SMG",
+    "kind": "item",
+    "tid": "502"
+  },
+  "3960": {
+    "cn": "火焰喷射器",
+    "en": "Flamethrower",
+    "kind": "item",
+    "tid": "5295"
+  },
+  "3961": {
+    "cn": "电击步枪",
+    "en": "Stun Rifle",
+    "kind": "item",
+    "tid": "7640"
+  },
+  "3962": {
+    "cn": "电击手枪",
+    "en": "Stun Pistol",
+    "kind": "item",
+    "tid": "7638"
+  },
+  "3963": {
+    "cn": "损坏的武器配件",
+    "en": "Broken Weapon Attachment",
+    "kind": "item",
+    "tid": "7642"
+  },
+  "3967": {
+    "cn": "爆破榴弹发射器",
+    "en": "Explosive Grenade Launcher",
+    "kind": "item",
+    "tid": "7644"
+  },
+  "3968": {
+    "cn": "基础瞄准镜",
+    "en": "Basic scope",
+    "kind": "item",
+    "tid": "7647"
+  },
+  "3969": {
+    "cn": "战术握把",
+    "en": "Tactical Grip",
+    "kind": "item",
+    "tid": "7649"
+  },
+  "3975": {
+    "cn": "霰弹枪自动装填器",
+    "en": "Shotgun Autoloader",
+    "kind": "item",
+    "tid": "7659"
+  },
+  "40": {
+    "cn": "冰",
+    "en": "Ice",
+    "kind": "product",
+    "tid": "72"
+  },
+  "4005": {
+    "cn": "止痛药",
+    "en": "Painkillers",
+    "kind": "item",
+    "tid": "7668"
+  },
+  "4006": {
+    "cn": "战斗兴奋剂",
+    "en": "Combat Stimulant",
+    "kind": "item",
+    "tid": "7670"
+  },
+  "4007": {
+    "cn": "绷带",
+    "en": "Bandage",
+    "kind": "item",
+    "tid": "7672"
+  },
+  "4020": {
+    "cn": "情绪兴奋剂",
+    "en": "Mood Stimulant",
+    "kind": "item",
+    "tid": "7694"
+  },
+  "4022": {
+    "cn": "CSP",
+    "en": "CSP",
+    "kind": "item",
+    "tid": "7698"
+  },
+  "4025": {
+    "cn": "外星生物酶",
+    "en": "Alien Enzyme",
+    "kind": "item",
+    "tid": "7702"
+  },
+  "4027": {
+    "cn": "外星生物器官",
+    "en": "Alien Organs",
+    "kind": "product",
+    "tid": "7706"
+  },
+  "4028": {
+    "cn": "人类器官",
+    "en": "Human Organs",
+    "kind": "product",
+    "tid": "7708"
+  },
+  "4030": {
+    "cn": "纳米伤口包扎剂",
+    "en": "Nano Wound Dressing",
+    "kind": "item",
+    "tid": "7716"
+  },
+  "4035": {
+    "cn": "镇静剂",
+    "en": "Sedative Syringe",
+    "kind": "item",
+    "tid": "7722"
+  },
+  "4040": {
+    "cn": "小型爆破炸药",
+    "en": "Small Breaching Charge",
+    "kind": "item",
+    "tid": "7728"
+  },
+  "4065": {
+    "cn": "太空服扩氧背心",
+    "en": "Space Suit Oxygen Extender",
+    "kind": "item",
+    "tid": "7735"
+  },
+  "4076": {
+    "cn": "燃烧榴弹发射器",
+    "en": "Incendiary Grenade Launcher",
+    "kind": "item",
+    "tid": "7861"
+  },
+  "4078": {
+    "cn": "外星寄生虫尸体",
+    "en": "Alien Parasite Corpse",
+    "kind": "item",
+    "tid": "7846"
+  },
+  "4101": {
+    "cn": "叛变机器人攻击无人机残骸",
+    "en": "Rogue bot Attack Drone rubble",
+    "kind": "item",
+    "tid": "7890"
+  },
+  "4102": {
+    "cn": "叛变机器人哨兵无人机残骸",
+    "en": "Rogue bot Sentry Drone rubble",
+    "kind": "item",
+    "tid": "7886"
+  },
+  "4103": {
+    "cn": "叛变机器人侦察无人机残骸",
+    "en": "Rogue bot Scout rubble",
+    "kind": "item",
+    "tid": "7888"
+  },
+  "4104": {
+    "cn": "小马驹（运输机）残骸",
+    "en": "Pony (Dropship) rubble",
+    "kind": "item",
+    "tid": "7892"
+  },
+  "4106": {
+    "cn": "寄生物尸体",
+    "en": "Infester Corpse",
+    "kind": "item",
+    "tid": "7902"
+  },
+  "4109": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "4110": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "4145": {
+    "cn": "探路者信标",
+    "en": "Pathfinder Beacon",
+    "kind": "item",
+    "tid": "7930"
+  },
+  "4146": {
+    "cn": "伊甸园的线索",
+    "en": "Eden Clue",
+    "kind": "item",
+    "tid": "7931"
+  },
+  "4530": {
+    "cn": "战斗机器人",
+    "en": "Combat Robot",
+    "kind": "item",
+    "tid": "8995"
+  },
+  "4531": {
+    "cn": "战斗机器人残骸",
+    "en": "Combat Robot rubble",
+    "kind": "item",
+    "tid": "8997"
+  },
+  "4533": {
+    "cn": "冲锋枪",
+    "en": "SMG",
+    "kind": "item",
+    "tid": "502"
+  },
+  "481": {
+    "cn": "帽子",
+    "en": "Hat",
+    "kind": "item",
+    "tid": "517"
+  },
+  "488": {
+    "cn": "墨镜",
+    "en": "Sunglasses",
+    "kind": "item",
+    "tid": "761"
+  },
+  "63": {
+    "cn": "氧气",
+    "en": "Oxygen",
+    "kind": "product",
+    "tid": "3472"
+  },
+  "64": {
+    "cn": "二氧化碳",
+    "en": "CO2",
+    "kind": "product",
+    "tid": "3457"
+  },
+  "704": {
+    "cn": "水果",
+    "en": "Fruits",
+    "kind": "product",
+    "tid": "422"
+  },
+  "705": {
+    "cn": "人工肉",
+    "en": "Artificial meat",
+    "kind": "product",
+    "tid": "423"
+  },
+  "706": {
+    "cn": "水果",
+    "en": "Fruits",
+    "kind": "product",
+    "tid": "422"
+  },
+  "707": {
+    "cn": "人工肉",
+    "en": "Artificial meat",
+    "kind": "product",
+    "tid": "423"
+  },
+  "71": {
+    "cn": "有机物",
+    "en": "Bio Matter",
+    "kind": "product",
+    "tid": "77"
+  },
+  "712": {
+    "cn": "太空食物",
+    "en": "Space food",
+    "kind": "product",
+    "tid": "429"
+  },
+  "725": {
+    "cn": "步枪",
+    "en": "Rifle",
+    "kind": "item",
+    "tid": "7857"
+  },
+  "728": {
+    "cn": "冲锋枪",
+    "en": "SMG",
+    "kind": "item",
+    "tid": "502"
+  },
+  "729": {
+    "cn": "霰弹枪",
+    "en": "Shotgun",
+    "kind": "item",
+    "tid": "504"
+  },
+  "73": {
+    "cn": "热量",
+    "en": "Heat",
+    "kind": "product",
+    "tid": "3469"
+  },
+  "746": {
+    "cn": "手雷",
+    "en": "Grenade",
+    "kind": "item",
+    "tid": "518"
+  },
+  "760": {
+    "cn": "手枪",
+    "en": "Pistol",
+    "kind": "item",
+    "tid": "7855"
+  },
+  "77": {
+    "cn": "烟雾",
+    "en": "Smoke",
+    "kind": "product",
+    "tid": "3453"
+  },
+  "923": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "930": {
+    "cn": "科技方块",
+    "en": "Techblock",
+    "kind": "product",
+    "tid": "477"
+  },
+  "971": {
+    "cn": "有害气体",
+    "en": "Hazardous Gas",
+    "kind": "product",
+    "tid": "484"
+  },
+  "984": {
+    "cn": "怪物肉",
+    "en": "Monster meat",
+    "kind": "product",
+    "tid": "488"
+  },
+  "985": {
+    "cn": "人肉",
+    "en": "Human meat",
+    "kind": "product",
+    "tid": "490"
+  },
+  "997": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "998": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  },
+  "999": {
+    "cn": "Placeholder name",
+    "en": "Placeholder name",
+    "kind": "item",
+    "tid": "2104"
+  }
+}
