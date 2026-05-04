@@ -83,6 +83,28 @@
 - [ ] 取消勾选 **建造速度 ×10** → 恢复正常建造速度
 - [ ] 勾选 **生产速度 ×10** → 工坊产出速度明显加快
 
+### 自己种植作物生长
+
+- [ ] 村庄 Tab 显示 **自己种植作物生长 ×10** 开关
+- [ ] 若作物 patch 失败,面板显示 `[!] 作物生长 patch 未绑定`,记录 MelonLoader 控制台日志
+- [ ] 开关关闭时,自己种植作物按正常速度生长
+- [ ] 开启开关后,自己种植作物生长明显加快
+- [ ] 野外自然植物 / flora 不加速
+- [ ] 普通资源点、建造速度、工坊生产速度不受该开关影响
+- [ ] 关闭开关后,新观察到的作物生长恢复正常速度
+- [ ] 保存并从主菜单重载无异常
+- [ ] 完全重启游戏后重载存档无异常
+
+### 己方村民移动速度
+
+- [ ] 村庄 Tab 在同一栏显示 **己方村民移动速度**、**2倍**、**5倍**
+- [ ] 若移动 patch 失败,面板显示 `[!] 村民移动 patch 未绑定`,记录 MelonLoader 控制台日志
+- [ ] 未选择倍率时,己方村民移动速度正常
+- [ ] 点击 **2倍** 后,己方村民移动明显加快约 2 倍,按钮高亮
+- [ ] 点击 **5倍** 后,己方村民移动明显加快约 5 倍,按钮高亮且 2倍 取消高亮
+- [ ] 再次点击已高亮按钮后,倍率取消,己方村民恢复正常移动速度
+- [ ] 野外动物、敌人、非己方单位不受该倍率影响
+
 ## 解锁模块
 
 - [ ] 切换到"解锁"Tab
@@ -101,7 +123,7 @@
 | 资源 — 手动仓库扩容 | 🟨 | 常驻 ResizeInventory patch 已禁用;改为点击按钮一次性扩容,需一次性测试存档验证 |
 | 资源 — 选择器/搜索 | ⬜ | |
 | 资源 — 锁定 | ⬜ | |
-| 村庄 | ⬜ | 建造速度方向需确认 |
+| 村庄 | ⬜ | 建造速度方向、自己种植作物 ×10 需确认 |
 | 解锁 | ⬜ | |
 
 **验证日期:** ___________  
@@ -122,3 +144,35 @@
   - Confirm save backup creation.
   - Confirm no combat crash after waiting several minutes and fighting.
   - Confirm save, reload, full restart, and reload again.
+
+## 2026-05-04 Stable Smoke Addendum
+
+Run on a disposable save first, then on the backed-up target save.
+
+This addendum supersedes older warehouse shrink checks. Stable builds must not shrink expanded warehouses.
+
+### Warehouse Expansion And Save Snapshot
+
+- [ ] Startup log contains the installed DLL hash expected for the current build.
+- [ ] Startup log contains `Save snapshot hook OK (Il2CppHumanica.SaveLoading.SaveLoader, methods=1)`.
+- [ ] Startup log does not contain `warehouse resource snapshot saved (periodic)`.
+- [ ] Load a save with warehouse multiplier x5 selected.
+- [ ] Auto expansion log shows consistent baselines, for example `baseline=16,16,16,16,16,16`.
+- [ ] Click `执行扩容`; log shows `manual warehouse expansion x5`.
+- [ ] Add or gather warehouse resources after expanding.
+- [ ] Save the game normally.
+- [ ] Log shows `warehouse resource snapshot saved (game-save)` or `warehouse resource snapshot unchanged (game-save)`.
+- [ ] Exit the game, restart, reload the same save.
+- [ ] Warehouses expand back to x5.
+- [ ] Resources present at the time of the normal save are restored.
+- [ ] No warehouse shrink happens when changing from a higher multiplier to a lower multiplier.
+
+### Village Cheats
+
+- [ ] Own villager movement speed x2 visibly increases movement.
+- [ ] Own villager movement speed x5 visibly increases movement more than x2.
+- [ ] Clicking the active movement multiplier again restores normal movement.
+- [ ] Build speed x10 visibly accelerates building progress.
+- [ ] Production speed x10 visibly accelerates workshop output.
+- [ ] Self-planted crop growth x10 affects planted crops.
+- [ ] Wild plants and non-crop resource deposits do not receive the crop multiplier.

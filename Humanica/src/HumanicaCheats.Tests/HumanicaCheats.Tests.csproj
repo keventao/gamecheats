@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\HumanicaCheats\Modules\CropGrowthPolicy.cs" Link="CropGrowthPolicy.cs" />
+    <Compile Include="..\HumanicaCheats\Modules\VillagerMoveSpeedPolicy.cs" Link="VillagerMoveSpeedPolicy.cs" />
+    <Compile Include="..\HumanicaCheats\Modules\WarehouseAutoExpansionPolicy.cs" Link="WarehouseAutoExpansionPolicy.cs" />
+    <Compile Include="..\HumanicaCheats\Modules\WarehouseCapacityBaselinePolicy.cs" Link="WarehouseCapacityBaselinePolicy.cs" />
+    <Compile Include="..\HumanicaCheats\Modules\WarehouseResourceSnapshotPolicy.cs" Link="WarehouseResourceSnapshotPolicy.cs" />
+  </ItemGroup>
+</Project>

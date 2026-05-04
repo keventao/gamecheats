@@ -21,6 +21,7 @@ namespace HumanicaCheats.Modules
         private static readonly int[] SupportedCapacityMultipliers = { 1, 2, 5, 10 };
 
         internal static int WarehouseCapacityMultiplier { get; private set; } = 1;
+        private static ResourceCheats? _instance;
 
         // 默认槽:STICKS / LOG / COBBLESTONES / RAW_PELT / BREAD
         private static readonly int[] DefaultSlotIdx = { 1, 3, 2, 7, 32 };
@@ -31,9 +32,15 @@ namespace HumanicaCheats.Modules
         private MelonPreferences_Entry<int> _capacityMultiplierPref = null!;
         private MelonPreferences_Entry<int> _appliedCapacityMultiplierPref = null!;
         private MelonPreferences_Entry<string> _capacityBaselinePacksPref = null!;
+        private MelonPreferences_Entry<string> _warehouseResourceSnapshotPref = null!;
         private bool _warehouseCapacityPatchBound;
+        private bool _warehouseAutoExpansionAppliedForLoadedWorld;
+        private int _warehouseAutoExpansionLoadedWorldMultiplier = 1;
+        private bool _warehouseResourceSnapshotRestoreAttempted;
+        private bool _wasGameReady;
         private bool[] _lockEnabled = new bool[SlotCount];
-        private string _lastWarehouseExpansionResult = "未执行手动扩容";
+        private string _lastWarehouseExpansionResult = "未执行仓库扩容";
+        private string _lastWarehouseSnapshotResult = "仓库资源快照未恢复";
 
         // 资源选择器状态:-1 = 关,0..N = 给某个槽选资源
         private int _pickerForSlot = -1;
@@ -50,22 +57,25 @@ namespace HumanicaCheats.Modules
 
         public void Register(HarmonyLib.Harmony harmony)
         {
+            _instance = this;
             if (_allResources == null) _allResources = LoadAllResources();
 
-            _prefs = MelonPreferences.CreateCategory("HumanicaCheats.Resources");
+            _prefs = MelonPreferences.CreateCategory("HumanicaCheats");
             _slotIdxPref = new MelonPreferences_Entry<int>[SlotCount];
             for (int i = 0; i < SlotCount; i++)
             {
-                _slotIdxPref[i] = _prefs.CreateEntry($"slot{i}_idx", DefaultSlotIdx[i],
+                _slotIdxPref[i] = _prefs.CreateEntry($"resources_slot{i}_idx", DefaultSlotIdx[i],
                     description: $"Resource slot {i} ResourceIndex int value");
             }
 
-            _capacityMultiplierPref = _prefs.CreateEntry("warehouse_capacity_multiplier", 1,
-                description: "Manual warehouse expansion multiplier. Supported values: 1, 2, 5, 10.");
-            _appliedCapacityMultiplierPref = _prefs.CreateEntry("warehouse_capacity_applied_multiplier", 1,
-                description: "Last manual warehouse expansion multiplier applied to saved baseline packs.");
-            _capacityBaselinePacksPref = _prefs.CreateEntry("warehouse_capacity_baseline_packs", "",
-                description: "Comma-separated original warehouse pack counts before manual expansion.");
+            _capacityMultiplierPref = _prefs.CreateEntry("resources_warehouse_capacity_multiplier", 1,
+                description: "Warehouse expansion multiplier. Supported values: 1, 2, 5, 10.");
+            _appliedCapacityMultiplierPref = _prefs.CreateEntry("resources_warehouse_capacity_applied_multiplier", 1,
+                description: "Last warehouse expansion multiplier applied to saved baseline packs.");
+            _capacityBaselinePacksPref = _prefs.CreateEntry("resources_warehouse_capacity_baseline_packs", "",
+                description: "Comma-separated original warehouse pack counts before expansion.");
+            _warehouseResourceSnapshotPref = _prefs.CreateEntry("resources_warehouse_resource_snapshot", "",
+                description: "Best-effort warehouse resource totals used to restore resources after expanded warehouses reload at vanilla size.");
             WarehouseCapacityMultiplier = NormalizeCapacityMultiplier(_capacityMultiplierPref.Value);
             if (_capacityMultiplierPref.Value != WarehouseCapacityMultiplier)
             {
@@ -81,8 +91,53 @@ namespace HumanicaCheats.Modules
             }
 
             _warehouseCapacityPatchBound = WarehouseCapacityPatch.Register(harmony);
+            RegisterSaveSnapshotHooks(harmony);
 
             Status = ModuleStatus.Ok;
+        }
+
+        private static void RegisterSaveSnapshotHooks(HarmonyLib.Harmony harmony)
+        {
+            Type? saveLoaderType = AccessTools.TypeByName("Il2CppHumanica.SaveLoading.SaveLoader")
+                ?? AccessTools.TypeByName("Humanica.SaveLoading.SaveLoader");
+            if (saveLoaderType == null)
+            {
+                MelonLogger.Warning("[ResourceCheats] Save snapshot hook skipped: SaveLoader type not found.");
+                return;
+            }
+
+            int patched = 0;
+            MethodInfo? startSave = AccessTools.Method(saveLoaderType, "StartSave", new[] { typeof(string) });
+            if (startSave != null)
+            {
+                harmony.Patch(startSave, postfix: new HarmonyMethod(typeof(ResourceCheats), nameof(SaveSnapshotAfterGameSaveAction)));
+                patched++;
+            }
+
+            MethodInfo? onSaveSuccess = AccessTools.Method(saveLoaderType, "OnSaveSuccess", Type.EmptyTypes);
+            if (onSaveSuccess != null)
+            {
+                harmony.Patch(onSaveSuccess, postfix: new HarmonyMethod(typeof(ResourceCheats), nameof(SaveSnapshotAfterGameSaveSuccess)));
+                patched++;
+            }
+
+            if (patched == 0)
+            {
+                MelonLogger.Warning($"[ResourceCheats] Save snapshot hook skipped: no save methods found on {saveLoaderType.FullName}.");
+                return;
+            }
+
+            MelonLogger.Msg($"[ResourceCheats] Save snapshot hook OK ({saveLoaderType.FullName}, methods={patched})");
+        }
+
+        private static void SaveSnapshotAfterGameSaveAction()
+        {
+            _instance?.SaveWarehouseResourceSnapshot("game-save");
+        }
+
+        private static void SaveSnapshotAfterGameSaveSuccess()
+        {
+            _instance?.SaveWarehouseResourceSnapshot("game-save-success");
         }
 
         private static int NormalizeCapacityMultiplier(int value)
@@ -241,7 +296,7 @@ namespace HumanicaCheats.Modules
             const float btnH = 26f;
             const float gap = 6f;
 
-            GUI.Label(new Rect(l.X, l.Y, 92f, btnH), "手动扩容:");
+            GUI.Label(new Rect(l.X, l.Y, 92f, btnH), "仓库扩容:");
             float x = l.X + 96f;
             for (int i = 0; i < SupportedCapacityMultipliers.Length; i++)
             {
@@ -264,32 +319,45 @@ namespace HumanicaCheats.Modules
             }
             GUI.Label(new Rect(l.X + 156f, l.Y + 3f, l.Width - 156f, btnH), _lastWarehouseExpansionResult);
             l.Y += btnH + 4f;
+            l.Label(_lastWarehouseSnapshotResult);
 
             if (!_warehouseCapacityPatchBound)
             {
-                l.Label("[i] 无常驻仓库 patch;扩容只在点击按钮时执行");
+                l.Label("[!] 实验:会在进存档后自动重扩;先备份再用");
             }
             l.Space(4);
         }
 
         private void RunManualWarehouseExpansion()
         {
-            if (WarehouseCapacityMultiplier <= 1)
+            RunWarehouseExpansion("manual", WarehouseCapacityMultiplier);
+            _warehouseResourceSnapshotRestoreAttempted = true;
+            SaveWarehouseResourceSnapshot("manual");
+        }
+
+        private void RunAutoWarehouseExpansion(int multiplier)
+        {
+            RunWarehouseExpansion("auto", multiplier);
+        }
+
+        private void RunWarehouseExpansion(string reason, int multiplier)
+        {
+            if (multiplier <= 1)
             {
                 _lastWarehouseExpansionResult = "x1 不需要扩容";
                 return;
             }
 
-            bool backedUp = SaveBackupService.BackupSaves("before-manual-warehouse-expansion");
+            bool backedUp = SaveBackupService.BackupSaves("before-" + reason + "-warehouse-expansion");
             int previousMultiplier = NormalizeCapacityMultiplier(_appliedCapacityMultiplierPref.Value);
             var result = WarehouseCapacityPatch.ExpandWarehousesOnce(
-                WarehouseCapacityMultiplier,
+                multiplier,
                 previousMultiplier,
                 _capacityBaselinePacksPref.Value);
             _capacityBaselinePacksPref.Value = result.BaselinePacksCsv;
             if (!result.HasErrors)
             {
-                _appliedCapacityMultiplierPref.Value = WarehouseCapacityMultiplier;
+                _appliedCapacityMultiplierPref.Value = multiplier;
             }
             _prefs.SaveToFile(false);
 
@@ -299,15 +367,110 @@ namespace HumanicaCheats.Modules
 
             if (result.HasErrors)
             {
-                MelonLogger.Warning($"[ResourceCheats] Manual warehouse expansion x{WarehouseCapacityMultiplier}: {_lastWarehouseExpansionResult}");
+                MelonLogger.Warning($"[ResourceCheats] {reason} warehouse expansion x{multiplier}: {_lastWarehouseExpansionResult}");
                 for (int i = 0; i < result.Errors.Count; i++)
                 {
-                    MelonLogger.Warning($"[ResourceCheats] Manual warehouse expansion error {i + 1}: {result.Errors[i]}");
+                    MelonLogger.Warning($"[ResourceCheats] {reason} warehouse expansion error {i + 1}: {result.Errors[i]}");
                 }
             }
             else
             {
-                MelonLogger.Msg($"[ResourceCheats] Manual warehouse expansion x{WarehouseCapacityMultiplier}: {_lastWarehouseExpansionResult}");
+                MelonLogger.Msg($"[ResourceCheats] {reason} warehouse expansion x{multiplier}: {_lastWarehouseExpansionResult}");
+            }
+        }
+
+        private Dictionary<int, int> CaptureWarehouseResourceSnapshot()
+        {
+            var snapshot = new Dictionary<int, int>();
+            if (_allResources == null)
+            {
+                return snapshot;
+            }
+
+            foreach (var item in _allResources)
+            {
+                int amount = GetCurrentAmount(item.Idx);
+                if (amount > 0)
+                {
+                    snapshot[item.Idx] = amount;
+                }
+            }
+
+            return snapshot;
+        }
+
+        private void SaveWarehouseResourceSnapshot(string reason)
+        {
+            if (WarehouseCapacityMultiplier <= 1)
+            {
+                return;
+            }
+
+            try
+            {
+                var savedSnapshot = WarehouseResourceSnapshotPolicy.Parse(_warehouseResourceSnapshotPref.Value);
+                var currentSnapshot = CaptureWarehouseResourceSnapshot();
+                var snapshot = WarehouseResourceSnapshotPolicy.MergeHighWater(savedSnapshot, currentSnapshot);
+                string formattedSnapshot = WarehouseResourceSnapshotPolicy.Format(snapshot);
+                if (formattedSnapshot == _warehouseResourceSnapshotPref.Value)
+                {
+                    _lastWarehouseSnapshotResult = $"快照 {snapshot.Count} 项";
+                    MelonLogger.Msg($"[ResourceCheats] warehouse resource snapshot unchanged ({reason}): {snapshot.Count} entries, current={currentSnapshot.Count}");
+                    return;
+                }
+
+                _warehouseResourceSnapshotPref.Value = formattedSnapshot;
+                _prefs.SaveToFile(false);
+                _lastWarehouseSnapshotResult = $"快照 {snapshot.Count} 项";
+                MelonLogger.Msg($"[ResourceCheats] warehouse resource snapshot saved ({reason}): {snapshot.Count} entries, current={currentSnapshot.Count}, high-water");
+            }
+            catch (Exception ex)
+            {
+                _lastWarehouseSnapshotResult = "快照失败";
+                MelonLogger.Warning($"[ResourceCheats] warehouse resource snapshot save failed ({reason}): {ex.Message}");
+            }
+        }
+
+        private void RestoreWarehouseResourceSnapshot()
+        {
+            try
+            {
+                var snapshot = WarehouseResourceSnapshotPolicy.Parse(_warehouseResourceSnapshotPref.Value);
+                if (snapshot.Count == 0)
+                {
+                    _lastWarehouseSnapshotResult = "无仓库资源快照";
+                    return;
+                }
+
+                int restoredKinds = 0;
+                int restoredTotal = 0;
+                foreach (var pair in snapshot)
+                {
+                    int current = GetCurrentAmount(pair.Key);
+                    if (current < 0) continue;
+
+                    int missing = WarehouseResourceSnapshotPolicy.MissingAmount(pair.Value, current);
+                    if (missing <= 0) continue;
+
+                    AddRes(FindName(pair.Key), pair.Key, missing);
+                    restoredKinds++;
+                    restoredTotal += missing;
+                }
+
+                _lastWarehouseSnapshotResult = restoredKinds == 0
+                    ? $"快照已检查 {snapshot.Count} 项"
+                    : $"快照补回 {restoredKinds} 项/{restoredTotal}";
+                MelonLogger.Msg($"[ResourceCheats] warehouse resource snapshot restored: kinds={restoredKinds}, total={restoredTotal}, snapshot={snapshot.Count}");
+
+                if (restoredKinds > 0)
+                {
+                    SaveWarehouseResourceSnapshot("restore");
+                }
+            }
+            catch (Exception ex)
+            {
+                _lastWarehouseSnapshotResult = "快照恢复失败";
+                MelonLogger.Warning($"[ResourceCheats] warehouse resource snapshot restore failed: {ex.Message}");
             }
         }
 
@@ -485,7 +648,37 @@ namespace HumanicaCheats.Modules
         // ── 锁定:每帧补差值 ──
         public void OnUpdate()
         {
-            if (!GameRefs.IsReady) return;
+            bool gameReady = GameRefs.IsReady;
+            if (!gameReady)
+            {
+                _wasGameReady = false;
+                return;
+            }
+
+            if (!_wasGameReady)
+            {
+                _warehouseAutoExpansionAppliedForLoadedWorld = false;
+                _warehouseAutoExpansionLoadedWorldMultiplier = WarehouseCapacityMultiplier;
+                _warehouseResourceSnapshotRestoreAttempted = false;
+                _wasGameReady = true;
+            }
+
+            if (WarehouseAutoExpansionPolicy.ShouldApply(
+                WarehouseCapacityMultiplier,
+                _warehouseAutoExpansionLoadedWorldMultiplier,
+                _warehouseAutoExpansionAppliedForLoadedWorld))
+            {
+                _warehouseAutoExpansionAppliedForLoadedWorld = true;
+                RunAutoWarehouseExpansion(_warehouseAutoExpansionLoadedWorldMultiplier);
+                SaveWarehouseResourceSnapshot("auto");
+            }
+
+            if (WarehouseResourceSnapshotPolicy.ShouldRestore(WarehouseCapacityMultiplier, _warehouseResourceSnapshotRestoreAttempted))
+            {
+                _warehouseResourceSnapshotRestoreAttempted = true;
+                RestoreWarehouseResourceSnapshot();
+            }
+
             for (int i = 0; i < SlotCount; i++)
             {
                 if (!_lockEnabled[i]) continue;

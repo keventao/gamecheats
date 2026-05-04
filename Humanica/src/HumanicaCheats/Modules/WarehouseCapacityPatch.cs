@@ -112,10 +112,10 @@ namespace HumanicaCheats.Modules
                         continue;
                     }
 
-                    if (targetPacks < currentPacks && !CanShrinkWithoutLosingStoredPacks(inventory, targetPacks, currentPacks))
+                    if (targetPacks < currentPacks)
                     {
                         skipped++;
-                        errors.Add($"{InventoryLabel(inventory)} has non-empty packs above target {targetPacks}; not shrinking from {currentPacks}.");
+                        errors.Add($"{InventoryLabel(inventory)} shrink blocked: current packs {currentPacks}, target packs {targetPacks}. Keeping larger warehouse to avoid item loss.");
                         index++;
                         continue;
                     }
@@ -142,7 +142,7 @@ namespace HumanicaCheats.Modules
             }
 
             string newBaselineCsv = FormatBaselinePacks(baselinePacks);
-            MelonLogger.Msg($"[WarehouseCapacityPatch] Manual expansion x{multiplier}: attempted={attempted}, expanded={expanded}, shrunk={shrunk}, skipped={skipped}, errors={errors.Count}, baseline={newBaselineCsv}");
+            MelonLogger.Msg($"[WarehouseCapacityPatch] Expansion x{multiplier}: attempted={attempted}, expanded={expanded}, shrunk={shrunk}, skipped={skipped}, errors={errors.Count}, baseline={newBaselineCsv}");
             return new ExpansionResult(attempted, expanded, shrunk, skipped, errors, newBaselineCsv);
         }
 
@@ -166,18 +166,8 @@ namespace HumanicaCheats.Modules
 
         private static int GetOrInferBaseline(List<int> baselinePacks, int index, int currentPacks, int previousMultiplier)
         {
-            if (index < baselinePacks.Count && baselinePacks[index] > 0)
-            {
-                return baselinePacks[index];
-            }
-
-            if (previousMultiplier > 1 && currentPacks % previousMultiplier == 0)
-            {
-                int inferred = currentPacks / previousMultiplier;
-                if (inferred > 0) return inferred;
-            }
-
-            return currentPacks;
+            int savedBaseline = index < baselinePacks.Count ? baselinePacks[index] : -1;
+            return WarehouseCapacityBaselinePolicy.InferBaseline(savedBaseline, currentPacks, previousMultiplier);
         }
 
         private static void SetBaseline(List<int> baselinePacks, int index, int baseline)

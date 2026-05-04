@@ -3,10 +3,33 @@
 ## Language & Core Principles
 
 - First reply to the user in Chinese.
+- Default to Chinese replies unless the user asks for English.
+- Keep a caveman-full style: short, precise, low ceremony.
+- Prefix shell commands with `rtk` by default.
 - Think Before Coding: do not assume, and do not hide confusion.
 - Simplicity First: use the minimum code that solves the problem.
 - Surgical Changes: touch only what is necessary.
 - Goal-Driven Execution: define success criteria, then loop until verified.
+
+## Project Overrides
+
+- Treat this repository as a multi-game, multi-engine cheat/mod workspace. Supported targets may include Unity, Godot, Mono, IL2CPP, BepInEx, MelonLoader, native games, and future game-specific stacks. Prefer project-local docs before general assumptions:
+  - `Humanica/README.md`, `Humanica/ROADMAP.md`, and `Humanica/refs/**` for Humanica.
+  - `For The King/README.md` and `For The King/refs/**` for For The King.
+  - `LordsAndVilleins/README.md`, `LordsAndVilleins/ROADMAP.md`, and `LordsAndVilleins/refs/**` for Lords & Villeins.
+- Review likely cheat/gameplay integration code first:
+  - `*/src/**/Modules/**`
+  - `*/src/**/Core/**`
+  - `*/src/**/*.csproj`
+  - `*/src/**/*.Tests/**`
+  - project `refs/**`, `docs/**`, and smoke checklists when behavior changes.
+- Avoid unrelated asset, binary, or generated-file churn. Do not import or edit game binaries, copied assemblies, engine import folders, mod loader runtime files, saves, backup folders, `Library`, `.godot`, `Temp`, or logs unless explicitly requested.
+- Game cheat/mod development tasks should use local Game Studios capability when it helps:
+  - Relevant CCGS roles as reference: `producer`, `game-designer`, `systems-designer`, `unity-specialist`, `gameplay-programmer`, `ui-programmer`, `qa-lead`, `release-manager`.
+  - Relevant CCGS skills are installed globally with the `ccgs-` prefix, for example `ccgs-project-stage-detect`, `ccgs-sprint-plan`, `ccgs-dev-story`, `ccgs-design-review`, `ccgs-architecture-review`, `ccgs-smoke-check`, `ccgs-qa-plan`, `ccgs-milestone-review`, and `ccgs-release-checklist`.
+  - Superpowers remains the development methodology layer: writing plans, executing plans, TDD, debugging, and verification. It supports Game Studios judgment; it does not replace project-specific or domain-specific judgment.
+  - For complex game-mod tasks, define acceptance criteria first with the relevant Game Studios skill/role perspective, then implement. For Unity-specific tasks, include the unity-specialist perspective. For non-Unity engines, use the closest available technical specialist plus project-local research. Major milestone or release calls should consider producer + the relevant technical specialist + release-manager perspectives.
+  - Use Codex subagents only when the user explicitly asks for agents, delegation, or parallel work.
 
 ## Project Structure & Module Organization
 

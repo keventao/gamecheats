@@ -110,3 +110,19 @@ Personal use, no warranty.
 ## 2026-05-03 Warehouse Capacity Note
 
 Warehouse capacity / slot resizing is currently disabled. The experimental `Inventory.ResizeInventory()` approach created usable extra slots and survived reload testing, but it also caused repeatable combat crashes. The current build keeps the Resource tab and add-resource controls available while `WarehouseCapacityPatch` returns disabled. See `refs/01-resource-research.md` and `docs/smoke-checklist.md` for details before re-enabling warehouse work.
+
+## 2026-05-04 Stable Cheat Notes
+
+- Resource tab warehouse expansion uses manual/auto one-shot `Inventory.ResizeInventory()` only. No always-on warehouse Harmony getter patch is installed.
+- Warehouse baselines are normalized from the current loaded warehouse when saved baseline data does not match, preventing mismatched 16-pack warehouses from becoming 60-pack warehouses.
+- Warehouse shrink is blocked. Selecting a lower multiplier never reduces an already larger warehouse, to avoid item loss.
+- Warehouse resource recovery uses a high-water snapshot. It is saved when:
+  - the player clicks `执行扩容`
+  - auto expansion runs after loading a save
+  - the game save flow calls `SaveLoader.StartSave(string)`
+  - restored resources change the high-water snapshot
+- There is no periodic warehouse snapshot loop. Logs should not contain `warehouse resource snapshot saved (periodic)`.
+- Village tab crop growth and movement cheats are active:
+  - self-planted crop growth x10
+  - own villager movement speed x2 or x5 in one UI row
+  - build speed and production speed x10
