@@ -24,6 +24,10 @@ obj/
 TestResults/
 coverage/
 
+# Python
+__pycache__/
+*.py[cod]
+
 # OS
 Thumbs.db
 .DS_Store
@@ -41,3 +45,6 @@ desktop.ini
 **/save-backups/
 **/SaveBackups/
 Humanica/UserData/
+
+# Generated Space Haven mods from local game assets
+spacehaven/generated/

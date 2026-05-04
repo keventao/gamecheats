@@ -1,10 +1,9 @@
 #!/bin/bash
 # Space Haven save editor launcher (mac)
-# Runs editor.py directly.
 
 cd "$(dirname "$0")"
 
-for py in "python3" "python3" "python3" "python3"; do
+for py in "$HOME/python3/bin/python3" "python3" "python3" "python3"; do
     if command -v "$py" >/dev/null 2>&1; then
         if "$py" -c "import tkinter" >/dev/null 2>&1; then
             exec "$py" editor.py "$@"

@@ -35,11 +35,11 @@
 
 This repository hosts multiple game-specific cheat-tool projects, one subdirectory each. Active projects:
 
-- `LordsAndVilleins/` — BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
+- `LordsAndVilleins/` - BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
 - `For The King/` - BepInEx + Harmony mod for *For The King* (Unity Mono). See `For The King/README.md` for project-specific commands and structure.
-- `Humanica/` — MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
-- `fightlife mods/` — packaged Unity Mono managed-DLL cheat files for *FightLife Vanguard*. See `fightlife mods/README-安装说明.txt`.
-- `spacehaven/` — offline save editor for *Space Haven*. See `spacehaven/README.md`.
+- `Humanica/` - MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
+- `fightlife mods/` - packaged Unity Mono managed-DLL cheat files for *FightLife Vanguard*. See its local install notes.
+- `spacehaven/` - offline save editor and future modloader/Workshop mod workspace for *Space Haven*. See `spacehaven/README.md` and `spacehaven/MODDING.md`.
 
 The sections below describe **LordsAndVilleins**; for other projects, prefer their local README and roadmap/status docs.
 

@@ -1,61 +1,90 @@
-# Space Haven 存档修改器
+# Space Haven Tools
 
-## 目录结构
+This folder currently contains an offline save editor for *Space Haven*. Runtime modloader or Steam Workshop mods can be added later under a separate `mods/` area.
 
-```
+## Structure
+
+```text
 spacehaven/
-├── mac/
-│   └── SpaceHavenEditor.app   ← 双击运行（macOS）
-├── windows/
-│   ├── 运行.bat                ← 双击运行（Windows，需 Python）
-│   ├── editor.py
-│   ├── extract_names.py
-│   ├── resource_names.json
-│   └── README.txt
-└── README.md
+  mac/
+    SpaceHavenEditor.app
+    editor.py
+    resource_names.json
+    run.command
+  windows/
+    editor.py
+    extract_names.py
+    resource_names.json
+    run.bat
+    README.txt
+  MODDING.md
+  README.md
 ```
 
-## macOS 使用
+## Save Editor
 
-双击 `mac/SpaceHavenEditor.app`。
+The editor opens Space Haven save XML files and can edit:
 
-首次打开可能被 Gatekeeper 拦截（未签名）。两种解法：
+- Bank: credits, science points, and build points.
+- Crew: health, hunger, mood, attributes, and skills.
+- Resources: stored player-ship items from the generated resource name table.
 
-1. 右键 .app → **打开** → 弹窗点**打开**
-2. 或在终端解除隔离：
-   ```bash
-   xattr -dr com.apple.quarantine "mac/SpaceHavenEditor.app"
-   ```
+Every save write creates a timestamped backup next to the original `game` file.
 
-工具会自动扫描以下存档位置：
+## Windows
 
-- `~/<APP_SUPPORT>/Spacehaven/savegames/`（Mac 原生安装）
-- `~/<APP_SUPPORT>/compatibility layer/...`（compatibility layer/Wine）
+Requirements:
 
-## Windows 使用
+- Python 3.10 or newer.
+- Tkinter, included with the normal Python installer.
 
-见 `windows/README.txt`。需先安装 Python 3.10+（勾选 Add to PATH），再双击 `运行.bat`。
+Run:
 
-## 功能
+1. Exit Space Haven before editing a save.
+2. Double-click `spacehaven/windows/run.bat`.
+3. Pick a save, click `Load`, edit values, then click `Save (with backup)`.
 
-- **Bank**：信用币 / 科研点 / 建造点
-- **Crew**：每位船员的血量/饥饿/心情/属性/14 项技能
-- **Resources**：玩家船上所有存储物资（含武器/药品），一键填满或单独设值，共 182 种条目来自 `spacehaven.jar` 实时抽取
+If the editor cannot find saves, set `SPACEHAVEN_SAVES` or browse to the save file manually.
 
-## 安全
+## macOS
 
-- 每次保存前自动备份原存档为 `game.bak-时间戳`
-- 修改前**必须退出游戏**（文件锁）
-- 崩档把备份改名回 `game` 即可
+Double-click `mac/SpaceHavenEditor.app`, or run `mac/run.command`.
 
-## 更新资源名表
-
-游戏升级后 `elementaryId → 名称` 映射可能变。重生成：
+If Gatekeeper blocks the unsigned app, right-click the app and choose `Open`, or remove quarantine:
 
 ```bash
-# macOS
-python3 extract_names.py /path/to/spacehaven.jar
+xattr -dr com.apple.quarantine "mac/SpaceHavenEditor.app"
+```
 
-# Windows
+The editor checks common native Steam and compatibility layer save locations.
+
+## Updating Resource Names
+
+After a game update, regenerate `resource_names.json` if item IDs or names changed.
+
+Windows example:
+
+```bash
 python extract_names.py "<SPACEHAVEN_GAME_ROOT>\spacehaven.jar"
 ```
+
+macOS example:
+
+```bash
+python3 extract_names.py /path/to/spacehaven.jar
+```
+
+## Runtime Mods
+
+See `MODDING.md` for Space Haven Mod Loader and Workshop notes.
+
+Current mod work:
+
+- `tools/build_resource_yield_mod.py` builds a local XML mod that multiplies Crop and Process resource outputs.
+- Generated mods are written to `spacehaven/generated/` and ignored by git.
+
+## Safety
+
+- Exit the game before editing saves.
+- Keep backups until the edited save has loaded successfully.
+- Do not commit save files, backup files, `spacehaven.jar`, extracted game assets, or modloader binaries.
