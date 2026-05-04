@@ -237,3 +237,31 @@ TechManager.TechManager.InstantResearchAll();
   - save/reload and full restart/reload
   - several minutes of combat after expansion
   - no per-pack stored amount above original pack size
+
+## 2026-05-04 Warehouse Expansion Stable Policy
+
+- Final accepted workflow:
+  - click expansion or load a save with multiplier > x1
+  - game saves normally
+  - snapshot is refreshed during the game save flow
+  - restart/reload restores from the snapshot after auto expansion
+- Snapshot trigger points:
+  - manual expansion
+  - auto expansion
+  - `Humanica.SaveLoading.SaveLoader.StartSave(string)` postfix
+  - restore pass when it actually changes the high-water snapshot
+- Removed behavior:
+  - periodic 5-second / 60-second snapshot loop
+  - periodic `MelonPreferences.SaveToFile(false)` on the main thread
+  - periodic snapshot log spam
+- Baseline fix:
+  - saved baseline by warehouse index can become stale when the loaded warehouse list changes
+  - if saved baseline does not match current packs and previous multiplier, use current packs as the new baseline
+  - this prevents a 16-pack warehouse from being incorrectly treated as baseline 12 and resized to 60 at x5
+- Shrink policy:
+  - never shrink expanded warehouses
+  - selecting a lower multiplier keeps the larger warehouse to avoid item loss and index errors
+- Verified log evidence:
+  - `Save snapshot hook OK (Il2CppHumanica.SaveLoading.SaveLoader, methods=1)`
+  - `warehouse resource snapshot saved (game-save): ... high-water`
+  - no `warehouse resource snapshot saved (periodic)` in the stable build

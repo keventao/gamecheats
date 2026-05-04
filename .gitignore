@@ -36,3 +36,8 @@ desktop.ini
 *.log
 *.tmp
 *~
+
+# Local game saves/backups
+**/save-backups/
+**/SaveBackups/
+Humanica/UserData/

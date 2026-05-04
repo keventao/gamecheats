@@ -72,6 +72,8 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 
 - 完成村庄 / 解锁 Tab 游戏内冒烟,失败项进入 v0.2 修复列表
 - 若村庄建造速度方向错误:修正 postfix 为 `÷10`
+- 自己种植作物生长 ×10:放在村庄 Tab,仅当 `HasPlantGrowingTrigger` 与 `Planted == true` 均可确认时生效;否则安全跳过并显示 patch/日志警告
+- 己方村民移动速度 2倍/5倍:放在村庄 Tab 作物生长同一区域,同一栏两个选项;仅当移动目标可确认在 `CreatureManager.Villagers` 中时生效
 - ResourceI18n 翻译表补全(目前覆盖 ~100 / 143 项)
 - 属性/技能作弊(若游戏有村民属性系统)
 - 天气/季节控制
@@ -107,3 +109,25 @@ v0.1.0 用标准 `GUILayout.*` + `GUI.Window` + `GUI.Button` 写的面板,在游
 - Next safe direction:
   - Do not use always-on Harmony prefixes on warehouse getters.
   - Verify manual one-shot expansion on disposable saves, including combat after expansion.
+
+## 2026-05-04 Stable In-Game Status
+
+- Confirmed working in Humanica 0.8.18 with MelonLoader 0.7.2:
+  - own villager movement speed x2/x5
+  - production speed x10
+  - build speed x10
+  - self-planted crop growth x10
+  - warehouse x5 auto/manual expansion
+  - warehouse resource high-water restore after restart
+- Warehouse expansion final behavior:
+  - no always-on warehouse getter patches
+  - auto expansion runs once after loading a save when multiplier > x1
+  - manual `执行扩容` can be clicked to expand newly loaded warehouses
+  - shrink is blocked to prevent item loss
+  - baseline mismatch falls back to the current warehouse pack count
+  - game save hooks save the resource snapshot through `SaveLoader.StartSave(string)`
+  - periodic snapshots were removed to avoid main-thread config writes and log spam
+- Expected log markers:
+  - `Save snapshot hook OK (Il2CppHumanica.SaveLoading.SaveLoader, methods=1)`
+  - `warehouse resource snapshot saved (game-save)` or `unchanged (game-save)`
+  - no `warehouse resource snapshot saved (periodic)` lines
