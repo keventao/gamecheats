@@ -1,128 +1,148 @@
-# Humanica Cheats (MelonLoader mod)
+# Humanica Cheats
 
-In-game cheat panel for *Humanica*. Modular, fully self-painted IMGUI, F1 to toggle.
+MelonLoader + HarmonyX cheat panel for Humanica.
 
-> Personal use first. Code is structured for future release; UI is currently Chinese only.
+The panel is opened with F1. UI rendering is fully custom-painted IMGUI because
+the generated IL2CPP Unity IMGUI bindings for this game do not reliably return
+values from several standard GUI calls.
 
-## Status
+## Current Status
 
-**v0.1.1 — partially in-game verified (2026-05-02)**
+Tested with:
 
-- ✅ Loader: MelonLoader 0.7.2 + HarmonyX, dll deploys to `<game>/Mods/`
-- ✅ GUI: F1 toggle, draggable window, 4 tabs — all custom-painted (see "IL2CPP IMGUI gotchas" below)
-- ✅ Time: `Time.timeScale` ×1/×2/×5/×10 + reset, panel shows target vs actual
-- ✅ Resource: 5 user-configurable slots, picker with **Chinese + English search**,
-  scroll wheel list (~120 resources), selection persisted via MelonPreferences,
-  +5 / +50 amounts, lock-floor toggle
-- ⏳ Village: SpawnRandomVillager + build/production speed ×10 — patch direction needs in-game verification
-- ⏳ Unlock: InstantResearchAll for tech tree
+- Humanica 0.8.18
+- Unity 2019.4.41f2
+- MelonLoader 0.7.2 Open-Beta
+- Game type: IL2CPP x64
 
-See `ROADMAP.md` for the full version history, known limitations, and v0.2 plans.
+Current stable features:
+
+- Time scale: x1, x2, x5, x10
+- Resource tab:
+  - 5 configurable resource slots
+  - resource picker with search
+  - +5 and +50 resource buttons
+  - resource lock floor
+  - warehouse x1, x2, x5, x10 controls
+- Village tab:
+  - build speed x10
+  - production speed x10
+  - self-planted crop growth x10
+  - own villager movement speed x2 or x5
+- Unlock tab:
+  - research unlock entry point
+
+## Warehouse Expansion Policy
+
+Warehouse expansion is intentionally conservative.
+
+- No always-on warehouse getter patches are installed.
+- Expansion runs only as a one-shot action:
+  - when the player clicks `Execute expansion`
+  - automatically once after loading a save if the selected multiplier is above x1
+- Expansion uses the game's own `Inventory.ResizeInventory(int)` method.
+- Warehouse baselines are normalized from the currently loaded warehouse if saved
+  baseline data no longer matches the loaded warehouse list.
+- Shrinking is blocked. A larger warehouse is kept instead of being reduced to a
+  smaller multiplier, because shrinking can lose items or hit invalid pack indexes.
+- Resource recovery uses a high-water snapshot.
+- The snapshot is saved when:
+  - manual expansion runs
+  - auto expansion runs
+  - the game save flow calls `SaveLoader.StartSave(string)`
+  - restored resources raise the high-water mark
+- There is no periodic snapshot loop.
+
+Expected stable log markers:
+
+```text
+[ResourceCheats] Save snapshot hook OK (Il2CppHumanica.SaveLoading.SaveLoader, methods=1)
+[ResourceCheats] warehouse resource snapshot saved (game-save): ...
+```
+
+The log should not contain:
+
+```text
+warehouse resource snapshot saved (periodic)
+```
 
 ## Install
 
-1. Download MelonLoader 0.7.x x64 from https://github.com/LavaGang/MelonLoader/releases (zip variant) and extract into the game folder so `version.dll` sits next to `Humanica.exe`.
-2. Launch the game once. MelonLoader will generate Il2CppInterop proxy assemblies into `<game>/MelonLoader/Il2CppAssemblies/` (first launch can take 3–10 minutes; black screen is normal).
-3. Build this project: `dotnet build -c Release` (from `src/HumanicaCheats/`).
-4. Or run `tools/install.ps1` — builds and verifies dll deploy.
-5. Launch the game. Press **F1** to toggle the cheat panel.
-
-## Layout
-
-- `src/HumanicaCheats/` — the mod
-  - `Core/` — shared services (ICheatModule, ModuleRegistry, GuiManager, GameRefs, **Layout**, **ResourceI18n**)
-  - `Modules/` — feature modules (TimeCheats, ResourceCheats, VillageCheats, UnlockCheats)
-  - `Plugin.cs` — MelonMod entry point
-- `tools/install.ps1` — build + verify dll deploy to `<game>/Mods/`
-- `refs/` — IL2CPP proxy reconnaissance notes (game-specific class/field/method names)
-- `docs/smoke-checklist.md` — manual smoke list to run before release
-- `docs/superpowers/specs/` — design spec
-- `docs/superpowers/plans/` — implementation plan
-- `ROADMAP.md` — current status, known limitations, next-version plans, version history
-
-## Develop
+1. Install MelonLoader 0.7.x x64 into the game folder so `version.dll` sits next
+   to `Humanica.exe`.
+2. Launch the game once so MelonLoader generates IL2CPP proxy assemblies under
+   `<game>/MelonLoader/Il2CppAssemblies/`.
+3. Build the mod:
 
 ```bash
-dotnet build -c Release
-powershell tools/install.ps1
+rtk dotnet build Humanica/src/HumanicaCheats/HumanicaCheats.sln -c Release
 ```
 
-`Directory.Build.props` defines the default `GameRoot=E:\Games\Humanica`. Override per-build:
+4. Copy or let the build target copy `HumanicaCheats.dll` into:
+
+```text
+<game>/Mods/
+```
+
+5. Restart the game and press F1.
+
+## Development
+
+Default local `GameRoot` is configured in `Humanica/Directory.Build.props`.
+Override it when needed:
 
 ```bash
-dotnet build -c Release /p:GameRoot="<HUMANICA_GAME_ROOT>"
+rtk dotnet build Humanica/src/HumanicaCheats/HumanicaCheats.sln -c Release /p:GameRoot="<HUMANICA_GAME_ROOT>"
 ```
 
-After a code change: `tools/install.ps1`, then restart game (MelonLoader does not hot-reload).
+Run lightweight policy tests:
 
-## IL2CPP IMGUI gotchas (this mod's hard-won lessons)
+```bash
+rtk dotnet run --project Humanica/src/HumanicaCheats.Tests/HumanicaCheats.Tests.csproj
+```
 
-MelonLoader 0.7.2 + Il2CppInterop's generated UnityEngine.IMGUIModule stub for this Unity
-build has multiple bugs. **Do not** use any of these — they fail silently or throw:
+## Project Layout
 
-1. **`GUILayout.*` — throws `MissingMethodException`** on `BeginHorizontal`/`Window` etc.
-   Internal `ExitGUIException..ctor(string)` and `LayoutedWindow..ctor(...)` ctors don't
-   match the binding. Use **only `GUI.*` positional API** (no auto-layout).
-2. **`GUI.Window` — `Rect` return value does not propagate.** Drag is captured internally
-   (hot control flips) but `_windowRect = GUI.Window(...)` always assigns the input rect.
-   Workaround: don't use `GUI.Window`; draw window background with `GUI.Box` and implement
-   drag yourself with `Event.current.MouseDown / MouseDrag / MouseUp`.
-3. **`GUI.Button` / `GUI.Toggle` — `bool` return value does not propagate.** IMGUI processes
-   the click correctly (event becomes `Used`, hot resets) but the bool comes back `false`.
-   Workaround: draw with `GUI.Box`, hit-test manually:
-   ```csharp
-   GUI.Box(rect, label);
-   if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
-   { Event.current.Use(); /* fire action */ }
-   ```
-4. **`GUI.TextField` — by extension `string` return assumed broken.** Implement custom text
-   input by tracking string state and listening to `Event.current.character` on `KeyDown`.
-   IME (Chinese pinyin) delivers the final character via `character` after composition,
-   so this approach handles both Chinese and English input.
+- `src/HumanicaCheats/` - mod source
+- `src/HumanicaCheats/Core/` - GUI, module registry, shared helpers
+- `src/HumanicaCheats/Modules/` - cheat modules and pure policy helpers
+- `src/HumanicaCheats.Tests/` - no-game lightweight policy tests
+- `refs/` - IL2CPP research notes
+- `docs/smoke-checklist.md` - manual in-game verification checklist
+- `docs/superpowers/specs/` - design notes
+- `docs/superpowers/plans/` - implementation plans
+- `ROADMAP.md` - current status and version notes
 
-The `Core/Layout.cs` helper wraps these workarounds (`ImguiUtil.Button`, `ImguiUtil.Toggle`,
-plus a vertical-cursor `Layout` for stacked rows). New modules should use it instead of
-calling `GUI.*` directly.
+## IL2CPP IMGUI Notes
 
-## Other IL2CPP-specific notes
+Avoid these APIs in this game:
 
-- All game types are wrapped under `Il2Cpp` namespace by Il2CppInterop. The service locator pattern is `Il2Cpp.S.<ManagerName>` (e.g. `Il2Cpp.S.VillageData`, `Il2Cpp.S.TechManager`).
-- `Il2Cpp.ResourceIndex` is a runtime enum with 143 members. Cast int → enum directly:
-  `(Il2Cpp.ResourceIndex)42`. The startup dump in `Plugin.OnInitializeMelon` writes
-  the full member list to `MelonLoader/Latest.log` under `[ResourceIndex.dump]`.
-- `GUI.Window` callback requires `DelegateSupport.ConvertDelegate<GUI.WindowFunction>(...)`
-  to wrap managed delegates — but per (2) above, you shouldn't be using `GUI.Window` anyway.
-- Some game types live in deep namespaces (e.g. `Il2CppGameCore.Features.Buffs.BuffController`); when the flat `Il2Cpp.*` proxy isn't available, fall back to `AccessTools.TypeByName(全限定名)`.
+- `GUILayout.*`
+- `GUI.Window`
+- `GUI.Button` return value
+- `GUI.Toggle` return value
+- `GUI.TextField` return value
 
-## Tested game version
+Use positional `GUI.Box` / `GUI.Label`, then handle input with `Event.current`
+and `Rect.Contains`. The helper code lives in `Core/Layout.cs`.
 
-See `ROADMAP.md`. Game updates may break Harmony patches and Il2CppInterop class paths — re-run MelonLoader's first-launch generation and check `MelonLoader/Latest.log`.
+Known binding issues:
 
-## Known limitations
+- `GUILayout.*` can throw `MissingMethodException`.
+- `GUI.Window` does not propagate the returned `Rect`.
+- `GUI.Button` and `GUI.Toggle` can process clicks but return `false`.
+- `GUI.TextField` string return is not trusted; custom text input is used instead.
 
-- Village `×10` build / production patches not yet in-game verified (direction may need flip).
-- `ResourceI18n` covers ~100 of 143 enum entries; the rest fall back to enum name.
-- No save backup yet (LordsAndVilleins has one; Humanica v0.2 may add).
+## Research Notes
 
-## License
+- `Il2Cpp.ResourceIndex` is a runtime enum with 143 members.
+- Common service locator pattern: `Il2Cpp.S.<ManagerName>`.
+- Some game types live under deep namespaces such as
+  `Il2CppGameCore.Features.ResourceManagement`.
+- When a flat `Il2Cpp.*` proxy is unavailable, use `AccessTools.TypeByName`.
 
-Personal use, no warranty.
-## 2026-05-03 Warehouse Capacity Note
+## Safety
 
-Warehouse capacity / slot resizing is currently disabled. The experimental `Inventory.ResizeInventory()` approach created usable extra slots and survived reload testing, but it also caused repeatable combat crashes. The current build keeps the Resource tab and add-resource controls available while `WarehouseCapacityPatch` returns disabled. See `refs/01-resource-research.md` and `docs/smoke-checklist.md` for details before re-enabling warehouse work.
-
-## 2026-05-04 Stable Cheat Notes
-
-- Resource tab warehouse expansion uses manual/auto one-shot `Inventory.ResizeInventory()` only. No always-on warehouse Harmony getter patch is installed.
-- Warehouse baselines are normalized from the current loaded warehouse when saved baseline data does not match, preventing mismatched 16-pack warehouses from becoming 60-pack warehouses.
-- Warehouse shrink is blocked. Selecting a lower multiplier never reduces an already larger warehouse, to avoid item loss.
-- Warehouse resource recovery uses a high-water snapshot. It is saved when:
-  - the player clicks `执行扩容`
-  - auto expansion runs after loading a save
-  - the game save flow calls `SaveLoader.StartSave(string)`
-  - restored resources change the high-water snapshot
-- There is no periodic warehouse snapshot loop. Logs should not contain `warehouse resource snapshot saved (periodic)`.
-- Village tab crop growth and movement cheats are active:
-  - self-planted crop growth x10
-  - own villager movement speed x2 or x5 in one UI row
-  - build speed and production speed x10
+- Test experimental warehouse behavior on disposable saves first.
+- Do not commit save files, game binaries, generated loader files, logs, or backups.
+- Avoid reintroducing per-pack amount scaling; it corrupted saves during research.

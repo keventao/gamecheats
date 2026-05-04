@@ -1,7 +1,7 @@
-# Claude Code 本地配置(权限、个人偏好)
+# Local agent configuration
 .claude/
 
-# .NET 构建产物
+# .NET build output
 bin/
 obj/
 *.user
@@ -12,15 +12,15 @@ obj/
 .idea/
 *.DotSettings.user
 
-# 反编译输出(ilspycmd 产物,几千个 .cs,纯本地分析用)
+# Decompiled output
 **/decompiled/
 
-# 游戏 DLL(用 csproj HintPath 引本机游戏目录,永远不入仓)
+# Game binaries and symbols
 **/*.dll
 **/*.pdb
 **/*.mdb
 
-# 测试 / 覆盖
+# Tests and coverage
 TestResults/
 coverage/
 
@@ -32,7 +32,7 @@ desktop.ini
 # Git worktrees
 .worktrees/
 
-# 临时
+# Temporary files
 *.log
 *.tmp
 *~

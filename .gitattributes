@@ -1,0 +1,9 @@
+* text=auto
+
+*.md text
+*.txt text
+*.cs text
+*.csproj text
+*.sln text
+*.ps1 text
+*.props text
