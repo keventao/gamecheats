@@ -43,6 +43,27 @@ Default behavior:
 
 Copy the generated folder into the game's `mods/` folder, clear QuickLaunch in the modloader, then launch from the modloader.
 
+Example local install path:
+
+```text
+<SPACEHAVEN_GAME_ROOT>\mods\kk-resource-yield-x2
+```
+
+The modloader log should show:
+
+```text
+Finished loading KK Resource Yield x2
+```
+
+If `Clear QuickLaunch file` is disabled, there is no QuickLaunch cache to delete. This is OK. Enable the mod in the modloader list and launch from the modloader.
+
+Useful log paths:
+
+```text
+<SPACEHAVEN_GAME_ROOT>\mods\logs.txt
+<STEAM_WORKSHOP_ROOT>\content\979110\3703674043\logs.txt
+```
+
 ## Modloader Workflow
 
 The Space Haven Mod Loader supports two mod types:

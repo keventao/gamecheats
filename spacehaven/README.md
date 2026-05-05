@@ -82,6 +82,8 @@ Current mod work:
 
 - `tools/build_resource_yield_mod.py` builds a local XML mod that multiplies Crop and Process resource outputs.
 - Generated mods are written to `spacehaven/generated/` and ignored by git.
+- The generated `KK Resource Yield x2` mod can be installed under the game's `mods/` folder and enabled from Space Haven Mod Loader.
+- A disabled `Clear QuickLaunch file` button usually means no cache exists; enable the mod and launch normally.
 
 ## Safety
 
