@@ -6,6 +6,12 @@ This folder currently contains an offline save editor for *Space Haven*. Runtime
 
 ```text
 spacehaven/
+  tools/
+    build_resource_yield_mod.py
+    check_resource_tuning_generator.js
+    check_spacehaven_jar.js
+  generated/
+    kk-resource-tuning-x2/       # generated locally, ignored by git
   mac/
     SpaceHavenEditor.app
     editor.py
@@ -80,10 +86,35 @@ See `MODDING.md` for Space Haven Mod Loader and Workshop notes.
 
 Current mod work:
 
-- `tools/build_resource_yield_mod.py` builds a local XML mod that multiplies Crop and Process resource outputs.
+- `tools/build_resource_yield_mod.py` builds a local XML test mod for Crop and Process products.
 - Generated mods are written to `spacehaven/generated/` and ignored by git.
-- The generated `KK Resource Yield x2` mod can be installed under the game's `mods/` folder and enabled from Space Haven Mod Loader.
+- The default generated `KK Resource Tuning x2` mod can be installed under the game's `mods/` folder and enabled from Space Haven Mod Loader.
+- Default test features:
+  - Crop and Process output `howMuch` x2.
+  - Crop stage `time` divided by 2.
+  - Crop `<needs>` `consumeEvery` intervals x2, lowering ongoing crop input use.
+  - Process `<needs>` `consumeEvery` intervals x2, lowering recipe input use.
 - A disabled `Clear QuickLaunch file` button usually means no cache exists; enable the mod and launch normally.
+
+Example build command after Python is installed:
+
+```bash
+python spacehaven/tools/build_resource_yield_mod.py --game-root "<SPACEHAVEN_GAME_ROOT>"
+```
+
+Optional focused test examples:
+
+```bash
+python spacehaven/tools/build_resource_yield_mod.py --multiplier 5
+python spacehaven/tools/build_resource_yield_mod.py --no-crop-speed --no-crop-input-saver --no-process-input-saver
+```
+
+Local validation without Python:
+
+```bash
+node spacehaven/tools/check_resource_tuning_generator.js
+node spacehaven/tools/check_spacehaven_jar.js
+```
 
 ## Safety
 

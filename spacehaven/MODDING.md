@@ -10,8 +10,10 @@ Recommended layout for future runtime mods:
 spacehaven/
   tools/
     build_resource_yield_mod.py
+    check_resource_tuning_generator.js
+    check_spacehaven_jar.js
   generated/
-    kk-resource-yield-x2/
+    kk-resource-tuning-x2/
   mods/
     kk-cheats/
       info.xml
@@ -24,35 +26,53 @@ spacehaven/
 
 Use XML mods first when the feature can be expressed by changing library definitions. Use code injection only when runtime behavior must change.
 
-## Resource Yield Mod
+## Resource Tuning Mod
 
-The first minimal resource cheat is generated locally instead of committed as copied game XML:
+The XML resource test mod is generated locally instead of committed as copied game XML:
 
 ```bash
-rtk python spacehaven/tools/build_resource_yield_mod.py
+python spacehaven/tools/build_resource_yield_mod.py
 ```
 
-If `python` is not on PATH, use Codex's bundled Python or any Python 3.10+ install.
+If `python` is not on PATH, install any Python 3.10+ build and enable `Add python.exe to PATH` during install.
 
 Default behavior:
 
 - Reads `spacehaven.jar` from `SPACEHAVEN_GAME_ROOT` or common Steam install paths.
-- Writes `spacehaven/generated/kk-resource-yield-x2/`.
+- Writes `spacehaven/generated/kk-resource-tuning-x2/`.
 - Copies only `Product` definitions with type `Crop` or `Process`.
 - Multiplies output `howMuch` values under `<products>` by `x2`.
+- Divides Crop stage `time` values by `2` so crops mature faster.
+- Multiplies Crop `<needs>` `consumeEvery` intervals by `2` so crops consume inputs less often.
+- Multiplies Process `<needs>` `consumeEvery` intervals by `2` so processing recipes consume inputs less often.
+
+Useful focused test flags:
+
+```bash
+python spacehaven/tools/build_resource_yield_mod.py --multiplier 5
+python spacehaven/tools/build_resource_yield_mod.py --no-crop-speed
+python spacehaven/tools/build_resource_yield_mod.py --no-crop-input-saver --no-process-input-saver
+```
+
+Validation commands that work without Python:
+
+```bash
+node spacehaven/tools/check_resource_tuning_generator.js
+node spacehaven/tools/check_spacehaven_jar.js
+```
 
 Copy the generated folder into the game's `mods/` folder, clear QuickLaunch in the modloader, then launch from the modloader.
 
 Example local install path:
 
 ```text
-<SPACEHAVEN_GAME_ROOT>\mods\kk-resource-yield-x2
+<SPACEHAVEN_GAME_ROOT>\mods\kk-resource-tuning-x2
 ```
 
 The modloader log should show:
 
 ```text
-Finished loading KK Resource Yield x2
+Finished loading KK Resource Tuning x2
 ```
 
 If `Clear QuickLaunch file` is disabled, there is no QuickLaunch cache to delete. This is OK. Enable the mod in the modloader list and launch from the modloader.
