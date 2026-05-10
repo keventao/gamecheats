@@ -12,7 +12,7 @@
 ## dnSpy 通用操作
 
 1. 启动 dnSpy(或 dnSpyEx)
-2. File → Open → `<LAV_GAME_ROOT>\Lords and Villeins_Data\Managed\Assembly-CSharp.dll`
+2. File → Open → `<GAME_ROOT>\Lords and Villeins_Data\Managed\Assembly-CSharp.dll`
    - 同时 File → Open → `Assembly-CSharp-firstpass.dll`(可能含部分基础类)
 3. 等待解析完成(30–60 秒)
 4. `Ctrl+Shift+K` 跨 assembly 搜索关键词

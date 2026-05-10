@@ -22,8 +22,7 @@ Mod 的成功标志是**游戏内可见的行为变化**,不是代码"看起来�
 - 游戏 DLL 永远 **不入仓**(`.gitignore` 强制 `**/*.dll`),用 csproj `<Reference HintPath="...">` 引用本机游戏目录
 - 反编译笔记放 `<project>/refs/`(**入仓**;模块代码消费这些笔记)
 - 反编译输出(ilspycmd 产物)放 `<project>/refs/decompiled/`,git 忽略(几千 .cs 文件,纯本地)
-- 设计文档放 `<project>/docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-- 实施计划放 `<project>/docs/superpowers/plans/`
+- Internal agent design and implementation plans should stay out of the public repo unless they are scrubbed for local paths and personal details.
 - 复杂源码型项目自带 `<project>/ROADMAP.md`(状态、已知限制、下一版规划、版本历史)
 - 根 `ROADMAP.md` 记录仓库级状态、打包型工具状态、跨项目事项
 
@@ -32,8 +31,8 @@ Mod 的成功标志是**游戏内可见的行为变化**,不是代码"看起来�
 | 项目 | 版本 | 引擎 | Mod loader | 状态 |
 |---|---|---|---|---|
 | `LordsAndVilleins/` | v0.1.1 | Unity (Mono) | BepInEx 5 + Harmony | 部分游戏内验证通过;Pawn / Build 待冒烟。详见 `LordsAndVilleins/ROADMAP.md` |
-| `For The King/` | v0.1.0 | Unity (Mono) | BepInEx 5 + Harmony | 项目 README / design / plan 已入仓。详见 `For The King/README.md` |
-| `Timberborn/` | v0.0.0 | 待实查 | 待实查 | 新建研究骨架;已记录用户提供的 Windows Steam 路径。详见 `Timberborn/README.md` |
+| `For The King/` | v0.1.0 | Unity (Mono) | BepInEx 5 + Harmony | 项目 README 和源码骨架已入仓。详见 `For The King/README.md` |
+| `Timberborn/` | v0.1.0 | Unity (Mono) | Official mod + Harmony | `KKDoubleResources` 已验证有效。详见 `Timberborn/README.md` |
 | `Humanica/` | v0.1.1 | Unity (IL2CPP) | MelonLoader 0.7.2 + HarmonyX | GUI / 时间 / 资源(5 槽 + 中英搜索 + 持久化)游戏内验证通过;村庄 / 解锁 待冒烟。详见 `Humanica/ROADMAP.md` |
 | `fightlife mods/` | package | Unity (Mono) | Managed DLL injection | Windows 安装包文件已入仓;含 heal team / gold / speed / damage。详见 `fightlife mods/README-安装说明.txt` |
 | `spacehaven/` | package | save XML | Standalone Tk editor | macOS app + Windows Python launcher 已入仓;支持 Bank / Crew / Resources。详见 `spacehaven/README.md` |

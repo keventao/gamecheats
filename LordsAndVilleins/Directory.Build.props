@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <GameRoot Condition="'$(GameRoot)' == ''"><LAV_GAME_ROOT></GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(LAV_GAME_ROOT)</GameRoot>
     <GameManaged>$(GameRoot)\Lords and Villeins_Data\Managed</GameManaged>
     <BepInExPath>$(GameRoot)\BepInEx</BepInExPath>
     <PluginInstallDir>$(BepInExPath)\plugins\LordsAndVilleinsCheats</PluginInstallDir>

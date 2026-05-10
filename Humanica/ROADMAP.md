@@ -159,5 +159,3 @@ Major changes:
 - `README.md` - install, development, and IL2CPP notes.
 - `docs/smoke-checklist.md` - manual in-game verification checklist.
 - `refs/` - Humanica-specific research notes.
-- `docs/superpowers/specs/` - design notes.
-- `docs/superpowers/plans/` - implementation plans.

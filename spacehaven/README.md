@@ -62,22 +62,16 @@ If Gatekeeper blocks the unsigned app, right-click the app and choose `Open`, or
 xattr -dr com.apple.quarantine "mac/SpaceHavenEditor.app"
 ```
 
-The editor checks common native Steam and compatibility layer save locations.
+The editor checks an explicit path argument, `SPACEHAVEN_SAVES`, and the bundled `savegames/` fallback.
 
 ## Updating Resource Names
 
 After a game update, regenerate `resource_names.json` if item IDs or names changed.
 
-Windows example:
+Example:
 
 ```bash
-python extract_names.py "<SPACEHAVEN_GAME_ROOT>\spacehaven.jar"
-```
-
-macOS example:
-
-```bash
-python3 extract_names.py /path/to/spacehaven.jar
+python extract_names.py "<SPACEHAVEN_GAME_ROOT>/spacehaven.jar"
 ```
 
 ## Runtime Mods

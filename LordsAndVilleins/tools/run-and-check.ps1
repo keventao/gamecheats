@@ -2,7 +2,7 @@ param(
     [string]$GameRoot = $env:LAV_GAME_ROOT,
     [int]$WaitSeconds = 30
 )
-if (-not $GameRoot) { $GameRoot = "<LAV_GAME_ROOT>" }
+if (-not $GameRoot) { throw "Set -GameRoot or LAV_GAME_ROOT to your Lords & Villeins install folder." }
 
 $ErrorActionPreference = "Stop"
 $exe = Join-Path $GameRoot "Lords and Villeins.exe"

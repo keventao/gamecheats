@@ -38,7 +38,7 @@ If `python` is not on PATH, install any Python 3.10+ build and enable `Add pytho
 
 Default behavior:
 
-- Reads `spacehaven.jar` from `SPACEHAVEN_GAME_ROOT` or common Steam install paths.
+- Reads `spacehaven.jar` from `--game-root` or `SPACEHAVEN_GAME_ROOT`.
 - Writes `spacehaven/generated/kk-resource-tuning-x2/`.
 - Copies only `Product` definitions with type `Crop` or `Process`.
 - Multiplies output `howMuch` values under `<products>` by `x2`.
@@ -81,7 +81,7 @@ Useful log paths:
 
 ```text
 <SPACEHAVEN_GAME_ROOT>\mods\logs.txt
-<STEAM_WORKSHOP_ROOT>\content\979110\3703674043\logs.txt
+<STEAM_WORKSHOP_ROOT>\content\979110\<WORKSHOP_ITEM_ID>\logs.txt
 ```
 
 ## Modloader Workflow

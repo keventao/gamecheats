@@ -7,8 +7,8 @@
 执行命令:
 
 ```powershell
-Get-FileHash "<LAV_GAME_ROOT>\Lords and Villeins_Data\Managed\Assembly-CSharp.dll" -Algorithm SHA256
-(Get-Item "<LAV_GAME_ROOT>\Lords and Villeins.exe").VersionInfo | Format-List
+Get-FileHash "<GAME_ROOT>\Lords and Villeins_Data\Managed\Assembly-CSharp.dll" -Algorithm SHA256
+(Get-Item "<GAME_ROOT>\Lords and Villeins.exe").VersionInfo | Format-List
 ```
 
 填结果:

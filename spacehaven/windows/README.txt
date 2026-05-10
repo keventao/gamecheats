@@ -30,10 +30,6 @@ Default Windows location:
 
     %APPDATA%\Spacehaven\savegames\
 
-Equivalent full path:
-
-    <WINDOWS_USER_HOME>\AppData\Roaming\Spacehaven\savegames\
-
 Discovery order:
 
 1. Path passed on the command line.

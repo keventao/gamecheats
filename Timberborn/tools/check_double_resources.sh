@@ -31,17 +31,28 @@ if [[ -d "$mod/NaturalResources" ]] && find "$mod/NaturalResources" -type f | gr
   exit 1
 fi
 
+source_dir="$root/src/KKDoubleResources"
+if [[ ! -f "$source_dir/MainModStarter.cs" ]] || [[ ! -f "$source_dir/YieldCarryMultiplierPatch.cs" ]]; then
+  echo "missing: source files for runtime yield patch"
+  exit 1
+fi
+
+if ! grep -q 'public.timberborn.double-resources' "$source_dir/MainModStarter.cs"; then
+  echo "wrong: MainModStarter.cs Harmony id"
+  exit 1
+fi
+
+if ! grep -q 'private const int Multiplier = 10;' "$source_dir/YieldCarryMultiplierPatch.cs"; then
+  echo "wrong: YieldCarryMultiplierPatch.cs multiplier"
+  exit 1
+fi
+
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
-
-if [[ ! -f "$mod/Scripts/KKDoubleResources.dll" ]]; then
-  echo "missing: mods/KKDoubleResources/Scripts/KKDoubleResources.dll"
-  exit 1
-fi
 
 check_json_value "$mod/Recipes/Recipe.SciencePoints.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "10"
 check_json_value "$mod/Recipes/Recipe.SciencePointsNumbercruncher.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "100"

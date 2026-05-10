@@ -3,7 +3,10 @@ const os = require('os');
 const path = require('path');
 const childProcess = require('child_process');
 
-const jarPath = process.argv[2] || '<SPACEHAVEN_GAME_ROOT>/spacehaven.jar';
+const jarPath = process.argv[2] || process.env.SPACEHAVEN_JAR;
+if (!jarPath) {
+  throw new Error('Pass spacehaven.jar as argv[2] or set SPACEHAVEN_JAR');
+}
 if (!fs.existsSync(jarPath)) {
   throw new Error(`spacehaven.jar not found: ${jarPath}`);
 }

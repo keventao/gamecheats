@@ -9,8 +9,6 @@ Last updated: 2026-05-10
 Known facts:
 
 - Target game: Timberborn.
-- User-provided Windows Steam path:
-  `<TIMBERBORN_GAME_ROOT>`
 - Observed installed version: `1.0.13.1-b769e88-sw`.
 - Runtime: Unity Mono, based on local managed assemblies.
 - Mod route: official Timberborn Blueprint JSON plus Harmony runtime patch.
@@ -18,7 +16,7 @@ Known facts:
   points by 10.
 - Lumberjack Flag, Gatherer Flag, and Tapper's Shack output inventories are set
   to 500 capacity.
-- Package synced to `<USER_DOCUMENTS>/Timberborn/Mods/KKDoubleResources/`.
+- Package can be copied to the user's Timberborn mod directory for local testing.
 
 ## Acceptance Criteria For First Real Mod
 

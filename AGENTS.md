@@ -60,10 +60,11 @@ The sections below describe **LordsAndVilleins**; for other projects, prefer the
 - `powershell tools/tail-log.ps1` follows `BepInEx/LogOutput.log`.
 - `powershell tools/run-and-check.ps1` runs the build/install/launch/log-check loop. Exit codes are `0` PASS, `1` FAIL, and `2` WARN.
 
-`Directory.Build.props` defines the default `GameRoot`. Override it when needed, for example:
+Pass `GameRoot` explicitly or set the project-specific environment variable.
+Example:
 
 ```bash
-dotnet build -c Release -p:GameRoot="<LAV_GAME_ROOT>"
+dotnet build -c Release -p:GameRoot="<GAME_ROOT>"
 ```
 
 ## Coding Style & Naming Conventions

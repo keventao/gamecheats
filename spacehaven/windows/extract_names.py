@@ -4,17 +4,12 @@
 Run once after game updates. Writes resource_names.json next to this script.
 """
 import json
+import os
 import re
 import sys
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
-
-JAR_CANDIDATES = [
-    Path("<USER_HOME>/<APP_SUPPORT>/compatibility layer/Bottles/Steam/drive_c/Program Files (x86)/Steam/steamapps/common/SpaceHaven/spacehaven.jar"),
-    Path("<USER_HOME>/<APP_SUPPORT>/Steam/steamapps/common/SpaceHaven/spacehaven.app/Contents/Resources/spacehaven.jar"),
-    Path("<USER_HOME>/<APP_SUPPORT>/Steam/steamapps/common/SpaceHaven/spacehaven.jar"),
-]
 
 OUT = Path(__file__).parent / "resource_names.json"
 
@@ -24,10 +19,12 @@ def find_jar() -> Path:
         p = Path(sys.argv[1])
         if p.is_file():
             return p
-    for p in JAR_CANDIDATES:
+    env_path = os.environ.get("SPACEHAVEN_JAR")
+    if env_path:
+        p = Path(env_path)
         if p.is_file():
             return p
-    raise SystemExit("spacehaven.jar not found; pass path as arg")
+    raise SystemExit("spacehaven.jar not found; pass path as arg or set SPACEHAVEN_JAR")
 
 
 def read_text_from_jar(jar: Path, name: str) -> str:

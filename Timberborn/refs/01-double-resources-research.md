@@ -4,11 +4,7 @@ Date: 2026-05-10
 
 ## Local Game Evidence
 
-- compatibility layer bottle: `Steam`
-- Game root:
-  `<USER_HOME>/<APP_SUPPORT>/compatibility layer/Bottles/Steam/drive_c/Program Files (x86)/Steam/steamapps/common/Timberborn`
-- Windows path inside bottle:
-  `<TIMBERBORN_GAME_ROOT>`
+- Game root: local Steam install path, not committed.
 - Version file:
   `Timberborn_Data/StreamingAssets/Version.txt`
 - Observed version: `1.0.13.1-b769e88-sw`
@@ -88,7 +84,7 @@ Repository package:
 Timberborn/mods/KKDoubleResources/
 ```
 
-compatibility layer install target:
+Install target:
 
 ```text
 <USER_DOCUMENTS>/Timberborn/Mods/KKDoubleResources/
@@ -97,7 +93,7 @@ compatibility layer install target:
 Windows view:
 
 ```text
-C:\users\crossover\Documents\Timberborn\Mods\KKDoubleResources
+<CROSSOVER_DOCUMENTS>\Timberborn\Mods\KKDoubleResources
 ```
 
 ## Verification

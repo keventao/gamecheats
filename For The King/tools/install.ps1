@@ -2,7 +2,7 @@ param(
     [string]$Configuration = "Release",
     [string]$GameRoot = $env:FTK_GAME_ROOT
 )
-if (-not $GameRoot) { $GameRoot = "<FTK_GAME_ROOT>" }
+if (-not $GameRoot) { throw "Set -GameRoot or FTK_GAME_ROOT to your For The King install folder." }
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot

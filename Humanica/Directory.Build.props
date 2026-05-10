@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <GameRoot Condition="'$(GameRoot)' == ''">E:\Games\Humanica</GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(HUMANICA_GAME_ROOT)</GameRoot>
     <ModInstallDir>$(GameRoot)\Mods</ModInstallDir>
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>

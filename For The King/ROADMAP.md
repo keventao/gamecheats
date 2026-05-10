@@ -86,6 +86,4 @@ Use `docs/smoke-checklist.md`.
 
 - `README.md` - build/install quickstart.
 - `docs/smoke-checklist.md` - manual test checklist.
-- `docs/superpowers/specs/2026-05-03-for-the-king-cheats-design.md` - design notes.
-- `docs/superpowers/plans/2026-05-03-for-the-king-cheats-implementation.md` - implementation plan.
 - `refs/00-research-checklist.md` - research notes.

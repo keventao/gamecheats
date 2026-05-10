@@ -33,25 +33,23 @@ See `ROADMAP.md` for the full known-limitations list, v0.2 plans, and version hi
 - `tools/run-and-check.ps1` — launch game, wait, parse log, report PASS/FAIL/WARN
 - `refs/` — dnSpy reconnaissance notes (game-specific class/field/method names)
 - `docs/smoke-checklist.md` — manual smoke list to run before release
-- `docs/superpowers/specs/` — design spec
-- `docs/superpowers/plans/` — implementation plan
 - `ROADMAP.md` — current status, known limitations, next-version plans, version history
 
 ## Develop
 
 ```bash
 dotnet build -c Release
-powershell tools/install.ps1
-powershell tools/tail-log.ps1   # in a separate terminal
+powershell tools/install.ps1 -GameRoot "<GAME_ROOT>"
+powershell tools/tail-log.ps1 -GameRoot "<GAME_ROOT>"   # in a separate terminal
 # then launch the game via Steam
 ```
 
-After a code change: `dotnet build -c Release && powershell tools/install.ps1`, then restart game.
+After a code change: `dotnet build -c Release && powershell tools/install.ps1 -GameRoot "<GAME_ROOT>"`, then restart game.
 
 For an automated build+install+launch+log-check loop:
 
 ```bash
-powershell tools/run-and-check.ps1
+powershell tools/run-and-check.ps1 -GameRoot "<GAME_ROOT>"
 ```
 
 Exit codes: `0` PASS, `1` FAIL (no plugin load or errors), `2` WARN (broken patches present).

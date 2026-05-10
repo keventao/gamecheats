@@ -29,13 +29,6 @@ def candidate_game_roots() -> list[Path]:
     roots: list[Path] = []
     if env_root := os.environ.get("SPACEHAVEN_GAME_ROOT"):
         roots.append(Path(env_root))
-    roots.extend(
-        [
-            Path(r"<SPACEHAVEN_GAME_ROOT>"),
-            Path(r"<SPACEHAVEN_GAME_ROOT>"),
-            Path(r"<SPACEHAVEN_GAME_ROOT>"),
-        ]
-    )
     return roots
 
 

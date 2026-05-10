@@ -4,8 +4,7 @@ Write facts here before coding. Do not guess class or method names.
 
 ## Install Facts
 
-- Game path:
-  `<TIMBERBORN_GAME_ROOT>`
+- Game path: record locally during research; do not commit personal absolute paths.
 - Game version/build:
 - Executable name:
 - Runtime/engine evidence:

@@ -5,12 +5,6 @@ Local Timberborn mod workspace.
 ## Current Status
 
 - Status: local official-mod package created.
-- Game root provided by user:
-
-```text
-<TIMBERBORN_GAME_ROOT>
-```
-
 - Observed game version: `1.0.13.1-b769e88-sw`
 - Runtime: Unity Mono, based on local `Timberborn_Data/Managed` assemblies.
 - Loader path: official Timberborn mod manager, Blueprint JSON, and Harmony for
@@ -55,13 +49,16 @@ amount to the destination inventory.
 
 ## Install
 
-compatibility layer maps `C:\users\crossover\Documents` to:
+Build the Harmony DLL locally before installing:
 
-```text
-<USER_DOCUMENTS>
+```bash
+dotnet build Timberborn/src/KKDoubleResources/KKDoubleResources.csproj -c Release \
+  -p:GameRoot="<TIMBERBORN_GAME_ROOT>" \
+  -p:HarmonyRoot="<HARMONY_MOD_SCRIPTS_DIR>" \
+  -p:ModPackageDir="Timberborn/mods/KKDoubleResources"
 ```
 
-Install the mod folder here:
+Install the mod folder under Timberborn's local user mod directory:
 
 ```text
 <USER_DOCUMENTS>/Timberborn/Mods/KKDoubleResources/
@@ -99,7 +96,6 @@ Timberborn/
     smoke-checklist.md
   mods/
     KKDoubleResources/
-      Scripts/
   refs/
     00-research-checklist.md
     01-double-resources-research.md

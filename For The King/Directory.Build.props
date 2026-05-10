@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <GameRoot Condition="'$(GameRoot)' == ''"><FTK_GAME_ROOT></GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(FTK_GAME_ROOT)</GameRoot>
     <GameManaged>$(GameRoot)\FTK_Data\Managed</GameManaged>
     <BepInExPath>$(GameRoot)\BepInEx</BepInExPath>
     <PluginInstallDir>$(BepInExPath)\plugins\ForTheKingCheats</PluginInstallDir>

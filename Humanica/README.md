@@ -88,8 +88,7 @@ rtk dotnet build Humanica/src/HumanicaCheats/HumanicaCheats.sln -c Release
 
 ## Development
 
-Default local `GameRoot` is configured in `Humanica/Directory.Build.props`.
-Override it when needed:
+Pass `GameRoot` explicitly or set `HUMANICA_GAME_ROOT`:
 
 ```bash
 rtk dotnet build Humanica/src/HumanicaCheats/HumanicaCheats.sln -c Release /p:GameRoot="<HUMANICA_GAME_ROOT>"
@@ -109,8 +108,6 @@ rtk dotnet run --project Humanica/src/HumanicaCheats.Tests/HumanicaCheats.Tests.
 - `src/HumanicaCheats.Tests/` - no-game lightweight policy tests
 - `refs/` - IL2CPP research notes
 - `docs/smoke-checklist.md` - manual in-game verification checklist
-- `docs/superpowers/specs/` - design notes
-- `docs/superpowers/plans/` - implementation plans
 - `ROADMAP.md` - current status and version notes
 
 ## IL2CPP IMGUI Notes

@@ -18,13 +18,9 @@ from tkinter import filedialog, messagebox, ttk
 from xml.etree import ElementTree as ET
 
 GAME_ROOT = Path(__file__).resolve().parent.parent
-HOME = Path.home()
 
 CANDIDATE_SAVE_DIRS = [
-    HOME / "<APP_SUPPORT>/Spacehaven/savegames",
-    HOME / "<APP_SUPPORT>/SpaceHaven/savegames",
     GAME_ROOT / "savegames",
-    HOME / "<APP_SUPPORT>/compatibility layer/Bottles/Steam/drive_c/Program Files (x86)/Steam/steamapps/common/SpaceHaven/savegames",
 ]
 if env_dir := os.environ.get("SPACEHAVEN_SAVES"):
     CANDIDATE_SAVE_DIRS.insert(0, Path(env_dir))

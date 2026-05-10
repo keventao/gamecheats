@@ -5,7 +5,7 @@ BepInEx 5 x64 + Harmony mod skeleton for For The King (Unity Mono).
 ## Requirements
 
 - .NET SDK
-- For The King installed at `<FTK_GAME_ROOT>`
+- For The King installed locally
 - BepInEx 5 x64 installed in the game directory
 
 ## Build
@@ -22,7 +22,7 @@ From the repository root:
 dotnet build "For The King/src/ForTheKingCheats/ForTheKingCheats.csproj" -c Release
 ```
 
-Override the game path when needed:
+Set the game path with `-p:GameRoot` or `FTK_GAME_ROOT`:
 
 ```bash
 dotnet build "For The King/src/ForTheKingCheats/ForTheKingCheats.csproj" -c Release -p:GameRoot="<FTK_GAME_ROOT>"
