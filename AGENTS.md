@@ -16,6 +16,7 @@
 - Treat this repository as a multi-game, multi-engine cheat/mod workspace. Supported targets may include Unity, Godot, Mono, IL2CPP, BepInEx, MelonLoader, native games, and future game-specific stacks. Prefer project-local docs before general assumptions:
   - `Humanica/README.md`, `Humanica/ROADMAP.md`, and `Humanica/refs/**` for Humanica.
   - `For The King/README.md` and `For The King/refs/**` for For The King.
+  - `Timberborn/README.md`, `Timberborn/ROADMAP.md`, and `Timberborn/refs/**` for Timberborn.
   - `LordsAndVilleins/README.md`, `LordsAndVilleins/ROADMAP.md`, and `LordsAndVilleins/refs/**` for Lords & Villeins.
 - Review likely cheat/gameplay integration code first:
   - `*/src/**/Modules/**`
@@ -37,6 +38,7 @@ This repository hosts multiple game-specific cheat-tool projects, one subdirecto
 
 - `LordsAndVilleins/` - BepInEx + Harmony mod for *Lords & Villeins* (Unity Mono). The structure below describes this project.
 - `For The King/` - BepInEx + Harmony mod for *For The King* (Unity Mono). See `For The King/README.md` for project-specific commands and structure.
+- `Timberborn/` - research workspace for a future *Timberborn* mod or cheat. See `Timberborn/README.md` and `Timberborn/ROADMAP.md`.
 - `Humanica/` - MelonLoader + HarmonyX mod for *Humanica* (Unity IL2CPP). See `Humanica/README.md` for project-specific commands and structure.
 - `fightlife mods/` - packaged Unity Mono managed-DLL cheat files for *FightLife Vanguard*. See its local install notes.
 - `spacehaven/` - offline save editor and future modloader/Workshop mod workspace for *Space Haven*. See `spacehaven/README.md` and `spacehaven/MODDING.md`.

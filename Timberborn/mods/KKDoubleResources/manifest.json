@@ -1,0 +1,15 @@
+{
+  "Name": "KK Double Resources",
+  "Version": "0.2.0",
+  "Id": "public.timberborn.double-resources",
+  "MinimumGameVersion": "1.0.0.0",
+  "Description": "Multiplies selected flag-collected resource yields and science point production by 10.",
+  "RequiredMods": [
+    {
+      "Id": "Harmony",
+      "MinimumVersion": "2.4.1"
+    }
+  ],
+  "OptionalMods": [
+  ]
+}

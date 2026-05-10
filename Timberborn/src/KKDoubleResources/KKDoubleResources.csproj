@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>KKDoubleResources</AssemblyName>
+    <RootNamespace>KKDoubleResources</RootNamespace>
+    <Version>0.2.0</Version>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(HarmonyRoot)/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Carrying">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.Carrying.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BehaviorSystem">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.BehaviorSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BaseComponentSystem">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.BaseComponentSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Goods">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.Goods.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.InventorySystem">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.InventorySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ModManagerScene">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.ModManagerScene.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Yielding">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/Timberborn.Yielding.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameRoot)/Timberborn_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CopyToModPackage" AfterTargets="Build" Condition="'$(ModPackageDir)' != ''">
+    <MakeDir Directories="$(ModPackageDir)/Scripts" />
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFolder="$(ModPackageDir)/Scripts"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

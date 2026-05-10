@@ -44,6 +44,7 @@ desktop.ini
 # Local game saves/backups
 **/save-backups/
 **/SaveBackups/
+*.original.bak
 Humanica/UserData/
 
 # Generated Space Haven mods from local game assets
