@@ -28,6 +28,10 @@ Use a disposable world or backed-up save for every test.
 - Confirm Aquatic Farmhouse output inventory capacity is 500.
 - Confirm Scavenger Flag output inventory capacity is 500.
 - Confirm Tapper's Shack output inventory capacity is 500.
+- Confirm storage-category buildings use x5 capacity, for example Small
+  Warehouse 150, Medium Warehouse 1000, Large Warehouse 6000, Small Tank 150,
+  Medium Tank 1500, Large Tank 6000, Small Pile 100, Large Pile 900, and
+  Underground Pile 5000.
 - Cut a Birch and confirm the Lumberjack Flag receives 10 logs.
 - Cut a Pine and confirm the Lumberjack Flag receives 20 logs.
 - Confirm the worker still carries the vanilla amount before delivery.

@@ -38,6 +38,8 @@ storage still received the vanilla amount.
   10 per user request.
 - Water pump output: `Recipe.Water` and `Recipe.Water.Efficient` product amounts
   are multiplied by 5 for clear-water pumps.
+- Storage-category building capacity: `StockpileSpec.MaxCapacity` under
+  `Buildings/Storage/**` is multiplied by 5.
 - Character movement speed: `WalkerSpeedManagerSpec` on character blueprints,
   doubled after user requested faster Timberborn movement.
 
@@ -107,6 +109,28 @@ Water pump recipes:
 |---|---:|---:|
 | `Recipes/Recipe.Water.blueprint.json` | 1 Water | 5 Water |
 | `Recipes/Recipe.Water.Efficient.blueprint.json` | 5 Water | 25 Water |
+
+Storage building capacity:
+
+| Blueprint | Base | Mod |
+|---|---:|---:|
+| `Buildings/Storage/SmallWarehouse/SmallWarehouse.Folktails.blueprint.json` | 30 | 150 |
+| `Buildings/Storage/SmallWarehouse/SmallWarehouse.IronTeeth.blueprint.json` | 30 | 150 |
+| `Buildings/Storage/MediumWarehouse/MediumWarehouse.Folktails.blueprint.json` | 200 | 1000 |
+| `Buildings/Storage/MediumWarehouse/MediumWarehouse.IronTeeth.blueprint.json` | 200 | 1000 |
+| `Buildings/Storage/LargeWarehouse/LargeWarehouse.Folktails.blueprint.json` | 1200 | 6000 |
+| `Buildings/Storage/LargeWarehouse/LargeWarehouse.IronTeeth.blueprint.json` | 1200 | 6000 |
+| `Buildings/Storage/SmallTank/SmallTank.Folktails.blueprint.json` | 30 | 150 |
+| `Buildings/Storage/SmallTank/SmallTank.IronTeeth.blueprint.json` | 30 | 150 |
+| `Buildings/Storage/MediumTank/MediumTank.Folktails.blueprint.json` | 300 | 1500 |
+| `Buildings/Storage/MediumTank/MediumTank.IronTeeth.blueprint.json` | 300 | 1500 |
+| `Buildings/Storage/LargeTank/LargeTank.Folktails.blueprint.json` | 1200 | 6000 |
+| `Buildings/Storage/LargeTank/LargeTank.IronTeeth.blueprint.json` | 1200 | 6000 |
+| `Buildings/Storage/SmallPile/SmallPile.Folktails.blueprint.json` | 20 | 100 |
+| `Buildings/Storage/SmallIndustrialPile/SmallIndustrialPile.IronTeeth.blueprint.json` | 20 | 100 |
+| `Buildings/Storage/LargePile/LargePile.Folktails.blueprint.json` | 180 | 900 |
+| `Buildings/Storage/LargeIndustrialPile/LargeIndustrialPile.IronTeeth.blueprint.json` | 180 | 900 |
+| `Buildings/Storage/UndergroundPile/UndergroundPile.Folktails.blueprint.json` | 1000 | 5000 |
 
 Movement speed blueprints:
 

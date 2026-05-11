@@ -76,6 +76,32 @@ check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.IronTeeth.blu
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 
+storage_capacity_checks=(
+  "Buildings/Storage/LargeIndustrialPile/LargeIndustrialPile.IronTeeth.blueprint.json 900"
+  "Buildings/Storage/LargePile/LargePile.Folktails.blueprint.json 900"
+  "Buildings/Storage/LargeTank/LargeTank.Folktails.blueprint.json 6000"
+  "Buildings/Storage/LargeTank/LargeTank.IronTeeth.blueprint.json 6000"
+  "Buildings/Storage/LargeWarehouse/LargeWarehouse.Folktails.blueprint.json 6000"
+  "Buildings/Storage/LargeWarehouse/LargeWarehouse.IronTeeth.blueprint.json 6000"
+  "Buildings/Storage/MediumTank/MediumTank.Folktails.blueprint.json 1500"
+  "Buildings/Storage/MediumTank/MediumTank.IronTeeth.blueprint.json 1500"
+  "Buildings/Storage/MediumWarehouse/MediumWarehouse.Folktails.blueprint.json 1000"
+  "Buildings/Storage/MediumWarehouse/MediumWarehouse.IronTeeth.blueprint.json 1000"
+  "Buildings/Storage/SmallIndustrialPile/SmallIndustrialPile.IronTeeth.blueprint.json 100"
+  "Buildings/Storage/SmallPile/SmallPile.Folktails.blueprint.json 100"
+  "Buildings/Storage/SmallTank/SmallTank.Folktails.blueprint.json 150"
+  "Buildings/Storage/SmallTank/SmallTank.IronTeeth.blueprint.json 150"
+  "Buildings/Storage/SmallWarehouse/SmallWarehouse.Folktails.blueprint.json 150"
+  "Buildings/Storage/SmallWarehouse/SmallWarehouse.IronTeeth.blueprint.json 150"
+  "Buildings/Storage/UndergroundPile/UndergroundPile.Folktails.blueprint.json 5000"
+)
+
+for storage_capacity_check in "${storage_capacity_checks[@]}"; do
+  storage_file="${storage_capacity_check% *}"
+  storage_capacity="${storage_capacity_check##* }"
+  check_json_value "$mod/$storage_file" '.StockpileSpec.MaxCapacity' "$storage_capacity"
+done
+
 check_json_value "$mod/Characters/Beaver/BeaverAdult.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "5.4"
 check_json_value "$mod/Characters/Beaver/BeaverAdult.blueprint.json" '.WalkerSpeedManagerSpec.BaseSlowedSpeed' "2.7"
 check_json_value "$mod/Characters/Beaver/BeaverChild.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "2.7"

@@ -16,7 +16,7 @@ then write research notes under `refs/`.
 
 ## KK Double Resources
 
-`KKDoubleResources` multiplies selected output by 10:
+`KKDoubleResources` multiplies selected output and selected capacities:
 
 - Flag-collected natural outputs via runtime patch:
   - Birch: 1 -> 10
@@ -55,6 +55,14 @@ then write research notes under `refs/`.
   - Farmhouse: 50 -> 500
   - Efficient Farmhouse: 50 -> 500
   - Aquatic Farmhouse: 50 -> 500
+- Storage building capacity:
+  - Small Warehouse / Small Tank: 30 -> 150
+  - Medium Warehouse: 200 -> 1000
+  - Large Warehouse / Large Tank: 1200 -> 6000
+  - Small Pile / Small Industrial Pile: 20 -> 100
+  - Large Pile / Large Industrial Pile: 180 -> 900
+  - Medium Tank: 300 -> 1500
+  - Underground Pile: 1000 -> 5000
 - Science point recipes:
   - Inventor: 1 -> 10
   - Numbercruncher: 10 -> 100
@@ -114,10 +122,11 @@ Manual smoke test:
 7. Harvest one land crop, such as Carrot, and confirm the Farmhouse receives x10.
 8. Harvest one aquatic crop, such as Cattail, and confirm the Aquatic Farmhouse
    receives x10 if available.
-9. Run a Water Pump and confirm each cycle produces 5 water.
-10. Run a Large Water Pump if available and confirm each cycle produces 25 water.
-11. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
-12. Run Inventor or other science building and confirm science points per cycle
+9. Build or inspect storage-category buildings and confirm their capacity is x5.
+10. Run a Water Pump and confirm each cycle produces 5 water.
+11. Run a Large Water Pump if available and confirm each cycle produces 25 water.
+12. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
+13. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout
