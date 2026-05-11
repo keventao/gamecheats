@@ -61,6 +61,15 @@ check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.IronTeeth.blu
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 
+check_json_value "$mod/Characters/Beaver/BeaverAdult.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "5.4"
+check_json_value "$mod/Characters/Beaver/BeaverAdult.blueprint.json" '.WalkerSpeedManagerSpec.BaseSlowedSpeed' "2.7"
+check_json_value "$mod/Characters/Beaver/BeaverChild.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "2.7"
+check_json_value "$mod/Characters/Beaver/BeaverChild.blueprint.json" '.WalkerSpeedManagerSpec.BaseSlowedSpeed' "1.3"
+check_json_value "$mod/Characters/Bot/Bot.Folktails.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "5.4"
+check_json_value "$mod/Characters/Bot/Bot.Folktails.blueprint.json" '.WalkerSpeedManagerSpec.BaseSlowedSpeed' "2.7"
+check_json_value "$mod/Characters/Bot/Bot.IronTeeth.blueprint.json" '.WalkerSpeedManagerSpec.BaseWalkingSpeed' "5.4"
+check_json_value "$mod/Characters/Bot/Bot.IronTeeth.blueprint.json" '.WalkerSpeedManagerSpec.BaseSlowedSpeed' "2.7"
+
 check_json_value "$mod/Recipes/Recipe.SciencePoints.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "10"
 check_json_value "$mod/Recipes/Recipe.SciencePointsNumbercruncher.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "100"
 check_json_value "$mod/Recipes/Recipe.SciencePointsObservatory.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "100"

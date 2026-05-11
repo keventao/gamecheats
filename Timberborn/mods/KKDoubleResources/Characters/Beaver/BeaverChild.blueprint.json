@@ -1,0 +1,6 @@
+{
+  "WalkerSpeedManagerSpec": {
+    "BaseWalkingSpeed": 2.7,
+    "BaseSlowedSpeed": 1.3
+  }
+}

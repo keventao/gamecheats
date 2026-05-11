@@ -42,6 +42,9 @@ Use a disposable world or backed-up save for every test.
 - Tap Maple Syrup and confirm the Tapper's Shack receives 30.
 - Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
   of the selected ruin's base yield.
+- Confirm adult beavers move at roughly x2 speed without path stutter.
+- Confirm bots move at roughly x2 speed if available.
+- Confirm child beavers move faster if available.
 - Run Inventor and confirm science output is 10 per cycle.
 - Run Numbercruncher or Observatory if available and confirm science output is
   100 per cycle.

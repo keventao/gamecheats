@@ -30,6 +30,8 @@ storage still received the vanilla amount.
   - `Good.ScrapMetal` from ruins via Scavenger Flag.
 - Science points: `ProducedSciencePoints` from science recipes, multiplied by
   10 per user request.
+- Character movement speed: `WalkerSpeedManagerSpec` on character blueprints,
+  doubled after user requested faster Timberborn movement.
 
 ## Blueprint Changes
 
@@ -77,6 +79,15 @@ Science point recipes:
 | `Recipes/Recipe.SciencePoints.blueprint.json` | 1 | 10 |
 | `Recipes/Recipe.SciencePointsNumbercruncher.blueprint.json` | 10 | 100 |
 | `Recipes/Recipe.SciencePointsObservatory.blueprint.json` | 10 | 100 |
+
+Movement speed blueprints:
+
+| Blueprint | Base walk | Mod walk | Base slowed | Mod slowed |
+|---|---:|---:|---:|---:|
+| `Characters/Beaver/BeaverAdult.blueprint.json` | 2.7 | 5.4 | 1.35 | 2.7 |
+| `Characters/Beaver/BeaverChild.blueprint.json` | 1.35 | 2.7 | 0.65 | 1.3 |
+| `Characters/Bot/Bot.Folktails.blueprint.json` | 2.7 | 5.4 | 1.35 | 2.7 |
+| `Characters/Bot/Bot.IronTeeth.blueprint.json` | 2.7 | 5.4 | 1.35 | 2.7 |
 
 ## Local Mod Folder
 

@@ -42,6 +42,10 @@ then write research notes under `refs/`.
   - Inventor: 1 -> 10
   - Numbercruncher: 10 -> 100
   - Observatory: 10 -> 100
+- Character movement speed:
+  - Adult beavers and bots: 2.7 -> 5.4
+  - Child beavers: 1.35 -> 2.7
+  - Slowed movement speeds are also doubled.
 
 Natural resource blueprints are intentionally left at vanilla yield values. The
 runtime patch marks selected yield collection in
@@ -87,7 +91,8 @@ Manual smoke test:
    pine resin, or maple syrup, and confirm the flag/building receives x10 goods.
 6. Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
    of the selected ruin's base yield.
-7. Run Inventor or other science building and confirm science points per cycle
+7. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
+8. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout
