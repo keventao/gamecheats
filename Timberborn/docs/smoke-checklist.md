@@ -43,7 +43,9 @@ Use a disposable world or backed-up save for every test.
 - Gather Mangrove Fruit and confirm the Gatherer Flag receives 40.
 - Tap Pine Resin and confirm the Tapper's Shack receives 20.
 - Tap Maple Syrup and confirm the Tapper's Shack receives 30.
-- Harvest Carrot and confirm the Farmhouse receives 30.
+- Harvest Carrot or another land crop and confirm the Farmhouse receives x10.
+- Harvest Cattail or another aquatic crop and confirm the Aquatic Farmhouse
+  receives x10.
 - Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
   of the selected ruin's base yield.
 - Confirm adult beavers move at roughly x2 speed without path stutter.

@@ -33,7 +33,20 @@ then write research notes under `refs/`.
   - Pine resin: 2 -> 20
   - Maple syrup: 3 -> 30
   - Scrap metal: 15-120 -> 150-1200
-  - Carrot: 3 -> 30
+  - Farmhouse crops:
+    - Canola seeds: 3 -> 30
+    - Carrot: 3 -> 30
+    - Cassava: 1 -> 10
+    - Corn: 2 -> 20
+    - Eggplant: 3 -> 30
+    - Kohlrabi: 2 -> 20
+    - Potato: 1 -> 10
+    - Soybean: 2 -> 20
+    - Sunflower seeds: 2 -> 20
+    - Wheat: 3 -> 30
+  - Aquatic Farmhouse crops:
+    - Cattail root: 3 -> 30
+    - Spadderdock: 3 -> 30
 - Output inventory capacity:
   - Lumberjack Flag: 20 -> 500
   - Gatherer Flag: 20 -> 500
@@ -95,8 +108,9 @@ Manual smoke test:
    pine resin, or maple syrup, and confirm the flag/building receives x10 goods.
 6. Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
    of the selected ruin's base yield.
-7. Harvest one Carrot and confirm the Farmhouse receives 30 carrots.
-8. Confirm Aquatic Farmhouse output inventory capacity is 500 if available.
+7. Harvest one land crop, such as Carrot, and confirm the Farmhouse receives x10.
+8. Harvest one aquatic crop, such as Cattail, and confirm the Aquatic Farmhouse
+   receives x10 if available.
 9. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
 10. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.

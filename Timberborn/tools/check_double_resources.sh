@@ -57,6 +57,13 @@ if ! grep -q '"Carrot"' "$source_dir/YieldCarryMultiplierPatch.cs"; then
   exit 1
 fi
 
+for crop_good in CanolaSeeds Cassava CattailRoot Corn Eggplant Kohlrabi Potato Soybean Spadderdock SunflowerSeeds Wheat; do
+  if ! grep -q "\"$crop_good\"" "$source_dir/YieldCarryMultiplierPatch.cs"; then
+    echo "wrong: YieldCarryMultiplierPatch.cs missing $crop_good"
+    exit 1
+  fi
+done
+
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"

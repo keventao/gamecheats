@@ -26,7 +26,18 @@ internal static class ResourceMultiplier
         "PineResin",
         "MapleSyrup",
         "ScrapMetal",
-        "Carrot"
+        "CanolaSeeds",
+        "Carrot",
+        "Cassava",
+        "CattailRoot",
+        "Corn",
+        "Eggplant",
+        "Kohlrabi",
+        "Potato",
+        "Soybean",
+        "Spadderdock",
+        "SunflowerSeeds",
+        "Wheat"
     };
 
     public static bool CanBoost(string goodId)

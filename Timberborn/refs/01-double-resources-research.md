@@ -28,7 +28,12 @@ storage still received the vanilla amount.
   - `Good.PineResin` from Pine.
   - `Good.MapleSyrup` from Maple.
   - `Good.ScrapMetal` from ruins via Scavenger Flag.
-  - `Good.Carrot` from planted Carrot via Farmhouse or Efficient Farmhouse.
+  - Planted land crops via Farmhouse or Efficient Farmhouse:
+    `Good.CanolaSeeds`, `Good.Carrot`, `Good.Cassava`, `Good.Corn`,
+    `Good.Eggplant`, `Good.Kohlrabi`, `Good.Potato`, `Good.Soybean`,
+    `Good.SunflowerSeeds`, and `Good.Wheat`.
+  - Planted aquatic crops via Aquatic Farmhouse: `Good.CattailRoot` and
+    `Good.Spadderdock`.
 - Science points: `ProducedSciencePoints` from science recipes, multiplied by
   10 per user request.
 - Character movement speed: `WalkerSpeedManagerSpec` on character blueprints,
@@ -59,7 +64,18 @@ Natural gathered/tapped yields:
 | Pine PineResin | 2 | 20 |
 | Maple MapleSyrup | 3 | 30 |
 | Ruin ScrapMetal | 15-120 | 150-1200 |
+| Canola CanolaSeeds | 3 | 30 |
 | Carrot Carrot | 3 | 30 |
+| Cassava Cassava | 1 | 10 |
+| Cattail CattailRoot | 3 | 30 |
+| Corn Corn | 2 | 20 |
+| Eggplant Eggplant | 3 | 30 |
+| Kohlrabi Kohlrabi | 2 | 20 |
+| Potato Potato | 1 | 10 |
+| Soybean Soybean | 2 | 20 |
+| Spadderdock Spadderdock | 3 | 30 |
+| Sunflower SunflowerSeeds | 2 | 20 |
+| Wheat Wheat | 3 | 30 |
 
 Implementation notes:
 
