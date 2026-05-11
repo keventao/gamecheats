@@ -24,7 +24,8 @@ internal static class ResourceMultiplier
         "Chestnut",
         "MangroveFruit",
         "PineResin",
-        "MapleSyrup"
+        "MapleSyrup",
+        "ScrapMetal"
     };
 
     public static bool CanBoost(string goodId)

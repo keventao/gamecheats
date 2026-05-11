@@ -47,10 +47,17 @@ if ! grep -q 'private const int Multiplier = 10;' "$source_dir/YieldCarryMultipl
   exit 1
 fi
 
+if ! grep -q '"ScrapMetal"' "$source_dir/YieldCarryMultiplierPatch.cs"; then
+  echo "wrong: YieldCarryMultiplierPatch.cs missing ScrapMetal"
+  exit 1
+fi
+
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/LumberjackFlag/LumberjackFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
+check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
+check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 

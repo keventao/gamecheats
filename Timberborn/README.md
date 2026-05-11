@@ -32,9 +32,11 @@ then write research notes under `refs/`.
   - Mangrove fruit: 4 -> 40
   - Pine resin: 2 -> 20
   - Maple syrup: 3 -> 30
+  - Scrap metal: 15-120 -> 150-1200
 - Output inventory capacity:
   - Lumberjack Flag: 20 -> 500
   - Gatherer Flag: 20 -> 500
+  - Scavenger Flag: 20 -> 500
   - Tapper's Shack: 50 -> 500
 - Science point recipes:
   - Inventor: 1 -> 10
@@ -83,7 +85,9 @@ Manual smoke test:
 4. Gather one blueberry bush and confirm berry output is 30.
 5. Gather or tap one covered natural resource, such as dandelion, chestnut,
    pine resin, or maple syrup, and confirm the flag/building receives x10 goods.
-6. Run Inventor or other science building and confirm science points per cycle
+6. Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
+   of the selected ruin's base yield.
+7. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout

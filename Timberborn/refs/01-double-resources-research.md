@@ -27,6 +27,7 @@ storage still received the vanilla amount.
   - `Good.MangroveFruit` from Mangrove.
   - `Good.PineResin` from Pine.
   - `Good.MapleSyrup` from Maple.
+  - `Good.ScrapMetal` from ruins via Scavenger Flag.
 - Science points: `ProducedSciencePoints` from science recipes, multiplied by
   10 per user request.
 
@@ -54,6 +55,7 @@ Natural gathered/tapped yields:
 | Mangrove MangroveFruit | 4 | 40 |
 | Pine PineResin | 2 | 20 |
 | Maple MapleSyrup | 3 | 30 |
+| Ruin ScrapMetal | 15-120 | 150-1200 |
 
 Implementation notes:
 
@@ -65,8 +67,8 @@ Implementation notes:
 - `GoodCarrier.EmptyHands` clears stale pending delivery markers.
 - This avoids multiplying normal warehouse/hauling transfers.
 - `NaturalResources/**` overrides are intentionally absent from the mod.
-- `LumberjackFlag`, `GathererFlag`, and `TappersShack` output inventories are
-  raised to 500 capacity to avoid overfilling with x10 yields.
+- `LumberjackFlag`, `GathererFlag`, `ScavengerFlag`, and `TappersShack` output
+  inventories are raised to 500 capacity to avoid overfilling with x10 yields.
 
 Science point recipes:
 

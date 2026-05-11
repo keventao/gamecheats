@@ -1,6 +1,6 @@
 # Timberborn Roadmap
 
-Last updated: 2026-05-10
+Last updated: 2026-05-11
 
 ## Status
 
@@ -14,8 +14,8 @@ Known facts:
 - Mod route: official Timberborn Blueprint JSON plus Harmony runtime patch.
 - `KKDoubleResources` multiplies selected flag-collected goods and science
   points by 10.
-- Lumberjack Flag, Gatherer Flag, and Tapper's Shack output inventories are set
-  to 500 capacity.
+- Lumberjack Flag, Gatherer Flag, Scavenger Flag, and Tapper's Shack output
+  inventories are set to 500 capacity.
 - Package can be copied to the user's Timberborn mod directory for local testing.
 
 ## Acceptance Criteria For First Real Mod

@@ -23,6 +23,7 @@ Use a disposable world or backed-up save for every test.
 
 - Confirm Lumberjack Flag output inventory capacity is 500.
 - Confirm Gatherer Flag output inventory capacity is 500.
+- Confirm Scavenger Flag output inventory capacity is 500.
 - Confirm Tapper's Shack output inventory capacity is 500.
 - Cut a Birch and confirm the Lumberjack Flag receives 10 logs.
 - Cut a Pine and confirm the Lumberjack Flag receives 20 logs.
@@ -39,6 +40,8 @@ Use a disposable world or backed-up save for every test.
 - Gather Mangrove Fruit and confirm the Gatherer Flag receives 40.
 - Tap Pine Resin and confirm the Tapper's Shack receives 20.
 - Tap Maple Syrup and confirm the Tapper's Shack receives 30.
+- Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
+  of the selected ruin's base yield.
 - Run Inventor and confirm science output is 10 per cycle.
 - Run Numbercruncher or Observatory if available and confirm science output is
   100 per cycle.
