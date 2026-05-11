@@ -28,6 +28,7 @@ storage still received the vanilla amount.
   - `Good.PineResin` from Pine.
   - `Good.MapleSyrup` from Maple.
   - `Good.ScrapMetal` from ruins via Scavenger Flag.
+  - `Good.Carrot` from planted Carrot via Farmhouse or Efficient Farmhouse.
 - Science points: `ProducedSciencePoints` from science recipes, multiplied by
   10 per user request.
 - Character movement speed: `WalkerSpeedManagerSpec` on character blueprints,
@@ -58,6 +59,7 @@ Natural gathered/tapped yields:
 | Pine PineResin | 2 | 20 |
 | Maple MapleSyrup | 3 | 30 |
 | Ruin ScrapMetal | 15-120 | 150-1200 |
+| Carrot Carrot | 3 | 30 |
 
 Implementation notes:
 
@@ -69,8 +71,9 @@ Implementation notes:
 - `GoodCarrier.EmptyHands` clears stale pending delivery markers.
 - This avoids multiplying normal warehouse/hauling transfers.
 - `NaturalResources/**` overrides are intentionally absent from the mod.
-- `LumberjackFlag`, `GathererFlag`, `ScavengerFlag`, and `TappersShack` output
-  inventories are raised to 500 capacity to avoid overfilling with x10 yields.
+- `LumberjackFlag`, `GathererFlag`, `FarmHouse`, `EfficientFarmHouse`,
+  `ScavengerFlag`, and `TappersShack` output inventories are raised to 500
+  capacity to avoid overfilling with x10 yields.
 
 Science point recipes:
 

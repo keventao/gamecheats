@@ -33,11 +33,14 @@ then write research notes under `refs/`.
   - Pine resin: 2 -> 20
   - Maple syrup: 3 -> 30
   - Scrap metal: 15-120 -> 150-1200
+  - Carrot: 3 -> 30
 - Output inventory capacity:
   - Lumberjack Flag: 20 -> 500
   - Gatherer Flag: 20 -> 500
   - Scavenger Flag: 20 -> 500
   - Tapper's Shack: 50 -> 500
+  - Farmhouse: 50 -> 500
+  - Efficient Farmhouse: 50 -> 500
 - Science point recipes:
   - Inventor: 1 -> 10
   - Numbercruncher: 10 -> 100
@@ -91,8 +94,9 @@ Manual smoke test:
    pine resin, or maple syrup, and confirm the flag/building receives x10 goods.
 6. Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
    of the selected ruin's base yield.
-7. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
-8. Run Inventor or other science building and confirm science points per cycle
+7. Harvest one Carrot and confirm the Farmhouse receives 30 carrots.
+8. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
+9. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout

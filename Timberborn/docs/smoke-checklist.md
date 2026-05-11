@@ -23,6 +23,8 @@ Use a disposable world or backed-up save for every test.
 
 - Confirm Lumberjack Flag output inventory capacity is 500.
 - Confirm Gatherer Flag output inventory capacity is 500.
+- Confirm Farmhouse output inventory capacity is 500.
+- Confirm Efficient Farmhouse output inventory capacity is 500.
 - Confirm Scavenger Flag output inventory capacity is 500.
 - Confirm Tapper's Shack output inventory capacity is 500.
 - Cut a Birch and confirm the Lumberjack Flag receives 10 logs.
@@ -40,6 +42,7 @@ Use a disposable world or backed-up save for every test.
 - Gather Mangrove Fruit and confirm the Gatherer Flag receives 40.
 - Tap Pine Resin and confirm the Tapper's Shack receives 20.
 - Tap Maple Syrup and confirm the Tapper's Shack receives 30.
+- Harvest Carrot and confirm the Farmhouse receives 30.
 - Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
   of the selected ruin's base yield.
 - Confirm adult beavers move at roughly x2 speed without path stutter.
