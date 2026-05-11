@@ -16,8 +16,9 @@ Known facts:
   outputs, and science points by 10.
 - Character movement speed is doubled for adult beavers, child beavers, and
   bots via Blueprint JSON.
-- Lumberjack Flag, Gatherer Flag, Farmhouse, Efficient Farmhouse, Scavenger
-  Flag, and Tapper's Shack output inventories are set to 500 capacity.
+- Lumberjack Flag, Gatherer Flag, Farmhouse, Efficient Farmhouse, Aquatic
+  Farmhouse, Scavenger Flag, and Tapper's Shack output inventories are set to
+  500 capacity.
 - Package can be copied to the user's Timberborn mod directory for local testing.
 
 ## Acceptance Criteria For First Real Mod

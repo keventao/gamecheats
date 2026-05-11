@@ -1,0 +1,6 @@
+{
+  "SimpleOutputInventorySpec": {
+    "Capacity": 500,
+    "IgnorableCapacity": false
+  }
+}

@@ -63,6 +63,7 @@ check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.Folktails.bluepr
 check_json_value "$mod/Buildings/Food/GathererFlag/GathererFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/FarmHouse/FarmHouse.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Food/EfficientFarmHouse/EfficientFarmHouse.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
+check_json_value "$mod/Buildings/Food/AquaticFarmhouse/AquaticFarmhouse.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Metal/ScavengerFlag/ScavengerFlag.IronTeeth.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"
 check_json_value "$mod/Buildings/Wood/TappersShack/TappersShack.Folktails.blueprint.json" '.SimpleOutputInventorySpec.Capacity' "500"

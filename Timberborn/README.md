@@ -41,6 +41,7 @@ then write research notes under `refs/`.
   - Tapper's Shack: 50 -> 500
   - Farmhouse: 50 -> 500
   - Efficient Farmhouse: 50 -> 500
+  - Aquatic Farmhouse: 50 -> 500
 - Science point recipes:
   - Inventor: 1 -> 10
   - Numbercruncher: 10 -> 100
@@ -95,8 +96,9 @@ Manual smoke test:
 6. Collect Scrap Metal from ruins and confirm the Scavenger Flag receives x10
    of the selected ruin's base yield.
 7. Harvest one Carrot and confirm the Farmhouse receives 30 carrots.
-8. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
-9. Run Inventor or other science building and confirm science points per cycle
+8. Confirm Aquatic Farmhouse output inventory capacity is 500 if available.
+9. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
+10. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout

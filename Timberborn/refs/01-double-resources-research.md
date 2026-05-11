@@ -72,8 +72,8 @@ Implementation notes:
 - This avoids multiplying normal warehouse/hauling transfers.
 - `NaturalResources/**` overrides are intentionally absent from the mod.
 - `LumberjackFlag`, `GathererFlag`, `FarmHouse`, `EfficientFarmHouse`,
-  `ScavengerFlag`, and `TappersShack` output inventories are raised to 500
-  capacity to avoid overfilling with x10 yields.
+  `AquaticFarmhouse`, `ScavengerFlag`, and `TappersShack` output inventories
+  are raised to 500 capacity to avoid overfilling with x10 yields.
 
 Science point recipes:
 

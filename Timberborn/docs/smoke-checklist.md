@@ -25,6 +25,7 @@ Use a disposable world or backed-up save for every test.
 - Confirm Gatherer Flag output inventory capacity is 500.
 - Confirm Farmhouse output inventory capacity is 500.
 - Confirm Efficient Farmhouse output inventory capacity is 500.
+- Confirm Aquatic Farmhouse output inventory capacity is 500.
 - Confirm Scavenger Flag output inventory capacity is 500.
 - Confirm Tapper's Shack output inventory capacity is 500.
 - Cut a Birch and confirm the Lumberjack Flag receives 10 logs.
