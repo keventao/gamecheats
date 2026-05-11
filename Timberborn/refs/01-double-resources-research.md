@@ -36,6 +36,8 @@ storage still received the vanilla amount.
     `Good.Spadderdock`.
 - Science points: `ProducedSciencePoints` from science recipes, multiplied by
   10 per user request.
+- Water pump output: `Recipe.Water` and `Recipe.Water.Efficient` product amounts
+  are multiplied by 5 for clear-water pumps.
 - Character movement speed: `WalkerSpeedManagerSpec` on character blueprints,
   doubled after user requested faster Timberborn movement.
 
@@ -98,6 +100,13 @@ Science point recipes:
 | `Recipes/Recipe.SciencePoints.blueprint.json` | 1 | 10 |
 | `Recipes/Recipe.SciencePointsNumbercruncher.blueprint.json` | 10 | 100 |
 | `Recipes/Recipe.SciencePointsObservatory.blueprint.json` | 10 | 100 |
+
+Water pump recipes:
+
+| Blueprint | Base | Mod |
+|---|---:|---:|
+| `Recipes/Recipe.Water.blueprint.json` | 1 Water | 5 Water |
+| `Recipes/Recipe.Water.Efficient.blueprint.json` | 5 Water | 25 Water |
 
 Movement speed blueprints:
 

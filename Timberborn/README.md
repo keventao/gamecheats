@@ -59,6 +59,9 @@ then write research notes under `refs/`.
   - Inventor: 1 -> 10
   - Numbercruncher: 10 -> 100
   - Observatory: 10 -> 100
+- Water pump recipes:
+  - Water Pump and Deep Water Pump: 1 -> 5 water
+  - Large Water Pump: 5 -> 25 water
 - Character movement speed:
   - Adult beavers and bots: 2.7 -> 5.4
   - Child beavers: 1.35 -> 2.7
@@ -111,8 +114,10 @@ Manual smoke test:
 7. Harvest one land crop, such as Carrot, and confirm the Farmhouse receives x10.
 8. Harvest one aquatic crop, such as Cattail, and confirm the Aquatic Farmhouse
    receives x10 if available.
-9. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
-10. Run Inventor or other science building and confirm science points per cycle
+9. Run a Water Pump and confirm each cycle produces 5 water.
+10. Run a Large Water Pump if available and confirm each cycle produces 25 water.
+11. Confirm adult beavers and bots move at roughly x2 speed without path stutter.
+12. Run Inventor or other science building and confirm science points per cycle
    are multiplied by 10.
 
 ## Project Layout

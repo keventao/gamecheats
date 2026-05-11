@@ -88,5 +88,9 @@ check_json_value "$mod/Characters/Bot/Bot.IronTeeth.blueprint.json" '.WalkerSpee
 check_json_value "$mod/Recipes/Recipe.SciencePoints.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "10"
 check_json_value "$mod/Recipes/Recipe.SciencePointsNumbercruncher.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "100"
 check_json_value "$mod/Recipes/Recipe.SciencePointsObservatory.blueprint.json" '.RecipeSpec.ProducedSciencePoints' "100"
+check_json_value "$mod/Recipes/Recipe.Water.blueprint.json" '.RecipeSpec.Products[0].Id' "Water"
+check_json_value "$mod/Recipes/Recipe.Water.blueprint.json" '.RecipeSpec.Products[0].Amount' "5"
+check_json_value "$mod/Recipes/Recipe.Water.Efficient.blueprint.json" '.RecipeSpec.Products[0].Id' "Water"
+check_json_value "$mod/Recipes/Recipe.Water.Efficient.blueprint.json" '.RecipeSpec.Products[0].Amount' "25"
 
 echo "KKDoubleResources checks passed"

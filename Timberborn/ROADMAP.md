@@ -14,6 +14,7 @@ Known facts:
 - Mod route: official Timberborn Blueprint JSON plus Harmony runtime patch.
 - `KKDoubleResources` multiplies selected flag-collected goods, all farmhouse
   and aquatic farmhouse crop outputs, and science points by 10.
+- Water pump recipes produce 5x water.
 - Character movement speed is doubled for adult beavers, child beavers, and
   bots via Blueprint JSON.
 - Lumberjack Flag, Gatherer Flag, Farmhouse, Efficient Farmhouse, Aquatic
@@ -40,8 +41,8 @@ Known facts:
 
 1. Enable `Harmony` and `KK Double Resources` in Timberborn's Mod Manager.
 2. Run a disposable-save smoke test for x10 logs, natural gathered/tapped goods,
-   x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x2 movement speed,
-   and science points.
+   x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x5 water pumps, x2
+   movement speed, and science points.
 3. Adjust target resources if user meant a different wood product than `Log`.
 
 ## Risks
