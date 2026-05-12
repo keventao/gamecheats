@@ -1,6 +1,6 @@
 {
   "TemplateCollectionSpec": {
-    "CollectionId": "Buildings.Common",
+    "CollectionId": "Buildings.Folktails",
     "Blueprints#append": [
       "Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint",
       "Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint"

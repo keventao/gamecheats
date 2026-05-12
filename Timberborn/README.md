@@ -183,8 +183,9 @@ buildings to the Wood tool group:
 - `all-in-one-products`: costs 1 Log to build. Every recipe consumes 1 Log and
   produces 10 selected processed products.
 
-The buildings are appended to `Buildings.Common`, so both Folktails and Iron
-Teeth should see the same two buildings.
+The buildings are appended to both `Buildings.Folktails` and
+`Buildings.IronTeeth`. The mod does not patch `Buildings.Common`, because that
+collection contains base templates such as `Path` used by other tool mods.
 
 Static package check:
 

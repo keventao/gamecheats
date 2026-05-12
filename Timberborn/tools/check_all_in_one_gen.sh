@@ -54,11 +54,18 @@ check_json_value "$mod/manifest.json" '.Id' "public.timberborn.all-in-one-gen"
 check_json_value "$mod/manifest.json" '.MinimumGameVersion' "1.0.0.0"
 check_json_value "$mod/manifest.json" '.RequiredMods | length' "0"
 
-template_file="$mod/TemplateCollections/TemplateCollection.Buildings.Common.blueprint.json"
-check_json_value "$template_file" '.TemplateCollectionSpec.CollectionId' "Buildings.Common"
-check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"] | length' "2"
-check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"][0]' "Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint"
-check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"][1]' "Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint"
+if [[ -f "$mod/TemplateCollections/TemplateCollection.Buildings.Common.blueprint.json" ]]; then
+  echo "wrong: all-in-one-gen must not patch Buildings.Common; it can hide base Path"
+  exit 1
+fi
+
+for faction in Folktails IronTeeth; do
+  template_file="$mod/TemplateCollections/TemplateCollection.Buildings.$faction.blueprint.json"
+  check_json_value "$template_file" '.TemplateCollectionSpec.CollectionId' "Buildings.$faction"
+  check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"] | length' "2"
+  check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"][0]' "Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint"
+  check_json_value "$template_file" '.TemplateCollectionSpec["Blueprints#append"][1]' "Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint"
+done
 
 resources_building="$mod/Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint.json"
 products_building="$mod/Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint.json"

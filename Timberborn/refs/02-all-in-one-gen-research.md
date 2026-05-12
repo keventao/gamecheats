@@ -15,8 +15,11 @@ and produces 10 of the selected output good.
 ## Implementation
 
 - Mod route: Blueprint-only package, no Harmony DLL.
-- Registration: append both buildings to
-  `TemplateCollection.Buildings.Common`, making them common to both factions.
+- Registration: append both buildings to `TemplateCollection.Buildings.Folktails`
+  and `TemplateCollection.Buildings.IronTeeth`. Do not patch
+  `TemplateCollection.Buildings.Common`; that collection contains base templates
+  such as `Path` used by other tool mods, and patching it caused a crash with
+  ConfigurableToolGroups/CustomTools.
 - Tool group: `Wood`.
 - Model reuse: existing Grill model and construction model paths are referenced;
   no copied game binaries or meshes are committed.

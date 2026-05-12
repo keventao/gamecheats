@@ -25,7 +25,8 @@ Known facts:
 - Package can be copied to the user's Timberborn mod directory for local testing.
 - `all-in-one-gen` Blueprint-only package adds two common generator buildings:
   one for raw resources and one for products, both using `Log x1 -> selected
-  Good x10` recipes.
+  Good x10` recipes. The buildings are appended to both faction building
+  collections and avoid patching `Buildings.Common`.
 
 ## Acceptance Criteria For First Real Mod
 
