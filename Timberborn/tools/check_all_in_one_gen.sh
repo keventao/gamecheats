@@ -54,6 +54,9 @@ check_json_value "$mod/manifest.json" '.Id' "public.timberborn.all-in-one-gen"
 check_json_value "$mod/manifest.json" '.MinimumGameVersion' "1.0.0.0"
 check_json_value "$mod/manifest.json" '.RequiredMods | length' "0"
 
+good_collection_file="$mod/GoodCollections/GoodCollection.Common.blueprint.json"
+check_json_value "$good_collection_file" '.GoodCollectionSpec.CollectionId' "Common"
+
 if [[ -f "$mod/TemplateCollections/TemplateCollection.Buildings.Common.blueprint.json" ]]; then
   echo "wrong: all-in-one-gen must not patch Buildings.Common; it can hide base Path"
   exit 1
@@ -89,6 +92,18 @@ for good in "${resource_goods[@]}"; do
     echo "wrong: AllInOneResources missing recipe $good"
     exit 1
   fi
+
+  if ! jq -e --arg good "$good" \
+    '.GoodCollectionSpec["Goods#append"] | index($good) != null' "$good_collection_file" >/dev/null; then
+    case "$good" in
+      Badwater|Berries|Dirt|Log|PineResin|ScrapMetal|Water)
+        ;;
+      *)
+        echo "wrong: GoodCollection.Common missing $good"
+        exit 1
+        ;;
+    esac
+  fi
 done
 
 for good in "${product_goods[@]}"; do
@@ -97,6 +112,18 @@ for good in "${product_goods[@]}"; do
     '.ManufactorySpec.ProductionRecipeIds | index($recipe) != null' "$products_building" >/dev/null; then
     echo "wrong: AllInOneProducts missing recipe $good"
     exit 1
+  fi
+
+  if ! jq -e --arg good "$good" \
+    '.GoodCollectionSpec["Goods#append"] | index($good) != null' "$good_collection_file" >/dev/null; then
+    case "$good" in
+      Explosives|Extract|Fireworks|Gear|MetalBlock|Plank)
+        ;;
+      *)
+        echo "wrong: GoodCollection.Common missing $good"
+        exit 1
+        ;;
+    esac
   fi
 done
 

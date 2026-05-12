@@ -20,6 +20,9 @@ and produces 10 of the selected output good.
   `TemplateCollection.Buildings.Common`; that collection contains base templates
   such as `Path` used by other tool mods, and patching it caused a crash with
   ConfigurableToolGroups/CustomTools.
+- Goods: append all non-common recipe output goods to `GoodCollection.Common`.
+  Without this, cross-faction outputs such as `Algae` crash Folktails with
+  `GoodSpec with id Algae not found`.
 - Tool group: `Wood`.
 - Model reuse: existing Grill model and construction model paths are referenced;
   no copied game binaries or meshes are committed.

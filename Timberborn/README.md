@@ -186,6 +186,8 @@ buildings to the Wood tool group:
 The buildings are appended to both `Buildings.Folktails` and
 `Buildings.IronTeeth`. The mod does not patch `Buildings.Common`, because that
 collection contains base templates such as `Path` used by other tool mods.
+The mod appends faction-specific goods used by these recipes to
+`GoodCollection.Common`, so both factions can resolve every selected output.
 
 Static package check:
 
