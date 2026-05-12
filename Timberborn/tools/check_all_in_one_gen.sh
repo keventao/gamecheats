@@ -5,19 +5,11 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mod="$root/mods/all-in-one-gen"
 
 resource_goods=(
-  Algae Badwater Berries CanolaSeeds Carrot Cassava CattailRoot Chestnut
-  CoffeeBean Corn Dandelion Dirt Eggplant Kohlrabi Log MangroveFruit
-  MapleSyrup Mushroom PineResin Potato ScrapMetal Soybean Spadderdock
-  SunflowerSeeds Water Wheat
+  Badwater Berries Dirt Log PineResin ScrapMetal Water
 )
 
 product_goods=(
-  AlgaeRation Antidote Biofuel Book BotChassis BotHead BotLimb Bread CanolaOil
-  Catalyst CattailCracker CattailFlour Coffee CornRation EggplantRation
-  Explosives Extract FermentedCassava FermentedMushroom FermentedSoybean
-  Fireworks Gear GrilledChestnut GrilledPotato GrilledSpadderdock
-  MaplePastry MetalBlock MetalPart Paper Plank PunchCard TreatedPlank
-  WheatFlour
+  Explosives Extract Fireworks Gear MetalBlock Plank
 )
 
 check_json_value() {
@@ -50,12 +42,38 @@ check_recipe() {
   check_json_value "$file" '.RecipeSpec.Products[0].Amount' "10"
 }
 
+for recipe_file in "$mod"/Recipes/*.blueprint.json; do
+  recipe_name="${recipe_file##*/}"
+  case "$recipe_name" in
+    Recipe.AllInOneResources.Badwater.blueprint.json|\
+    Recipe.AllInOneResources.Berries.blueprint.json|\
+    Recipe.AllInOneResources.Dirt.blueprint.json|\
+    Recipe.AllInOneResources.Log.blueprint.json|\
+    Recipe.AllInOneResources.PineResin.blueprint.json|\
+    Recipe.AllInOneResources.ScrapMetal.blueprint.json|\
+    Recipe.AllInOneResources.Water.blueprint.json|\
+    Recipe.AllInOneProducts.Explosives.blueprint.json|\
+    Recipe.AllInOneProducts.Extract.blueprint.json|\
+    Recipe.AllInOneProducts.Fireworks.blueprint.json|\
+    Recipe.AllInOneProducts.Gear.blueprint.json|\
+    Recipe.AllInOneProducts.MetalBlock.blueprint.json|\
+    Recipe.AllInOneProducts.Plank.blueprint.json)
+      ;;
+    *)
+      echo "wrong: unexpected all-in-one recipe ${recipe_file#$root/}"
+      exit 1
+      ;;
+  esac
+done
+
 check_json_value "$mod/manifest.json" '.Id' "public.timberborn.all-in-one-gen"
 check_json_value "$mod/manifest.json" '.MinimumGameVersion' "1.0.0.0"
 check_json_value "$mod/manifest.json" '.RequiredMods | length' "0"
 
-good_collection_file="$mod/GoodCollections/GoodCollection.Common.blueprint.json"
-check_json_value "$good_collection_file" '.GoodCollectionSpec.CollectionId' "Common"
+if [[ -e "$mod/GoodCollections/GoodCollection.Common.blueprint.json" ]]; then
+  echo "wrong: all-in-one-gen must not append goods to Common; recoverable-good tooltips can crash on faction needs"
+  exit 1
+fi
 
 if [[ -f "$mod/TemplateCollections/TemplateCollection.Buildings.Common.blueprint.json" ]]; then
   echo "wrong: all-in-one-gen must not patch Buildings.Common; it can hide base Path"
@@ -93,17 +111,6 @@ for good in "${resource_goods[@]}"; do
     exit 1
   fi
 
-  if ! jq -e --arg good "$good" \
-    '.GoodCollectionSpec["Goods#append"] | index($good) != null' "$good_collection_file" >/dev/null; then
-    case "$good" in
-      Badwater|Berries|Dirt|Log|PineResin|ScrapMetal|Water)
-        ;;
-      *)
-        echo "wrong: GoodCollection.Common missing $good"
-        exit 1
-        ;;
-    esac
-  fi
 done
 
 for good in "${product_goods[@]}"; do
@@ -114,17 +121,6 @@ for good in "${product_goods[@]}"; do
     exit 1
   fi
 
-  if ! jq -e --arg good "$good" \
-    '.GoodCollectionSpec["Goods#append"] | index($good) != null' "$good_collection_file" >/dev/null; then
-    case "$good" in
-      Explosives|Extract|Fireworks|Gear|MetalBlock|Plank)
-        ;;
-      *)
-        echo "wrong: GoodCollection.Common missing $good"
-        exit 1
-        ;;
-    esac
-  fi
 done
 
 if ! grep -q 'Building.AllInOneResources.DisplayName' "$mod/Localizations/enUS.csv"; then

@@ -20,13 +20,13 @@ and produces 10 of the selected output good.
   `TemplateCollection.Buildings.Common`; that collection contains base templates
   such as `Path` used by other tool mods, and patching it caused a crash with
   ConfigurableToolGroups/CustomTools.
-- Goods: append all non-common recipe output goods to `GoodCollection.Common`.
-  Without this, cross-faction outputs such as `Algae` crash Folktails with
-  `GoodSpec with id Algae not found`.
-- Excluded goods: `Grease` is not shipped in v0.1.1. Adding it to
-  `GoodCollection.Common` makes the recoverable-good tooltip describe the
-  `Grease` effect, then `FactionNeedService` throws
-  `Need with id Grease not found`.
+- Goods: do not patch `GoodCollection.Common` in v0.1.2. Appending
+  faction-specific goods there makes the recoverable-good tooltip describe
+  faction needs that are not globally available. Runtime smoke first hit
+  `Need with id Grease not found`, then `Need with id Coffee not found`.
+- Scope: v0.1.2 only ships common-safe outputs already available to both
+  factions. Broader output coverage needs separate Folktails and IronTeeth
+  generator buildings with faction-specific recipe lists.
 - Tool group: `Wood`.
 - Model reuse: existing Grill model and construction model paths are referenced;
   no copied game binaries or meshes are committed.
@@ -34,28 +34,18 @@ and produces 10 of the selected output good.
 
 ## Resource Generator Goods
 
-`all-in-one-resources` includes raw, gathered, farmed, fluid, and base material
-goods:
+`all-in-one-resources` includes common-safe raw, fluid, and base material goods:
 
 ```text
-Algae, Badwater, Berries, CanolaSeeds, Carrot, Cassava, CattailRoot, Chestnut,
-CoffeeBean, Corn, Dandelion, Dirt, Eggplant, Kohlrabi, Log, MangroveFruit,
-MapleSyrup, Mushroom, PineResin, Potato, ScrapMetal, Soybean, Spadderdock,
-SunflowerSeeds, Water, Wheat
+Badwater, Berries, Dirt, Log, PineResin, ScrapMetal, Water
 ```
 
 ## Product Generator Goods
 
-`all-in-one-products` includes processed food, materials, bot parts, medicine,
-fuel, and other manufactured goods:
+`all-in-one-products` includes common-safe processed products:
 
 ```text
-AlgaeRation, Antidote, Biofuel, Book, BotChassis, BotHead, BotLimb, Bread,
-CanolaOil, Catalyst, CattailCracker, CattailFlour, Coffee, CornRation,
-EggplantRation, Explosives, Extract, FermentedCassava, FermentedMushroom,
-FermentedSoybean, Fireworks, Gear, GrilledChestnut, GrilledPotato,
-GrilledSpadderdock, MaplePastry, MetalBlock, MetalPart, Paper, Plank,
-PunchCard, TreatedPlank, WheatFlour
+Explosives, Extract, Fireworks, Gear, MetalBlock, Plank
 ```
 
 ## Verification

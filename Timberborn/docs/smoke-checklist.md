@@ -66,7 +66,7 @@ Use a disposable world or backed-up save for every test.
 ## All-in-One Gen Smoke
 
 - Enable `all-in-one-gen` in the Mod Manager.
-- Confirm startup/load does not throw `Need with id Grease not found`.
+- Confirm startup/load does not throw `Need with id ... not found`.
 - Confirm `all-in-one-resources` appears in the Wood tool group.
 - Confirm `all-in-one-products` appears in the Wood tool group.
 - Build each generator and confirm each costs 1 Log.

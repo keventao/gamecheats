@@ -4,7 +4,7 @@ Last updated: 2026-05-12
 
 ## Status
 
-`v0.1.1` local official-mod package created.
+`v0.1.2` local official-mod package created.
 
 Known facts:
 
@@ -26,9 +26,10 @@ Known facts:
 - `all-in-one-gen` Blueprint-only package adds two common generator buildings:
   one for raw resources and one for products, both using `Log x1 -> selected
   Good x10` recipes. The buildings are appended to both faction building
-  collections and avoid patching `Buildings.Common`. v0.1.1 excludes `Grease`
-  after runtime smoke hit `Need with id Grease not found` in the game's
-  recoverable-good tooltip path.
+  collections and avoid patching `Buildings.Common`. v0.1.2 also avoids
+  patching `GoodCollection.Common` after runtime smoke hit `Need with id Grease
+  not found` and `Need with id Coffee not found` in the game's recoverable-good
+  tooltip path; current outputs are limited to common-safe goods.
 
 ## Acceptance Criteria For First Real Mod
 
@@ -54,7 +55,7 @@ Known facts:
 3. Adjust target resources if user meant a different wood product than `Log`.
 4. Smoke-test `all-in-one-gen`: enable the mod, confirm two Wood tool-group
    buildings appear, build each for 1 Log, confirm startup no longer throws the
-   `Grease` need exception, and run one resource/product recipe.
+   recoverable-good need exception, and run one resource/product recipe.
 
 ## Risks
 

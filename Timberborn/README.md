@@ -179,18 +179,19 @@ Planned areas after runtime research:
 buildings to the Wood tool group:
 
 - `all-in-one-resources`: costs 1 Log to build. Every recipe consumes 1 Log and
-  produces 10 selected raw resources.
+  produces 10 selected common-safe raw resources.
 - `all-in-one-products`: costs 1 Log to build. Every recipe consumes 1 Log and
-  produces 10 selected processed products.
+  produces 10 selected common-safe processed products.
 
 The buildings are appended to both `Buildings.Folktails` and
 `Buildings.IronTeeth`. The mod does not patch `Buildings.Common`, because that
 collection contains base templates such as `Path` used by other tool mods.
-The mod appends faction-specific goods used by these recipes to
-`GoodCollection.Common`, so both factions can resolve every selected output.
-`Grease` is intentionally excluded in v0.1.1 because adding it to the common
-recoverable-good list crashes the game's effect tooltip path with
-`Need with id Grease not found`.
+v0.1.2 intentionally does not patch `GoodCollection.Common`. Adding
+faction-specific goods such as `Grease` or `Coffee` to Common makes the game's
+recoverable-good tooltip describe faction needs that are not globally available,
+crashing with `Need with id ... not found`. The current package keeps only
+outputs already safe for both factions; broader output coverage needs separate
+faction-specific generator buildings.
 
 Static package check:
 

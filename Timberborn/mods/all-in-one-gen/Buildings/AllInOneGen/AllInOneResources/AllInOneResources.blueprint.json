@@ -35,32 +35,13 @@
   },
   "ManufactorySpec": {
     "ProductionRecipeIds": [
-      "AllInOneResources.Algae",
       "AllInOneResources.Badwater",
       "AllInOneResources.Berries",
-      "AllInOneResources.CanolaSeeds",
-      "AllInOneResources.Carrot",
-      "AllInOneResources.Cassava",
-      "AllInOneResources.CattailRoot",
-      "AllInOneResources.Chestnut",
-      "AllInOneResources.CoffeeBean",
-      "AllInOneResources.Corn",
-      "AllInOneResources.Dandelion",
       "AllInOneResources.Dirt",
-      "AllInOneResources.Eggplant",
-      "AllInOneResources.Kohlrabi",
       "AllInOneResources.Log",
-      "AllInOneResources.MangroveFruit",
-      "AllInOneResources.MapleSyrup",
-      "AllInOneResources.Mushroom",
       "AllInOneResources.PineResin",
-      "AllInOneResources.Potato",
       "AllInOneResources.ScrapMetal",
-      "AllInOneResources.Soybean",
-      "AllInOneResources.Spadderdock",
-      "AllInOneResources.SunflowerSeeds",
-      "AllInOneResources.Water",
-      "AllInOneResources.Wheat"
+      "AllInOneResources.Water"
     ]
   },
   "WorkshopSpec": {},
