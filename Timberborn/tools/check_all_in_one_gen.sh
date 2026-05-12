@@ -70,6 +70,10 @@ check_json_value "$mod/manifest.json" '.Id' "public.timberborn.all-in-one-gen"
 check_json_value "$mod/manifest.json" '.MinimumGameVersion' "1.0.0.0"
 check_json_value "$mod/manifest.json" '.RequiredMods | length' "0"
 
+tool_group_file="$mod/BlockObjectToolGroups/BlockObjectToolGroup.KKCheats.blueprint.json"
+check_json_value "$tool_group_file" '.BlockObjectToolGroupSpec.Id' "KKCheats"
+check_json_value "$tool_group_file" '.BlockObjectToolGroupSpec.NameLocKey' "ToolGroups.KKCheats"
+
 if [[ -e "$mod/GoodCollections/GoodCollection.Common.blueprint.json" ]]; then
   echo "wrong: all-in-one-gen must not append goods to Common; recoverable-good tooltips can crash on faction needs"
   exit 1
@@ -96,12 +100,16 @@ check_json_value "$resources_building" '.BuildingSpec.BuildingCost[0].Id' "Log"
 check_json_value "$resources_building" '.BuildingSpec.BuildingCost[0].Amount' "1"
 check_json_value "$resources_building" '.ManufactorySpec.ProductionRecipeIds | length' "${#resource_goods[@]}"
 check_json_value "$resources_building" '.LabeledEntitySpec.DisplayNameLocKey' "Building.AllInOneResources.DisplayName"
+check_json_value "$resources_building" '.PlaceableBlockObjectSpec.ToolGroupId' "KKCheats"
+check_json_value "$resources_building" '.PlaceableBlockObjectSpec.ToolOrder' "10"
 
 check_json_value "$products_building" '.TemplateSpec.TemplateName' "AllInOneProducts"
 check_json_value "$products_building" '.BuildingSpec.BuildingCost[0].Id' "Log"
 check_json_value "$products_building" '.BuildingSpec.BuildingCost[0].Amount' "1"
 check_json_value "$products_building" '.ManufactorySpec.ProductionRecipeIds | length' "${#product_goods[@]}"
 check_json_value "$products_building" '.LabeledEntitySpec.DisplayNameLocKey' "Building.AllInOneProducts.DisplayName"
+check_json_value "$products_building" '.PlaceableBlockObjectSpec.ToolGroupId' "KKCheats"
+check_json_value "$products_building" '.PlaceableBlockObjectSpec.ToolOrder' "20"
 
 for good in "${resource_goods[@]}"; do
   check_recipe "AllInOneResources" "$good"

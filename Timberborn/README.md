@@ -176,7 +176,7 @@ Planned areas after runtime research:
 ## All-in-One Gen
 
 `all-in-one-gen` is a separate Blueprint-only mod package. It adds two common
-buildings to the Wood tool group:
+buildings to a dedicated bottom-bar `KK` tool group:
 
 - `all-in-one-resources`: costs 1 Log to build. Every recipe consumes 1 Log and
   produces 10 selected common-safe raw resources.
@@ -186,6 +186,8 @@ buildings to the Wood tool group:
 The buildings are appended to both `Buildings.Folktails` and
 `Buildings.IronTeeth`. The mod does not patch `Buildings.Common`, because that
 collection contains base templates such as `Path` used by other tool mods.
+v0.1.3 moved the buildings out of the crowded `Wood` group into a dedicated
+`KKCheats` block-object tool group so they are easier to find.
 v0.1.2 intentionally does not patch `GoodCollection.Common`. Adding
 faction-specific goods such as `Grease` or `Coffee` to Common makes the game's
 recoverable-good tooltip describe faction needs that are not globally available,

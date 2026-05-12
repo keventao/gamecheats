@@ -67,8 +67,9 @@ Use a disposable world or backed-up save for every test.
 
 - Enable `all-in-one-gen` in the Mod Manager.
 - Confirm startup/load does not throw `Need with id ... not found`.
-- Confirm `all-in-one-resources` appears in the Wood tool group.
-- Confirm `all-in-one-products` appears in the Wood tool group.
+- Confirm a `KK` tool group appears in the bottom build bar.
+- Confirm `all-in-one-resources` appears in the `KK` tool group.
+- Confirm `all-in-one-products` appears in the `KK` tool group.
 - Build each generator and confirm each costs 1 Log.
 - Run one resource recipe, such as Log or Water, and confirm it consumes 1 Log
   and produces 10 selected goods.

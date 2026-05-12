@@ -1,0 +1,9 @@
+{
+  "BlockObjectToolGroupSpec": {
+    "Id": "KKCheats",
+    "Order": 999,
+    "NameLocKey": "ToolGroups.KKCheats",
+    "Icon": "Sprites/BottomBar/BuildingGroups/Wood",
+    "FallbackGroup": false
+  }
+}

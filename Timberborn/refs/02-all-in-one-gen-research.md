@@ -27,7 +27,8 @@ and produces 10 of the selected output good.
 - Scope: v0.1.2 only ships common-safe outputs already available to both
   factions. Broader output coverage needs separate Folktails and IronTeeth
   generator buildings with faction-specific recipe lists.
-- Tool group: `Wood`.
+- Tool group: `KKCheats`, displayed as `KK` in the bottom bar. v0.1.3 moved the
+  two buildings out of `Wood` after in-game smoke made them hard to find.
 - Model reuse: existing Grill model and construction model paths are referenced;
   no copied game binaries or meshes are committed.
 - Localization: `enUS.csv` and `zhCN.csv`.

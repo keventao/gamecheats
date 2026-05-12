@@ -4,7 +4,7 @@ Last updated: 2026-05-12
 
 ## Status
 
-`v0.1.2` local official-mod package created.
+`v0.1.3` local official-mod package created.
 
 Known facts:
 
@@ -29,7 +29,8 @@ Known facts:
   collections and avoid patching `Buildings.Common`. v0.1.2 also avoids
   patching `GoodCollection.Common` after runtime smoke hit `Need with id Grease
   not found` and `Need with id Coffee not found` in the game's recoverable-good
-  tooltip path; current outputs are limited to common-safe goods.
+  tooltip path; current outputs are limited to common-safe goods. v0.1.3 moves
+  the two buildings to a dedicated `KK` tool group for discoverability.
 
 ## Acceptance Criteria For First Real Mod
 
@@ -53,8 +54,8 @@ Known facts:
    x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x5 water pumps, x2
    movement speed, x5 storage buildings, and science points.
 3. Adjust target resources if user meant a different wood product than `Log`.
-4. Smoke-test `all-in-one-gen`: enable the mod, confirm two Wood tool-group
-   buildings appear, build each for 1 Log, confirm startup no longer throws the
+4. Smoke-test `all-in-one-gen`: enable the mod, confirm a `KK` bottom-bar tool
+   group appears with both buildings, build each for 1 Log, confirm startup no longer throws the
    recoverable-good need exception, and run one resource/product recipe.
 
 ## Risks

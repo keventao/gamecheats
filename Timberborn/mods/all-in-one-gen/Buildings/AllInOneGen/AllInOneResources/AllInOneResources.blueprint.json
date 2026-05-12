@@ -194,8 +194,8 @@
     "ForceOneFinalAccess": false
   },
   "PlaceableBlockObjectSpec": {
-    "ToolGroupId": "Wood",
-    "ToolOrder": 95,
+    "ToolGroupId": "KKCheats",
+    "ToolOrder": 10,
     "ToolShape": "Square",
     "Layout": "Single",
     "CustomPivot": {

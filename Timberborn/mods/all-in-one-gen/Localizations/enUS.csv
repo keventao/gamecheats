@@ -1,4 +1,5 @@
 ID,Text,Comment
+ToolGroups.KKCheats,KK,
 Building.AllInOneResources.DisplayName,all-in-one-resources,
 Building.AllInOneResources.Description,Consumes 1 log to produce 10 selected raw resources.,
 Building.AllInOneResources.FlavorDescription,A compact debug-grade resource generator.,
