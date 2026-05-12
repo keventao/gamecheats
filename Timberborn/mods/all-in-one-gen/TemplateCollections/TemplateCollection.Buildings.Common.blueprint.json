@@ -1,0 +1,9 @@
+{
+  "TemplateCollectionSpec": {
+    "CollectionId": "Buildings.Common",
+    "Blueprints#append": [
+      "Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint",
+      "Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint"
+    ]
+  }
+}

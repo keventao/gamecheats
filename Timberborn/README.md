@@ -10,6 +10,7 @@ Local Timberborn mod workspace.
 - Loader path: official Timberborn mod manager, Blueprint JSON, and Harmony for
   runtime yield collection patching.
 - Current mod: `mods/KKDoubleResources/`
+- New mod package: `mods/all-in-one-gen/`
 
 Do not guess game class, method, or field names. Inspect the target build first,
 then write research notes under `refs/`.
@@ -139,10 +140,13 @@ Timberborn/
     smoke-checklist.md
   mods/
     KKDoubleResources/
+    all-in-one-gen/
   refs/
     00-research-checklist.md
     01-double-resources-research.md
+    02-all-in-one-gen-research.md
   tools/
+    check_all_in_one_gen.sh
     check_double_resources.sh
   src/
     KKDoubleResources/
@@ -168,3 +172,22 @@ Planned areas after runtime research:
 - Do not commit game binaries, copied assemblies, loader binaries, saves, logs,
   or decompiled output.
 - Keep patches narrow and reversible.
+
+## All-in-One Gen
+
+`all-in-one-gen` is a separate Blueprint-only mod package. It adds two common
+buildings to the Wood tool group:
+
+- `all-in-one-resources`: costs 1 Log to build. Every recipe consumes 1 Log and
+  produces 10 selected raw resources.
+- `all-in-one-products`: costs 1 Log to build. Every recipe consumes 1 Log and
+  produces 10 selected processed products.
+
+The buildings are appended to `Buildings.Common`, so both Folktails and Iron
+Teeth should see the same two buildings.
+
+Static package check:
+
+```bash
+bash Timberborn/tools/check_all_in_one_gen.sh
+```

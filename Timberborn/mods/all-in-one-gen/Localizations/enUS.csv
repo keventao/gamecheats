@@ -1,0 +1,7 @@
+ID,Text,Comment
+Building.AllInOneResources.DisplayName,all-in-one-resources,
+Building.AllInOneResources.Description,Consumes 1 log to produce 10 selected raw resources.,
+Building.AllInOneResources.FlavorDescription,A compact debug-grade resource generator.,
+Building.AllInOneProducts.DisplayName,all-in-one-products,
+Building.AllInOneProducts.Description,Consumes 1 log to produce 10 selected products.,
+Building.AllInOneProducts.FlavorDescription,A compact debug-grade product generator.,

@@ -1,6 +1,6 @@
 # Timberborn Roadmap
 
-Last updated: 2026-05-11
+Last updated: 2026-05-12
 
 ## Status
 
@@ -23,6 +23,9 @@ Known facts:
   Farmhouse, Scavenger Flag, and Tapper's Shack output inventories are set to
   500 capacity.
 - Package can be copied to the user's Timberborn mod directory for local testing.
+- `all-in-one-gen` Blueprint-only package adds two common generator buildings:
+  one for raw resources and one for products, both using `Log x1 -> selected
+  Good x10` recipes.
 
 ## Acceptance Criteria For First Real Mod
 
@@ -46,6 +49,8 @@ Known facts:
    x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x5 water pumps, x2
    movement speed, x5 storage buildings, and science points.
 3. Adjust target resources if user meant a different wood product than `Log`.
+4. Smoke-test `all-in-one-gen`: enable the mod, confirm two Wood tool-group
+   buildings appear, build each for 1 Log, and run one resource/product recipe.
 
 ## Risks
 

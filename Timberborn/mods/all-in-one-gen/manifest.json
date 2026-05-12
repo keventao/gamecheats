@@ -1,0 +1,9 @@
+{
+  "Name": "all-in-one-gen",
+  "Version": "0.1.0",
+  "Id": "public.timberborn.all-in-one-gen",
+  "MinimumGameVersion": "1.0.0.0",
+  "Description": "Adds all-in-one generators that convert logs into selected raw resources or products.",
+  "RequiredMods": [],
+  "OptionalMods": []
+}

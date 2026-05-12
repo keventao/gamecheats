@@ -63,6 +63,17 @@ Use a disposable world or backed-up save for every test.
 - Save/load still works after using the mod.
 - Disable/uninstall path restores normal behavior.
 
+## All-in-One Gen Smoke
+
+- Enable `all-in-one-gen` in the Mod Manager.
+- Confirm `all-in-one-resources` appears in the Wood tool group.
+- Confirm `all-in-one-products` appears in the Wood tool group.
+- Build each generator and confirm each costs 1 Log.
+- Run one resource recipe, such as Log or Water, and confirm it consumes 1 Log
+  and produces 10 selected goods.
+- Run one product recipe, such as Plank or Gear, and confirm it consumes 1 Log
+  and produces 10 selected goods.
+
 ## Exit Criteria
 
 - Relevant log markers copied into the feature notes.
