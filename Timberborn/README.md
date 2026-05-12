@@ -188,6 +188,9 @@ The buildings are appended to both `Buildings.Folktails` and
 collection contains base templates such as `Path` used by other tool mods.
 The mod appends faction-specific goods used by these recipes to
 `GoodCollection.Common`, so both factions can resolve every selected output.
+`Grease` is intentionally excluded in v0.1.1 because adding it to the common
+recoverable-good list crashes the game's effect tooltip path with
+`Need with id Grease not found`.
 
 Static package check:
 

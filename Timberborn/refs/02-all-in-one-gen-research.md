@@ -23,6 +23,10 @@ and produces 10 of the selected output good.
 - Goods: append all non-common recipe output goods to `GoodCollection.Common`.
   Without this, cross-faction outputs such as `Algae` crash Folktails with
   `GoodSpec with id Algae not found`.
+- Excluded goods: `Grease` is not shipped in v0.1.1. Adding it to
+  `GoodCollection.Common` makes the recoverable-good tooltip describe the
+  `Grease` effect, then `FactionNeedService` throws
+  `Need with id Grease not found`.
 - Tool group: `Wood`.
 - Model reuse: existing Grill model and construction model paths are referenced;
   no copied game binaries or meshes are committed.
@@ -49,7 +53,7 @@ fuel, and other manufactured goods:
 AlgaeRation, Antidote, Biofuel, Book, BotChassis, BotHead, BotLimb, Bread,
 CanolaOil, Catalyst, CattailCracker, CattailFlour, Coffee, CornRation,
 EggplantRation, Explosives, Extract, FermentedCassava, FermentedMushroom,
-FermentedSoybean, Fireworks, Gear, Grease, GrilledChestnut, GrilledPotato,
+FermentedSoybean, Fireworks, Gear, GrilledChestnut, GrilledPotato,
 GrilledSpadderdock, MaplePastry, MetalBlock, MetalPart, Paper, Plank,
 PunchCard, TreatedPlank, WheatFlour
 ```

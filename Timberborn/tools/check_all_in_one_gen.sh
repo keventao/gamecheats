@@ -15,7 +15,7 @@ product_goods=(
   AlgaeRation Antidote Biofuel Book BotChassis BotHead BotLimb Bread CanolaOil
   Catalyst CattailCracker CattailFlour Coffee CornRation EggplantRation
   Explosives Extract FermentedCassava FermentedMushroom FermentedSoybean
-  Fireworks Gear Grease GrilledChestnut GrilledPotato GrilledSpadderdock
+  Fireworks Gear GrilledChestnut GrilledPotato GrilledSpadderdock
   MaplePastry MetalBlock MetalPart Paper Plank PunchCard TreatedPlank
   WheatFlour
 )
