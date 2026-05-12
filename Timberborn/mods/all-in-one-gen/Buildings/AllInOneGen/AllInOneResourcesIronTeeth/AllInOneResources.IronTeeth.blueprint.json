@@ -42,15 +42,16 @@
       "AllInOneResources.PineResin",
       "AllInOneResources.ScrapMetal",
       "AllInOneResources.Water",
-      "AllInOneResources.Carrot",
-      "AllInOneResources.CattailRoot",
-      "AllInOneResources.Chestnut",
-      "AllInOneResources.Dandelion",
-      "AllInOneResources.MapleSyrup",
-      "AllInOneResources.Potato",
-      "AllInOneResources.Spadderdock",
-      "AllInOneResources.SunflowerSeeds",
-      "AllInOneResources.Wheat"
+      "AllInOneResources.Algae",
+      "AllInOneResources.CanolaSeeds",
+      "AllInOneResources.Cassava",
+      "AllInOneResources.CoffeeBean",
+      "AllInOneResources.Corn",
+      "AllInOneResources.Eggplant",
+      "AllInOneResources.Kohlrabi",
+      "AllInOneResources.MangroveFruit",
+      "AllInOneResources.Mushroom",
+      "AllInOneResources.Soybean"
     ]
   },
   "WorkshopSpec": {},
@@ -62,7 +63,7 @@
     "CapacityUnfinished": 0
   },
   "TemplateSpec": {
-    "TemplateName": "AllInOneResources.Folktails",
+    "TemplateName": "AllInOneResources.IronTeeth",
     "BackwardCompatibleTemplateNames": [],
     "RequiredFeatureToggle": "",
     "DisablingFeatureToggle": ""

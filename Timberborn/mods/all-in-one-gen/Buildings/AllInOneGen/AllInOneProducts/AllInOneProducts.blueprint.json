@@ -40,7 +40,25 @@
       "AllInOneProducts.Fireworks",
       "AllInOneProducts.Gear",
       "AllInOneProducts.MetalBlock",
-      "AllInOneProducts.Plank"
+      "AllInOneProducts.Plank",
+      "AllInOneProducts.Antidote",
+      "AllInOneProducts.Biofuel",
+      "AllInOneProducts.Book",
+      "AllInOneProducts.BotChassis",
+      "AllInOneProducts.BotHead",
+      "AllInOneProducts.BotLimb",
+      "AllInOneProducts.Bread",
+      "AllInOneProducts.Catalyst",
+      "AllInOneProducts.CattailCracker",
+      "AllInOneProducts.CattailFlour",
+      "AllInOneProducts.GrilledChestnut",
+      "AllInOneProducts.GrilledPotato",
+      "AllInOneProducts.GrilledSpadderdock",
+      "AllInOneProducts.MaplePastry",
+      "AllInOneProducts.Paper",
+      "AllInOneProducts.PunchCard",
+      "AllInOneProducts.TreatedPlank",
+      "AllInOneProducts.WheatFlour"
     ]
   },
   "WorkshopSpec": {},
@@ -52,7 +70,7 @@
     "CapacityUnfinished": 0
   },
   "TemplateSpec": {
-    "TemplateName": "AllInOneProducts",
+    "TemplateName": "AllInOneProducts.Folktails",
     "BackwardCompatibleTemplateNames": [],
     "RequiredFeatureToggle": "",
     "DisablingFeatureToggle": ""

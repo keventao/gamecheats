@@ -187,7 +187,10 @@ The buildings are appended to both `Buildings.Folktails` and
 `Buildings.IronTeeth`. The mod does not patch `Buildings.Common`, because that
 collection contains base templates such as `Path` used by other tool mods.
 v0.1.3 moved the buildings out of the crowded `Wood` group into a dedicated
-`KKCheats` block-object tool group so they are easier to find.
+`KKCheats` block-object tool group so they are easier to find. v0.1.4 keeps
+two visible buildings per faction, but each faction gets its own recipe list:
+Folktails sees Folktails + common goods, and IronTeeth sees IronTeeth + common
+goods.
 v0.1.2 intentionally does not patch `GoodCollection.Common`. Adding
 faction-specific goods such as `Grease` or `Coffee` to Common makes the game's
 recoverable-good tooltip describe faction needs that are not globally available,

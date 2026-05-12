@@ -70,6 +70,9 @@ Use a disposable world or backed-up save for every test.
 - Confirm a `KK` tool group appears in the bottom build bar.
 - Confirm `all-in-one-resources` appears in the `KK` tool group.
 - Confirm `all-in-one-products` appears in the `KK` tool group.
+- Confirm the active faction sees its faction-specific goods:
+  - Folktails examples: Carrot, CattailRoot, MapleSyrup, TreatedPlank.
+  - IronTeeth examples: Algae, CoffeeBean, Coffee, Grease.
 - Build each generator and confirm each costs 1 Log.
 - Run one resource recipe, such as Log or Water, and confirm it consumes 1 Log
   and produces 10 selected goods.

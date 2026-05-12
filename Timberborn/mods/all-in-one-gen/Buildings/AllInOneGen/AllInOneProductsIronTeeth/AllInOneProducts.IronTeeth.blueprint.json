@@ -35,22 +35,26 @@
   },
   "ManufactorySpec": {
     "ProductionRecipeIds": [
-      "AllInOneResources.Badwater",
-      "AllInOneResources.Berries",
-      "AllInOneResources.Dirt",
-      "AllInOneResources.Log",
-      "AllInOneResources.PineResin",
-      "AllInOneResources.ScrapMetal",
-      "AllInOneResources.Water",
-      "AllInOneResources.Carrot",
-      "AllInOneResources.CattailRoot",
-      "AllInOneResources.Chestnut",
-      "AllInOneResources.Dandelion",
-      "AllInOneResources.MapleSyrup",
-      "AllInOneResources.Potato",
-      "AllInOneResources.Spadderdock",
-      "AllInOneResources.SunflowerSeeds",
-      "AllInOneResources.Wheat"
+      "AllInOneProducts.Explosives",
+      "AllInOneProducts.Extract",
+      "AllInOneProducts.Fireworks",
+      "AllInOneProducts.Gear",
+      "AllInOneProducts.MetalBlock",
+      "AllInOneProducts.Plank",
+      "AllInOneProducts.AlgaeRation",
+      "AllInOneProducts.BotChassis",
+      "AllInOneProducts.BotHead",
+      "AllInOneProducts.BotLimb",
+      "AllInOneProducts.CanolaOil",
+      "AllInOneProducts.Coffee",
+      "AllInOneProducts.CornRation",
+      "AllInOneProducts.EggplantRation",
+      "AllInOneProducts.FermentedCassava",
+      "AllInOneProducts.FermentedMushroom",
+      "AllInOneProducts.FermentedSoybean",
+      "AllInOneProducts.Grease",
+      "AllInOneProducts.MetalPart",
+      "AllInOneProducts.TreatedPlank"
     ]
   },
   "WorkshopSpec": {},
@@ -62,7 +66,7 @@
     "CapacityUnfinished": 0
   },
   "TemplateSpec": {
-    "TemplateName": "AllInOneResources.Folktails",
+    "TemplateName": "AllInOneProducts.IronTeeth",
     "BackwardCompatibleTemplateNames": [],
     "RequiredFeatureToggle": "",
     "DisablingFeatureToggle": ""
@@ -204,7 +208,7 @@
   },
   "PlaceableBlockObjectSpec": {
     "ToolGroupId": "KKCheats",
-    "ToolOrder": 10,
+    "ToolOrder": 20,
     "ToolShape": "Square",
     "Layout": "Single",
     "CustomPivot": {
@@ -220,10 +224,10 @@
   },
   "WorkplaceIlluminatorSpec": {},
   "LabeledEntitySpec": {
-    "DisplayNameLocKey": "Building.AllInOneResources.DisplayName",
-    "DescriptionLocKey": "Building.AllInOneResources.Description",
-    "FlavorDescriptionLocKey": "Building.AllInOneResources.FlavorDescription",
-    "Icon": "Sprites/Goods/LogIcon"
+    "DisplayNameLocKey": "Building.AllInOneProducts.DisplayName",
+    "DescriptionLocKey": "Building.AllInOneProducts.Description",
+    "FlavorDescriptionLocKey": "Building.AllInOneProducts.FlavorDescription",
+    "Icon": "Sprites/Goods/GearIcon"
   },
   "SimpleManufactoryBehaviorsSpec": {},
   "WorkshopWorkerHiderSpec": {},

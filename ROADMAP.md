@@ -11,7 +11,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `Humanica/` | MelonLoader + HarmonyX IL2CPP mod | v0.1.1 stable local build; warehouse workflow accepted; unlock still needs deeper smoke test. | `Humanica/ROADMAP.md` |
 | `LordsAndVilleins/` | BepInEx + Harmony Unity Mono mod | v0.1.1 partially in-game verified; Economy, Time, Royalty pass; Pawn and Build still need smoke tests. | `LordsAndVilleins/ROADMAP.md` |
 | `For The King/` | BepInEx + Harmony Unity Mono mod | v0.1.0 skeleton with Time and Player HP controls; in-game smoke pending. | `For The King/ROADMAP.md` |
-| `Timberborn/` | Official Blueprint JSON mod | `KKDoubleResources` validates; `all-in-one-gen` v0.1.3 narrowed to common-safe outputs and moved to a dedicated `KK` tool group. In-game disposable-save smoke pending. | `Timberborn/ROADMAP.md` |
+| `Timberborn/` | Official Blueprint JSON mod | `KKDoubleResources` validates; `all-in-one-gen` v0.1.4 uses faction-specific output lists in a dedicated `KK` tool group. In-game disposable-save smoke pending. | `Timberborn/ROADMAP.md` |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML workspace | Save editor present; `KK Resource Tuning x2` XML mod generated and locally installed for testing. | `spacehaven/ROADMAP.md` |
 | `fightlife mods/` | Unity Mono managed DLL package | Packaged Windows install files present; source for `CheatMenu.dll` still needs recovery/recreation. | `fightlife mods/ROADMAP.md` |
 

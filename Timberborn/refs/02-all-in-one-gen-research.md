@@ -24,9 +24,9 @@ and produces 10 of the selected output good.
   faction-specific goods there makes the recoverable-good tooltip describe
   faction needs that are not globally available. Runtime smoke first hit
   `Need with id Grease not found`, then `Need with id Coffee not found`.
-- Scope: v0.1.2 only ships common-safe outputs already available to both
-  factions. Broader output coverage needs separate Folktails and IronTeeth
-  generator buildings with faction-specific recipe lists.
+- Scope: v0.1.4 ships faction-specific recipe lists. Folktails gets common +
+  Folktails goods; IronTeeth gets common + IronTeeth goods. This restores broad
+  output coverage without adding foreign goods to `GoodCollection.Common`.
 - Tool group: `KKCheats`, displayed as `KK` in the bottom bar. v0.1.3 moved the
   two buildings out of `Wood` after in-game smoke made them hard to find.
 - Model reuse: existing Grill model and construction model paths are referenced;
@@ -35,18 +35,40 @@ and produces 10 of the selected output good.
 
 ## Resource Generator Goods
 
-`all-in-one-resources` includes common-safe raw, fluid, and base material goods:
+Folktails `all-in-one-resources` includes:
 
 ```text
-Badwater, Berries, Dirt, Log, PineResin, ScrapMetal, Water
+Badwater, Berries, Carrot, CattailRoot, Chestnut, Dandelion, Dirt, Log,
+MapleSyrup, PineResin, Potato, ScrapMetal, Spadderdock, SunflowerSeeds, Water,
+Wheat
+```
+
+IronTeeth `all-in-one-resources` includes:
+
+```text
+Algae, Badwater, Berries, CanolaSeeds, Cassava, CoffeeBean, Corn, Dirt,
+Eggplant, Kohlrabi, Log, MangroveFruit, Mushroom, PineResin, ScrapMetal,
+Soybean, Water
 ```
 
 ## Product Generator Goods
 
-`all-in-one-products` includes common-safe processed products:
+Folktails `all-in-one-products` includes:
 
 ```text
-Explosives, Extract, Fireworks, Gear, MetalBlock, Plank
+Antidote, Biofuel, Book, BotChassis, BotHead, BotLimb, Bread, Catalyst,
+CattailCracker, CattailFlour, Explosives, Extract, Fireworks, Gear,
+GrilledChestnut, GrilledPotato, GrilledSpadderdock, MaplePastry, MetalBlock,
+Paper, Plank, PunchCard, TreatedPlank, WheatFlour
+```
+
+IronTeeth `all-in-one-products` includes:
+
+```text
+AlgaeRation, BotChassis, BotHead, BotLimb, CanolaOil, Coffee, CornRation,
+EggplantRation, Explosives, Extract, FermentedCassava, FermentedMushroom,
+FermentedSoybean, Fireworks, Gear, Grease, MetalBlock, MetalPart, Plank,
+TreatedPlank
 ```
 
 ## Verification

@@ -2,8 +2,8 @@
   "TemplateCollectionSpec": {
     "CollectionId": "Buildings.IronTeeth",
     "Blueprints#append": [
-      "Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint",
-      "Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint"
+      "Buildings/AllInOneGen/AllInOneResourcesIronTeeth/AllInOneResources.IronTeeth.blueprint",
+      "Buildings/AllInOneGen/AllInOneProductsIronTeeth/AllInOneProducts.IronTeeth.blueprint"
     ]
   }
 }

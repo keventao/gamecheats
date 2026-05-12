@@ -1,0 +1,26 @@
+{
+  "RecipeSpec": {
+    "Id": "AllInOneProducts.Catalyst",
+    "BackwardCompatibleIds": [],
+    "DisplayLocKey": "Good.Catalyst.PluralDisplayName",
+    "CycleDurationInHours": 0.1,
+    "Ingredients": [
+      {
+        "Id": "Log",
+        "Amount": 1
+      }
+    ],
+    "Products": [
+      {
+        "Id": "Catalyst",
+        "Amount": 10
+      }
+    ],
+    "ProducedSciencePoints": 0,
+    "Fuel": "",
+    "CyclesFuelLasts": 0,
+    "FuelCapacity": 0,
+    "CyclesCapacity": 50,
+    "Icon": "Sprites/Goods/CatalystIcon"
+  }
+}
