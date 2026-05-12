@@ -65,6 +65,10 @@ Use a disposable world or backed-up save for every test.
 
 ## All-in-One Gen Smoke
 
+Latest result, 2026-05-12: PASS. User confirmed both `KK` buildings appear,
+can be built, and produce goods. Cross-faction goods are intentionally not
+required.
+
 - Enable `all-in-one-gen` in the Mod Manager.
 - Confirm startup/load does not throw `Need with id ... not found`.
 - Confirm a `KK` tool group appears in the bottom build bar.

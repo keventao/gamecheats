@@ -4,7 +4,7 @@ Last updated: 2026-05-12
 
 ## Status
 
-`v0.1.4` local official-mod package created.
+`v0.1.4` local official-mod package created and user-smoked in game.
 
 Known facts:
 
@@ -40,7 +40,7 @@ Known facts:
 - First target behavior documented in `refs/`. Done.
 - Minimal mod package validates and builds without committing game binaries. Done.
 - Manual smoke checklist updated with exact in-game verification steps. Done.
-- User confirms in-game smoke on disposable save. Pending.
+- User confirms in-game smoke on disposable save. Done for `all-in-one-gen`.
 
 ## Candidate First Features
 
@@ -55,11 +55,9 @@ Known facts:
    x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x5 water pumps, x2
    movement speed, x5 storage buildings, and science points.
 3. Adjust target resources if user meant a different wood product than `Log`.
-4. Smoke-test `all-in-one-gen`: enable the mod, confirm a `KK` bottom-bar tool
-   group appears with both buildings, confirm the active faction sees its
-   faction-specific goods, build each for 1 Log, confirm startup no longer
-   throws the recoverable-good need exception, and run one resource/product
-   recipe.
+4. `all-in-one-gen` v0.1.4 user smoke passed: both `KK` buildings appear,
+   build, and produce goods for the active faction. Cross-faction goods are
+   intentionally hidden because they are not useful for normal play.
 
 ## Risks
 

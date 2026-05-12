@@ -194,9 +194,12 @@ goods.
 v0.1.2 intentionally does not patch `GoodCollection.Common`. Adding
 faction-specific goods such as `Grease` or `Coffee` to Common makes the game's
 recoverable-good tooltip describe faction needs that are not globally available,
-crashing with `Need with id ... not found`. The current package keeps only
-outputs already safe for both factions; broader output coverage needs separate
-faction-specific generator buildings.
+crashing with `Need with id ... not found`. v0.1.4 uses separate
+faction-specific generator templates instead. Cross-faction goods are
+intentionally hidden because they are not useful for normal play.
+
+User smoke result, 2026-05-12: the `KK` buildings appear, can be built, and can
+produce goods.
 
 Static package check:
 

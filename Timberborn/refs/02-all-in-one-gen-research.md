@@ -78,3 +78,6 @@ Static check:
 ```bash
 bash Timberborn/tools/check_all_in_one_gen.sh
 ```
+
+Runtime smoke, 2026-05-12: PASS. User confirmed both `KK` buildings appear,
+can be built, and produce goods. Cross-faction goods are intentionally hidden.
