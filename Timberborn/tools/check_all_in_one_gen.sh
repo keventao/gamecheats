@@ -92,6 +92,7 @@ for recipe_file in "$mod"/Recipes/*.blueprint.json; do
 done
 
 check_json_value "$mod/manifest.json" '.Id' "public.timberborn.all-in-one-gen"
+check_json_value "$mod/manifest.json" '.Version' "0.1.5"
 check_json_value "$mod/manifest.json" '.MinimumGameVersion' "1.0.0.0"
 check_json_value "$mod/manifest.json" '.RequiredMods | length' "0"
 
@@ -153,6 +154,23 @@ check_building "$mod/Buildings/AllInOneGen/AllInOneResourcesIronTeeth/AllInOneRe
   "AllInOneResources.IronTeeth" "AllInOneResources" "10" "${ironteeth_resources[@]}"
 check_building "$mod/Buildings/AllInOneGen/AllInOneProductsIronTeeth/AllInOneProducts.IronTeeth.blueprint.json" \
   "AllInOneProducts.IronTeeth" "AllInOneProducts" "20" "${ironteeth_products[@]}"
+
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint.json" \
+  '.Children["#Finished"].TimbermeshSpec.Model' "Buildings/Food/Grill/Grill.Folktails.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneResources/AllInOneResources.blueprint.json" \
+  '.Children["#Unfinished"].Children.ConstructionStage0.TimbermeshSpec.Model' "Buildings/Food/Grill/Grill.Folktails.ConstructionStage0.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint.json" \
+  '.Children["#Finished"].TimbermeshSpec.Model' "Buildings/Food/Grill/Grill.Folktails.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneProducts/AllInOneProducts.blueprint.json" \
+  '.Children["#Unfinished"].Children.ConstructionStage0.TimbermeshSpec.Model' "Buildings/Food/Grill/Grill.Folktails.ConstructionStage0.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneResourcesIronTeeth/AllInOneResources.IronTeeth.blueprint.json" \
+  '.Children["#Finished"].TimbermeshSpec.Model' "Buildings/Food/OilPress/OilPress.IronTeeth.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneResourcesIronTeeth/AllInOneResources.IronTeeth.blueprint.json" \
+  '.Children["#Unfinished"].Children.ConstructionStage0.TimbermeshSpec.Model' "Buildings/Food/OilPress/OilPress.IronTeeth.ConstructionStage0.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneProductsIronTeeth/AllInOneProducts.IronTeeth.blueprint.json" \
+  '.Children["#Finished"].TimbermeshSpec.Model' "Buildings/Food/OilPress/OilPress.IronTeeth.Model"
+check_json_value "$mod/Buildings/AllInOneGen/AllInOneProductsIronTeeth/AllInOneProducts.IronTeeth.blueprint.json" \
+  '.Children["#Unfinished"].Children.ConstructionStage0.TimbermeshSpec.Model' "Buildings/Food/OilPress/OilPress.IronTeeth.ConstructionStage0.Model"
 
 if ! grep -q 'Building.AllInOneResources.DisplayName' "$mod/Localizations/enUS.csv"; then
   echo "wrong: enUS localization missing AllInOneResources"

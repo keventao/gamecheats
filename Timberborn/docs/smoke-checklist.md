@@ -65,12 +65,15 @@ Use a disposable world or backed-up save for every test.
 
 ## All-in-One Gen Smoke
 
-Latest result, 2026-05-12: PASS. User confirmed both `KK` buildings appear,
-can be built, and produce goods. Cross-faction goods are intentionally not
-required.
+Latest result, 2026-05-13: IronTeeth preview material crash fixed in v0.1.5 and
+needs re-smoke. Previous 2026-05-12 Folktails smoke passed: both `KK` buildings
+appeared, could be built, and produced goods. Cross-faction goods are
+intentionally not required.
 
 - Enable `all-in-one-gen` in the Mod Manager.
 - Confirm startup/load does not throw `Need with id ... not found`.
+- Confirm IronTeeth startup/tool preview does not throw
+  `Material BaseWood_Brown.Folktails not found in repository`.
 - Confirm a `KK` tool group appears in the bottom build bar.
 - Confirm `all-in-one-resources` appears in the `KK` tool group.
 - Confirm `all-in-one-products` appears in the `KK` tool group.

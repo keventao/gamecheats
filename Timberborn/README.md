@@ -190,7 +190,9 @@ v0.1.3 moved the buildings out of the crowded `Wood` group into a dedicated
 `KKCheats` block-object tool group so they are easier to find. v0.1.4 keeps
 two visible buildings per faction, but each faction gets its own recipe list:
 Folktails sees Folktails + common goods, and IronTeeth sees IronTeeth + common
-goods.
+goods. v0.1.5 keeps the Folktails buildings on the Folktails Grill model and
+uses the IronTeeth Oil Press model for IronTeeth buildings, avoiding missing
+Folktails material errors when IronTeeth previews are created.
 v0.1.2 intentionally does not patch `GoodCollection.Common`. Adding
 faction-specific goods such as `Grease` or `Coffee` to Common makes the game's
 recoverable-good tooltip describe faction needs that are not globally available,

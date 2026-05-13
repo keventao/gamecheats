@@ -2,6 +2,8 @@
 
 Date: 2026-05-12
 
+Update: 2026-05-13
+
 ## Intent
 
 Create a separate mod named `all-in-one-gen` with two buildings:
@@ -29,8 +31,12 @@ and produces 10 of the selected output good.
   output coverage without adding foreign goods to `GoodCollection.Common`.
 - Tool group: `KKCheats`, displayed as `KK` in the bottom bar. v0.1.3 moved the
   two buildings out of `Wood` after in-game smoke made them hard to find.
-- Model reuse: existing Grill model and construction model paths are referenced;
-  no copied game binaries or meshes are committed.
+- Model reuse: Folktails buildings reference the existing Grill model and
+  construction model paths. IronTeeth buildings reference the existing Oil Press
+  model and construction model paths as of v0.1.5, because the Folktails Grill
+  model can fail during IronTeeth preview creation with
+  `Material BaseWood_Brown.Folktails not found in repository`.
+  No copied game binaries or meshes are committed.
 - Localization: `enUS.csv` and `zhCN.csv`.
 
 ## Resource Generator Goods

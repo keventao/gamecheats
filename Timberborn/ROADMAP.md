@@ -1,10 +1,11 @@
 # Timberborn Roadmap
 
-Last updated: 2026-05-12
+Last updated: 2026-05-13
 
 ## Status
 
-`v0.1.4` local official-mod package created and user-smoked in game.
+`v0.1.5` local official-mod package created with an IronTeeth model material
+fix after user smoke.
 
 Known facts:
 
@@ -31,7 +32,8 @@ Known facts:
   not found` and `Need with id Coffee not found` in the game's recoverable-good
   tooltip path. v0.1.3 moves the two buildings to a dedicated `KK` tool group
   for discoverability. v0.1.4 restores broader output coverage with
-  faction-specific recipe lists.
+  faction-specific recipe lists. v0.1.5 uses IronTeeth-native Oil Press models
+  for IronTeeth generator previews to avoid missing Folktails material errors.
 
 ## Acceptance Criteria For First Real Mod
 
@@ -55,8 +57,8 @@ Known facts:
    x10 farm crops, x10 aquatic farm crops, x10 scrap metal, x5 water pumps, x2
    movement speed, x5 storage buildings, and science points.
 3. Adjust target resources if user meant a different wood product than `Log`.
-4. `all-in-one-gen` v0.1.4 user smoke passed: both `KK` buildings appear,
-   build, and produce goods for the active faction. Cross-faction goods are
+4. `all-in-one-gen` v0.1.5 should be smoke-tested on IronTeeth after fixing
+   `BaseWood_Brown.Folktails` preview material errors. Cross-faction goods are
    intentionally hidden because they are not useful for normal play.
 
 ## Risks

@@ -278,7 +278,7 @@
   "Children": {
     "#Finished": {
       "TimbermeshSpec": {
-        "Model": "Buildings/Food/Grill/Grill.Folktails.Model"
+        "Model": "Buildings/Food/OilPress/OilPress.IronTeeth.Model"
       },
       "CollidersSpec": {
         "BoxColliders": [
@@ -318,7 +318,7 @@
         },
         "ConstructionStage0": {
           "TimbermeshSpec": {
-            "Model": "Buildings/Food/Grill/Grill.Folktails.ConstructionStage0.Model"
+            "Model": "Buildings/Food/OilPress/OilPress.IronTeeth.ConstructionStage0.Model"
           },
           "CollidersSpec": {
             "BoxColliders": [
