@@ -6,7 +6,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>FactoryTownCheats</AssemblyName>
     <RootNamespace>FactoryTownCheats</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Configurations>Debug;Release</Configurations>
     <GameRoot Condition="'$(GameRoot)' == ''">$(FACTORY_TOWN_GAME_ROOT)</GameRoot>
     <GameManaged>$(GameRoot)/Factory Town.app/Contents/Resources/Data/Managed</GameManaged>
@@ -32,14 +32,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameManaged)/UnityEngine.CoreModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(GameManaged)/UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(GameManaged)/UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

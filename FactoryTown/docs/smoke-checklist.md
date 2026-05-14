@@ -11,8 +11,8 @@ Use a disposable save.
 
 ## UI
 
-- [ ] `F1` opens and closes the cheat panel.
-- [ ] Manual `Inject Item Generator Omni Recipes` does not duplicate recipes.
+- [ ] No always-on debug panel appears.
+- [ ] Normal left-click actions do not require double-clicking.
 - [ ] `ItemGenerator` appears in the basic build category.
 
 ## Gameplay

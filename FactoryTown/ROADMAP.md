@@ -4,13 +4,14 @@ Last updated: 2026-05-14
 
 ## Status
 
-`v0.1.0` prototype is implemented and build-verified.
+`v0.1.1` prototype is implemented and build-verified.
 
 - BepInEx plugin skeleton loads through `Plugin.Awake`.
 - Harmony patch hooks `Crafting.Init`.
 - Hidden `BuildingType.ItemGenerator` is enabled as the cheat building.
 - Build menu injection targets `BuildCategoryType.BuildingBasic`.
 - Runtime recipes use `1 Wood -> selected output`, one output per recipe.
+- Debug IMGUI was removed after smoke found it could steal left-click focus.
 - Pure tests cover output filtering and generated recipe id range.
 
 ## Verification

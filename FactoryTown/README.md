@@ -4,7 +4,7 @@ BepInEx + Harmony mod for *Factory Town* on macOS Unity Mono.
 
 ## Current Status
 
-`v0.1.0` adds an Omni Factory prototype:
+`v0.1.1` adds an Omni Factory prototype:
 
 - Enables the game's built-in hidden `ItemGenerator` building as a cheat building.
 - Adds it to the basic building category.
@@ -56,13 +56,9 @@ BepInEx/LogOutput.log
 
 Do first in-game checks on a disposable save.
 
-## Controls
-
-- `F1`: toggle the small cheat panel.
-- `Inject Item Generator Omni Recipes`: retry recipe injection if the automatic `Crafting.Init` hook ran before game data was ready.
-
 ## Known Limits
 
 - In-game smoke is still pending.
 - The mod uses the hidden `ItemGenerator` instead of creating a brand-new enum, prefab, icon, and localization entry.
+- There is no in-game debug panel in `v0.1.1`; check `BepInEx/LogOutput.log` for load and injection status.
 - If the hidden building is not visible in the build menu in a particular game mode, the next fallback is to patch an existing Workshop or add deeper build-menu/unlock hooks.
