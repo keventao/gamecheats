@@ -8,8 +8,7 @@ namespace FactoryTownCheats.Modules
 {
     internal static class OmniFactoryRecipes
     {
-        private const BuildingType TargetBuilding = BuildingType.ItemGenerator;
-        private const BuildCategoryType TargetBuildCategory = BuildCategoryType.BuildingBasic;
+        private const BuildingType TargetBuilding = BuildingType.Workshop;
         private const ItemType InputItem = ItemType.Wood;
         private const int InputCount = 1;
         private const float CraftingTimeSeconds = 1f;
@@ -59,12 +58,11 @@ namespace FactoryTownCheats.Modules
 
                     ConfigureTargetBuilding();
                     var data = Data.Instance;
-                    AddToBuildMenu(data);
                     var added = AddRecipes(data, outputs);
 
                     InjectedCount = added;
                     IsInjected = added > 0;
-                    LastStatus = $"injected {added} ItemGenerator recipes from {source}";
+                    LastStatus = $"injected {added} Workshop recipes from {source}";
                     Plugin.Log.LogInfo($"[OmniFactory] {LastStatus}.");
                 }
                 catch (Exception ex)
@@ -128,19 +126,6 @@ namespace FactoryTownCheats.Modules
             }
 
             def.CalcDerivedData();
-        }
-
-        private static void AddToBuildMenu(Data data)
-        {
-            AddUnique(data.buildCategories, TargetBuildCategory);
-
-            if (!data.defaultDisplayCategories.TryGetValue(TargetBuildCategory, out var entities))
-            {
-                entities = new List<EntityId>();
-                data.defaultDisplayCategories[TargetBuildCategory] = entities;
-            }
-
-            AddUnique(entities, EntityId.FromBuilding(TargetBuilding));
         }
 
         private static int AddRecipes(Data data, IEnumerable<ItemType> outputs)

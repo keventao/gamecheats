@@ -12,7 +12,7 @@ namespace FactoryTownCheats
     {
         public const string PluginId = "com.kk.factorytown-cheats";
         public const string PluginName = "Factory Town Cheats";
-        public const string PluginVersion = "0.1.1";
+        public const string PluginVersion = "0.1.2";
 
         internal static ManualLogSource Log = null!;
         internal static Harmony HarmonyInstance = null!;
@@ -28,7 +28,7 @@ namespace FactoryTownCheats
                 HarmonyInstance = new Harmony(PluginId);
                 OmniFactoryRecipes.Register(HarmonyInstance);
 
-                Log.LogInfo($"{PluginName} ready. Waiting for Crafting.Init to inject ItemGenerator recipes.");
+                Log.LogInfo($"{PluginName} ready. Waiting for Crafting.Init to inject Workshop recipes.");
             }
             catch (Exception ex)
             {

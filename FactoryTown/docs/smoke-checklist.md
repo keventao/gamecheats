@@ -5,19 +5,19 @@ Use a disposable save.
 ## Load
 
 - [ ] BepInEx starts without preloader errors.
-- [ ] `Factory Town Cheats 0.1.0` appears in the BepInEx log.
+- [ ] `Factory Town Cheats 0.1.2` appears in the BepInEx log.
 - [ ] Log includes `Waiting for Crafting.Init`.
-- [ ] After save load, log includes `injected ... ItemGenerator recipes`.
+- [ ] After save load, log includes `injected ... Workshop recipes`.
 
 ## UI
 
 - [ ] No always-on debug panel appears.
 - [ ] Normal left-click actions do not require double-clicking.
-- [ ] `ItemGenerator` appears in the basic build category.
+- [ ] Workshop opens normally and shows injected recipes.
 
 ## Gameplay
 
-- [ ] Place one `ItemGenerator`.
+- [ ] Place one Workshop.
 - [ ] Recipe picker shows many injected outputs.
 - [ ] Select one normal item output.
 - [ ] Provide Wood.

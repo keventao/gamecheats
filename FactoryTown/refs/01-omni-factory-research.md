@@ -17,12 +17,16 @@ Relevant game data:
 - `Crafting.recipeCache` stores runtime recipe definitions.
 - `Crafting.physicalItemTypes`, `currencies`, `researchItemTypes`, and `workerItemTypes` expose curated item groups.
 
-Chosen v0.1 route:
+Chosen v0.1.2 route:
 
-- Enable the hidden `ItemGenerator` instead of creating a fully new building enum/prefab.
+- Use vanilla `Workshop` for stable production and input behavior.
 - Add generated recipe ids in the high range `50000 + (int)ItemType`.
 - Use `Recipe.LoadBasic(ItemType.Wood, 1, output)` so the recipe picker selects exactly one output.
 - Exclude `None`, `Invalid`, `Filter*`, `Utility*`, and `Wood`.
+
+Rejected route:
+
+- `BuildingType.ItemGenerator` was build-visible and recipe injection worked, but A/B smoke showed the plugin route caused left-clicks to require two clicks. Disabling the plugin restored one-click behavior. Treat hidden generator as unsafe until deeper build-menu/input research is done.
 
 Deferred deeper route:
 
