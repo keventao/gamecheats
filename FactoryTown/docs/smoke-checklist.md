@@ -5,19 +5,20 @@ Use a disposable save.
 ## Load
 
 - [ ] BepInEx starts without preloader errors.
-- [ ] `Factory Town Cheats 0.1.2` appears in the BepInEx log.
+- [ ] `Factory Town Cheats 0.2.0` appears in the BepInEx log.
 - [ ] Log includes `Waiting for Crafting.Init`.
-- [ ] After save load, log includes `injected ... Workshop recipes`.
+- [ ] After save load, log includes `ensured ... KK 万能工坊 recipes`.
 
 ## UI
 
 - [ ] No always-on debug panel appears.
 - [ ] Normal left-click actions do not require double-clicking.
-- [ ] Workshop opens normally and shows injected recipes.
+- [ ] Build menu shows `KK 万能工坊`.
+- [ ] Vanilla Workshop opens normally and does not show omni recipes.
 
 ## Gameplay
 
-- [ ] Place one Workshop.
+- [ ] Place one `KK 万能工坊`.
 - [ ] Recipe picker shows many injected outputs.
 - [ ] Select one normal item output.
 - [ ] Provide Wood.

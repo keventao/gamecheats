@@ -4,12 +4,14 @@ BepInEx + Harmony mod for *Factory Town* on macOS Unity Mono.
 
 ## Current Status
 
-`v0.1.2` adds an Omni Factory prototype:
+`v0.2.0` adds a dedicated Omni Factory prototype:
 
-- Uses the vanilla `Workshop` as the stable cheat production building.
+- Adds `KK 万能工坊` as a separate build-menu building with custom id `90000`.
+- Reuses the vanilla `Workshop` prefab/icon for stable placement behavior.
 - Injects selectable recipes at runtime.
 - Each recipe consumes `1 Wood` and produces exactly one selected output item.
 - Filters out sentinel, filter, utility, and self-loop outputs.
+- Leaves vanilla `Workshop` recipes untouched.
 
 This is intentionally recipe-based. It does not create one recipe that emits every item at once, so the output does not explode.
 
@@ -57,7 +59,7 @@ Do first in-game checks on a disposable save.
 
 ## Known Limits
 
-- In-game smoke is still pending.
+- In-game smoke is still pending for `v0.2.0`.
 - The hidden `ItemGenerator` route was removed in `v0.1.2` because smoke testing showed it could make left-clicks require two clicks.
-- There is no in-game debug panel in `v0.1.2`; check `BepInEx/LogOutput.log` for load and injection status.
-- A fully custom building still needs a safer custom definition, prefab/icon/localization path, and input regression smoke.
+- There is no in-game debug panel; check `BepInEx/LogOutput.log` for load and injection status.
+- `KK 万能工坊` is a custom runtime building definition that reuses Workshop visuals. Keep save/load smoke on disposable saves.

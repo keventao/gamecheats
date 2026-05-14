@@ -6,7 +6,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>FactoryTownCheats</AssemblyName>
     <RootNamespace>FactoryTownCheats</RootNamespace>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <Configurations>Debug;Release</Configurations>
     <GameRoot Condition="'$(GameRoot)' == ''">$(FACTORY_TOWN_GAME_ROOT)</GameRoot>
     <GameManaged>$(GameRoot)/Factory Town.app/Contents/Resources/Data/Managed</GameManaged>

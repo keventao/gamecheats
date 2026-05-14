@@ -24,10 +24,19 @@ Chosen v0.1.2 route:
 - Use `Recipe.LoadBasic(ItemType.Wood, 1, output)` so the recipe picker selects exactly one output.
 - Exclude `None`, `Invalid`, `Filter*`, `Utility*`, and `Wood`.
 
+Chosen v0.2.0 route:
+
+- Add runtime building id `90000` named `KK 万能工坊`.
+- Keep recipes on `BuildingType(90000)` only, so vanilla `Workshop` recipes stay clean.
+- Add `EntityId.FromBuilding((BuildingType)90000)` to `BuildingBasic` display categories after `Crafting.Init`.
+- Clone Workshop-like `BuildingDef` behavior, then force manual recipe selection and fixed `Wood` input.
+- Patch `Building.PrefabForBuilding`, `Building.PrefabForBuildingLevel`, and `IconManager.SpriteForBuilding` so the custom building reuses Workshop visuals.
+- Patch `TextDisplay.LabelForBuilding`, `TextDisplay.DefaultLabelForBuilding`, `TextDisplay.DescriptionForBuilding`, and `Building.Title` for a stable visible name.
+
 Rejected route:
 
 - `BuildingType.ItemGenerator` was build-visible and recipe injection worked, but A/B smoke showed the plugin route caused left-clicks to require two clicks. Disabling the plugin restored one-click behavior. Treat hidden generator as unsafe until deeper build-menu/input research is done.
 
 Deferred deeper route:
 
-- Fully custom building means new type, build menu entry, localization, icon, prefab/render path, unlock behavior, save compatibility, and possibly UI cache patches.
+- Full custom art still means a unique prefab/render/icon path. Current v0.2.0 intentionally reuses Workshop visuals to avoid the hidden `ItemGenerator` input regression.

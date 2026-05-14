@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="../FactoryTownCheats/Core/OmniFactoryDefinition.cs" Link="Core/OmniFactoryDefinition.cs" />
     <Compile Include="../FactoryTownCheats/Core/OmniItemFilterPolicy.cs" Link="Core/OmniItemFilterPolicy.cs" />
   </ItemGroup>
 </Project>

@@ -12,13 +12,13 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `LordsAndVilleins/` | BepInEx + Harmony Unity Mono mod | v0.1.1 partially in-game verified; Economy, Time, Royalty pass; Pawn and Build still need smoke tests. | `LordsAndVilleins/ROADMAP.md` |
 | `For The King/` | BepInEx + Harmony Unity Mono mod | v0.1.0 skeleton with Time and Player HP controls; in-game smoke pending. | `For The King/ROADMAP.md` |
 | `Timberborn/` | Official Blueprint JSON mod | `KKDoubleResources` validates; `all-in-one-gen` v0.1.4 uses faction-specific output lists in a dedicated `KK` tool group and passed user in-game smoke. | `Timberborn/ROADMAP.md` |
-| `FactoryTown/` | BepInEx + Harmony Unity Mono mod | v0.1.2 build-verified; stable Workshop fallback gets selectable `1 Wood -> one output` omni recipes after hidden `ItemGenerator` caused double-click input regression. | `FactoryTown/ROADMAP.md` |
+| `FactoryTown/` | BepInEx + Harmony Unity Mono mod | v0.2.0 build-verified; separate `KK 万能工坊` runtime building gets selectable `1 Wood -> one output` omni recipes without polluting vanilla Workshop. | `FactoryTown/ROADMAP.md` |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML workspace | Save editor present; `KK Resource Tuning x2` XML mod generated and locally installed for testing. | `spacehaven/ROADMAP.md` |
 | `fightlife mods/` | Unity Mono managed DLL package | Packaged Windows install files present; source for `CheatMenu.dll` still needs recovery/recreation. | `fightlife mods/ROADMAP.md` |
 
 ## Cross-Project Priorities
 
-1. Smoke test Factory Town `Workshop` omni recipe injection in a disposable save.
+1. Smoke test Factory Town `KK 万能工坊` placement, recipe selection, Workshop cleanliness, and save reload in a disposable save.
 2. Smoke test Space Haven `KK Resource Tuning x2` through the modloader.
 3. Finish Humanica unlock verification and expose save-hook status in-panel.
 4. Run Lords & Villeins pending Pawn and Build smoke checks.
