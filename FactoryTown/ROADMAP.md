@@ -17,6 +17,7 @@ Last updated: 2026-05-14
 
 - PASS: `rtk dotnet test FactoryTown/src/FactoryTownCheats.Tests/FactoryTownCheats.Tests.csproj --logger "console;verbosity=detailed"`
 - PASS: `rtk dotnet build FactoryTown/src/FactoryTownCheats/FactoryTownCheats.csproj -c Release -p:GameRoot="/Users/anonymous/Library/Application Support/Steam/steamapps/common/Factory Town" -p:BepInExPath="/private/tmp/factorytown-bepinex/BepInEx"`
+- PASS: local BepInEx launch generated `BepInEx/LogOutput.log`, loaded `Factory Town Cheats 0.1.0`, and injected 330 `ItemGenerator` recipes.
 - PENDING: in-game BepInEx load and disposable-save smoke.
 
 ## Next Work

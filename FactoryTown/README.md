@@ -42,6 +42,18 @@ Install BepInEx 5 macOS universal into the game root, then place the built plugi
 BepInEx/plugins/FactoryTownCheats/FactoryTownCheats.dll
 ```
 
+For Steam launch, set Factory Town launch options to:
+
+```text
+./run_bepinex.sh %command%
+```
+
+BepInEx writes its load log here:
+
+```text
+BepInEx/LogOutput.log
+```
+
 Do first in-game checks on a disposable save.
 
 ## Controls
