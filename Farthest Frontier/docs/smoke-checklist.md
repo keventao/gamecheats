@@ -6,7 +6,7 @@ Use a disposable save.
 
 1. Build `KKFastVillagersPlugin_FF.dll`.
 2. Confirm the DLL exists in:
-   `<FARTHEST_FRONTIER_GAME_ROOT>\Farthest Frontier (Mono)\Plugins\`.
+   `<FARTHEST_FRONTIER_MONO_ROOT>\Plugins\`.
 3. Launch the Mono game executable.
 4. Confirm MelonLoader loads `KK Fast Villagers` under `Loading Plugins`.
 5. Confirm log lines:

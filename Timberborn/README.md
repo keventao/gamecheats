@@ -12,9 +12,6 @@ Local Timberborn mod workspace.
 - Current mod: `mods/KKDoubleResources/`
 - New mod package: `mods/all-in-one-gen/`
 
-Do not guess game class, method, or field names. Inspect the target build first,
-then write research notes under `refs/`.
-
 ## KK Double Resources
 
 `KKDoubleResources` multiplies selected output and selected capacities:

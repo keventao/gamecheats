@@ -1,6 +1,6 @@
 # Timberborn Research Checklist
 
-Write facts here before coding. Do not guess class or method names.
+Record confirmed game API notes here before changing patches.
 
 ## Install Facts
 

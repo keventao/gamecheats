@@ -37,17 +37,7 @@ Unity Version: 2022.3.62f3
 Game Version: v1.1.1b (Mono)
 ```
 
-Mono game root:
-
-```text
-<FARTHEST_FRONTIER_GAME_ROOT>\Farthest Frontier (Mono)
-```
-
-WSL path:
-
-```text
-<FARTHEST_FRONTIER_GAME_ROOT>/Farthest Frontier (Mono)
-```
+Mono game root is provided locally through `FARTHEST_FRONTIER_GAME_ROOT`.
 
 ## Current Assembly Findings
 

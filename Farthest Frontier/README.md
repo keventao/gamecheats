@@ -4,16 +4,13 @@ Local Farthest Frontier Mono mod workspace.
 
 ## Current Status
 
-- Game root: `<FARTHEST_FRONTIER_GAME_ROOT>`
-- Mono game root: `<FARTHEST_FRONTIER_GAME_ROOT>\Farthest Frontier (Mono)`
+- Build path is supplied through `FARTHEST_FRONTIER_GAME_ROOT` or
+  `/p:GameRoot=<FARTHEST_FRONTIER_MONO_ROOT>`.
 - Observed game version: `v1.1.1b (Mono)`
 - Unity version: `2022.3.62f3`
 - Loader: MelonLoader `0.7.0 Open-Beta`
 - Runtime: `MonoBleedingEdge`, `x64`, MelonLoader runtime type `net35`
 - Current mod: `src/FastVillagers/`
-
-Do not guess game class, method, or field names. Inspect the installed Mono
-`Assembly-CSharp.dll`, then record findings under `refs/`.
 
 ## KK Fast Villagers
 
@@ -64,14 +61,15 @@ Config is written to:
 From WSL:
 
 ```bash
+export FARTHEST_FRONTIER_GAME_ROOT="<FARTHEST_FRONTIER_MONO_ROOT>"
 rtk dotnet build "Farthest Frontier/src/FastVillagers/FastVillagers.csproj" -c Release \
-  /p:GameRoot="<FARTHEST_FRONTIER_GAME_ROOT>/Farthest Frontier (Mono)"
+  /p:GameRoot="$FARTHEST_FRONTIER_GAME_ROOT"
 ```
 
 Or use the project helper:
 
 ```bash
-rtk bash "Farthest Frontier/tools/install_fast_villagers.sh"
+rtk bash "Farthest Frontier/tools/install_fast_villagers.sh" "<FARTHEST_FRONTIER_MONO_ROOT>"
 ```
 
 Steam Workshop sync rebuilds `Mods`, so this project intentionally installs to
@@ -87,7 +85,7 @@ If building directly on Windows, pass:
 
 ```powershell
 dotnet build "Farthest Frontier/src/FastVillagers/FastVillagers.csproj" -c Release `
-  /p:GameRoot="<FARTHEST_FRONTIER_GAME_ROOT>\Farthest Frontier (Mono)"
+  /p:GameRoot="<FARTHEST_FRONTIER_MONO_ROOT>"
 ```
 
 ## Verify

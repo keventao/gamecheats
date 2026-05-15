@@ -2,7 +2,7 @@
 
 Observed target:
 
-- Steam game root: `/Users/anonymous/Library/Application Support/Steam/steamapps/common/Factory Town`
+- Steam game root: local install path, not committed.
 - Main assembly: `Factory Town.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll`
 - Assembly SHA256: `412a07473f2bcfdd5253bc35bfc888daf524d1c724b2ef5bc6b8dd1560588e57`
 - Unity player: `2022.3.62f2`

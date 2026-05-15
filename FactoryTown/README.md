@@ -20,7 +20,7 @@ This is intentionally recipe-based. It does not create one recipe that emits eve
 Build-only verification can use an extracted BepInEx 5 macOS package outside the game folder:
 
 ```bash
-rtk dotnet build FactoryTown/src/FactoryTownCheats/FactoryTownCheats.csproj -c Release -p:GameRoot="/Users/anonymous/Library/Application Support/Steam/steamapps/common/Factory Town" -p:BepInExPath="/private/tmp/factorytown-bepinex/BepInEx"
+rtk dotnet build FactoryTown/src/FactoryTownCheats/FactoryTownCheats.csproj -c Release -p:GameRoot="<FACTORY_TOWN_GAME_ROOT>" -p:BepInExPath="<BEPINEX_ROOT>"
 ```
 
 Run pure policy tests:
@@ -30,12 +30,6 @@ rtk dotnet test FactoryTown/src/FactoryTownCheats.Tests/FactoryTownCheats.Tests.
 ```
 
 ## Install Notes
-
-Target game root:
-
-```text
-/Users/anonymous/Library/Application Support/Steam/steamapps/common/Factory Town
-```
 
 Install BepInEx 5 macOS universal into the game root, then place the built plugin DLL under:
 

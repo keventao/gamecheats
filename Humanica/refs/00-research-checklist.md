@@ -1,7 +1,7 @@
 # 逆向研究清单
 
 > 研究方法：PowerShell 二进制字符串提取（IL2CPP proxy DLL），无 dnSpy GUI。
-> 目标文件：`E:\Games\Humanica\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll`（4.3 MB IL2CPP proxy）
+> 目标文件：`<HUMANICA_GAME_ROOT>\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll`（4.3 MB IL2CPP proxy）
 
 ## 资源系统
 

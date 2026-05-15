@@ -19,7 +19,7 @@ Last updated: 2026-05-14
 ## Verification
 
 - PASS: `rtk dotnet test FactoryTown/src/FactoryTownCheats.Tests/FactoryTownCheats.Tests.csproj`
-- PASS: `rtk dotnet build FactoryTown/src/FactoryTownCheats/FactoryTownCheats.csproj -c Release -p:GameRoot="/Users/anonymous/Library/Application Support/Steam/steamapps/common/Factory Town"`
+- PASS: `rtk dotnet build FactoryTown/src/FactoryTownCheats/FactoryTownCheats.csproj -c Release -p:GameRoot="<FACTORY_TOWN_GAME_ROOT>"`
 - PASS: `v0.2.0` DLL copied to `BepInEx/plugins/FactoryTownCheats/FactoryTownCheats.dll`; installed hash matches Release build hash `60b1bc3c5739883f1a2c1be66c4161dbac1007cb6986512eeb83927405d44dc8`.
 - PENDING: `v0.2.0` in-game smoke.
 
