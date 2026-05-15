@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(FARTHEST_FRONTIER_GAME_ROOT)</GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == ''"><FARTHEST_FRONTIER_GAME_ROOT>/Farthest Frontier (Mono)</GameRoot>
+    <PluginInstallDir Condition="'$(PluginInstallDir)' == ''">$(GameRoot)/Plugins</PluginInstallDir>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+</Project>

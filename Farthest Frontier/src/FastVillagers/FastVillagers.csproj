@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>KKFastVillagersPlugin_FF</AssemblyName>
+    <RootNamespace>FarthestFrontier.FastVillagers</RootNamespace>
+    <Version>0.1.0</Version>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="MelonLoader">
+      <HintPath>$(GameRoot)/MelonLoader/net35/MelonLoader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GameRoot)/MelonLoader/net35/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CopyToPlugins" AfterTargets="Build" Condition="'$(PluginInstallDir)' != ''">
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFolder="$(PluginInstallDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>
