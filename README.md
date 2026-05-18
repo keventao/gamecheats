@@ -35,10 +35,3 @@ dotnet test                      # xUnit (net8.0)
 ```
 
 Game-assembly paths are per-project, not hardcoded: resolved via an MSBuild prop (`$(GameManaged)`/`$(GameRoot)`) fed by a per-game environment variable. Check each `.csproj`/`Directory.Build.props`. Override with `-p:GameRoot="<GAME_ROOT>"`.
-
-## Conventions
-
-- Game DLLs/PDBs never enter git; reference local game directories via csproj `<Reference HintPath>`.
-- Keep generated mods, saves, backups, extracted assets, and logs out of git.
-- "Done" means a visible in-game behavior change, not code that looks right.
-- Never guess game method/field names — verify via dnSpy / `refs/` first.
