@@ -149,3 +149,53 @@ Phase 8 BuildCheats.cs 需要:
   ```
 - 注意：`BuildBlueprint` 是抽象类，patch 应针对具体子类或使用 `HarmonyPatch(typeof(BuildBlueprint), "HasResourcesForBlueprint")` 并加 `[HarmonyTargetMethods]` 覆盖所有子类
 - 备选：直接给 Blueprint.inventory 注入材料，绕过整个材料检查
+
+## FastBuild(1-tick 建造)— 2026-05-22 ilspycmd 验证
+
+源:`Assembly-CSharp.dll`(Lords and Villeins 1.6.15, CrossOver Steam bottle)。
+
+### 已验证签名
+
+| 符号 | 签名 / 行号 |
+|---|---|
+| `Blueprint.StartProgress` | `public void StartProgress()` — Blueprint:1105;副作用:`isInProgress = true`、视觉/摩擦更新,不触发计时。 |
+| `Blueprint.FinishedBuildProgress` | `public void FinishedBuildProgress()` — Blueprint:1188;body 全文:`finishedBuildProgress = true;` |
+| `Blueprint.haveAllResources` | `private bool` — Blueprint:34 |
+| `Blueprint.finishedBuildProgress` | `private bool` — Blueprint:36 |
+| `Blueprint.OnInventoryChange` | `private void OnInventoryChange()` — Blueprint:84;`OnInventoryContentChange` 监听器(Blueprint:269 添加,545 移除);开头分支 `if (haveAllResources && finishedBuildProgress) { BuildBlueprint(); return; }` 在 Blueprint:126。 |
+| `AIActivity.CalculateTargetTime` | `public float CalculateTargetTime(float targetTimeBase)` — AIActivity:270 |
+| `AIActivity.ExecuteForTime` | `public IEnumerator ExecuteForTime(float targetTimeInSeconds, bool storeTimeInTarget, SFXData executingSFXOverride = null, bool showBar = true)` — AIActivity:812 |
+
+### `BuildBlueprint.ExecuteActivitySteps` 关键片段(BuildBlueprint.cs:340-365)
+
+```csharp
+waitTimePassed = 0f;
+blueprint.StartProgress();
+targetTime = CalculateTargetTime(asset.GetConstructTime());   // ← FastBuild patch 点
+if (PlayerManager.instance.settlementDebuffModule.HasDebuff(SettlementDebuffType.MotivatedBuilders))
+    targetTime *= 0.5f;
+// ... 类型分支 ...
+yield return ExecuteForTime(targetTime, storeTimeInTarget: true);
+if (!executionInterrupted)
+{
+    executedSuccessfuly = true;
+    blueprint.FinishedBuildProgress();
+    PlaySoundByMaterial(...);
+}
+```
+
+### Patch 策略
+
+**目标**:`AIActivity.CalculateTargetTime` postfix,`__instance is BuildBlueprint` 限定。
+
+理由:
+1. `CalculateTargetTime` 是 `AIActivity` 基类公共方法,签名稳定。
+2. `__instance is BuildBlueprint` 把作用域限制在建造活动内 —— 不影响伐木/烹饪/狩猎等其他 AI 工作的计时。
+3. 把 `__result` 设 0f 时,`ExecuteForTime(0,...)` 立刻返回,后续 `FinishedBuildProgress` 即时执行;材料消耗仍由 NPC AI 流程在 `BuildBlueprint()` 实际触发前完成(`inventory.SpendResources` 走原路径触发 `OnInventoryChange` → `BuildBlueprint()`)。
+4. 零反射写 private 字段,零 transpiler,零 coroutine 改写。
+
+不选的方案:
+- `Blueprint.StartProgress` postfix 直接调 `BuildBlueprint()`:跳过材料消耗,违反"材料仍正常扣"。
+- `Blueprint.FinishedBuildProgress` 提前 + 触发 `OnInventoryChange`:需要反射读 `haveAllResources` 或显式重入,复杂且与 listener 模型相冲。
+- transpiler 重写 `BuildBlueprint.ExecuteActivitySteps`(IEnumerator):IL 改 coroutine 风险高。
+- `IBuildableObjectAsset.GetConstructTime` 全局归零:可能影响存档/序列化语义,作用面比 CalculateTargetTime 大。

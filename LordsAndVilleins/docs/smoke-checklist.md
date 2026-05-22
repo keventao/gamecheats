@@ -41,6 +41,11 @@
 - [ ] FreeBuilding OFF → 造一个建筑,材料正常扣
 - [ ] FreeBuilding ON → 造一个建筑,材料不扣
 
+## FastBuild(待验证)
+
+- [ ] FastBuild OFF → 造一个建筑,正常多 tick 完工
+- [ ] FastBuild ON → 造一个建筑,1 tick 内完工(材料仍正常扣)
+
 ## Royalty(2026-04-25 实测)
 
 - [x] Favor Points 顶部数字与游戏内一致

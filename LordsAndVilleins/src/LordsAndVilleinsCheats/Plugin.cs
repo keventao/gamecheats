@@ -87,6 +87,7 @@ namespace LordsAndVilleinsCheats
                 Registry.Add(new Modules.PawnCheats());
                 Registry.Add(new Modules.TimeCheats());
                 Registry.Add(new Modules.BuildCheats());
+                Registry.Add(new Modules.FastBuildCheats());
                 Registry.Add(new Modules.RoyaltyCheats());
 
                 Registry.RegisterAll(Cfg, HarmonyInstance);

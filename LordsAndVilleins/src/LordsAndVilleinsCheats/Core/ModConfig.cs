@@ -15,7 +15,7 @@ namespace LordsAndVilleinsCheats.Core
         public ModConfig(ConfigFile file)
         {
             File = file;
-            ToggleKey        = file.Bind("General", "ToggleKey",        KeyCode.F1, "Hotkey to toggle the cheats panel.");
+            ToggleKey        = file.Bind("General", "ToggleKey",        KeyCode.P,  "Hotkey to toggle the cheats panel.");
             GlobalDisableAll = file.Bind("General", "GlobalDisableAll", false,      "When true, all module Lock/Force behaviors are suppressed regardless of per-module settings.");
             PanelWidth       = file.Bind("UI",      "PanelWidth",       460,        "Cheats panel width in pixels.");
             PanelHeight      = file.Bind("UI",      "PanelHeight",      520,        "Cheats panel height in pixels.");

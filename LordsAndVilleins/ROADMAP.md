@@ -100,6 +100,10 @@ Still pending:
 - Build module:
   - verify vanilla material use with FreeBuilding OFF
   - verify behavior with FreeBuilding ON
+- FastBuild module (patch wired, awaits smoke):
+  - target: `AIActivity.CalculateTargetTime` postfix scoped to `__instance is BuildBlueprint`, zeroes targetTime → `ExecuteForTime(0)` returns instantly → `FinishedBuildProgress` fires → `OnInventoryChange` triggers `BuildBlueprint()`.
+  - verified via ilspycmd dump 2026-05-22 (Assembly-CSharp.dll 1.6.15). See `refs/04-build-research.md` § FastBuild.
+  - smoke-test 1-tick completion + material still deducted.
 - Disable All button and persistence.
 - Save/load safety after uninstall.
 - Main-menu fallback host if F1 is desired before entering a save.
