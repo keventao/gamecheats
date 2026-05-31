@@ -4,6 +4,7 @@
     <AssemblyName>LunHuiCheats.Tests</AssemblyName>
     <RootNamespace>LunHuiCheats.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 
   <ItemGroup>
