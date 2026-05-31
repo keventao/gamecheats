@@ -12,6 +12,7 @@ namespace LunHuiCheats.Modules
     {
         public string Id => "time";
         public string Name => "Time";
+        public string Category => "通用";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Pending;
 
         private float _timeScale = 1f;
@@ -25,6 +26,8 @@ namespace LunHuiCheats.Modules
         public void OnGameReady()
         {
         }
+
+        public void OnUpdate() { }
 
         public void DrawGui()
         {

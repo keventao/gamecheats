@@ -26,9 +26,11 @@ namespace LunHuiCheats.Tests
         {
             public string Id => "test";
             public string Name => "Test";
+            public string Category => "测试";
             public Core.ModuleStatus Status { get; set; } = Core.ModuleStatus.Pending;
             public void Register(Core.ModConfig cfg, HarmonyLib.Harmony harmony) => Status = Core.ModuleStatus.Ok;
             public void OnGameReady() { }
+            public void OnUpdate() { }
             public void DrawGui() { }
             public void DisableAll() { }
         }

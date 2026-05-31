@@ -9,6 +9,7 @@ namespace LunHuiCheats.Modules
     {
         public string Id => "debug";
         public string Name => "Debug";
+        public string Category => "调试";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Pending;
 
         private bool _scanOnReady;
@@ -18,6 +19,8 @@ namespace LunHuiCheats.Modules
         {
             Status = ModuleStatus.Ok;
         }
+
+        public void OnUpdate() { }
 
         public void OnGameReady()
         {
