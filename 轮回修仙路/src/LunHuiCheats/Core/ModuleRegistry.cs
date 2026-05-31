@@ -26,6 +26,23 @@ namespace LunHuiCheats.Core
 
         public void ResetGameReady() => _gameReadyDispatched = false;
 
+        public void OnUpdateAll()
+        {
+            foreach (var m in _modules)
+            {
+                try { m.OnUpdate(); }
+                catch { /* a faulty module must not break the frame loop */ }
+            }
+        }
+
+        public IReadOnlyList<string> Categories()
+        {
+            var seen = new List<string>();
+            foreach (var m in _modules)
+                if (!seen.Contains(m.Category)) seen.Add(m.Category);
+            return seen;
+        }
+
         public void DisableAll()
         {
             foreach (var m in _modules) m.DisableAll();

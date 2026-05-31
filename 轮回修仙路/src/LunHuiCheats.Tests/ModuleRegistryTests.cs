@@ -22,6 +22,31 @@ namespace LunHuiCheats.Tests
             Assert.Equal(Core.ModuleStatus.Ok, module.Status);
         }
 
+        [Fact]
+        public void OnUpdateAll_Calls_Each_Module()
+        {
+            var registry = new Core.ModuleRegistry();
+            var m = new CountingModule();
+            registry.Add(m);
+            registry.OnUpdateAll();
+            registry.OnUpdateAll();
+            Assert.Equal(2, m.Updates);
+        }
+
+        private class CountingModule : Core.ICheatModule
+        {
+            public int Updates;
+            public string Id => "count";
+            public string Name => "Count";
+            public string Category => "测试";
+            public Core.ModuleStatus Status => Core.ModuleStatus.Ok;
+            public void Register(Core.ModConfig cfg, HarmonyLib.Harmony harmony) { }
+            public void OnGameReady() { }
+            public void OnUpdate() => Updates++;
+            public void DrawGui() { }
+            public void DisableAll() { }
+        }
+
         private class TestModule : Core.ICheatModule
         {
             public string Id => "test";
