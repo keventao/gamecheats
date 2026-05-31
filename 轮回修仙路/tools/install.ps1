@@ -7,7 +7,7 @@ if (-not $GameRoot) {
     exit 1
 }
 
-$src = "$PSScriptRoot\..\src\LunHuiCheats\bin\Release\netstandard2.1\LunHuiCheats.dll"
+$src = "$PSScriptRoot\..\src\LunHuiCheats\bin\Release\net6.0\LunHuiCheats.dll"
 $dest = "$GameRoot\BepInEx\plugins\LunHuiCheats\LunHuiCheats.dll"
 
 if (-not (Test-Path $src)) {

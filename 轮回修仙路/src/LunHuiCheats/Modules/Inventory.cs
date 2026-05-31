@@ -41,7 +41,6 @@ namespace LunHuiCheats.Modules
 
         private void RebuildRows()
         {
-            // Rebuild at most every ~60 frames (lists are large; reflection is costly).
             if (Time.frameCount - _lastBuildFrame < 60) return;
             _lastBuildFrame = Time.frameCount;
 
@@ -51,23 +50,45 @@ namespace LunHuiCheats.Modules
             var rows = new List<ItemRow>();
             foreach (var (field, cat) in Lists)
             {
-                if (!ReflectAccessor.TryGet(inv, field, out var listObj) || listObj == null) continue;
-                var lt = listObj.GetType();
-                var countProp = lt.GetProperty("Count");
-                var itemProp = lt.GetProperty("Item"); // indexer
-                if (countProp == null || itemProp == null) continue;
-                int count;
-                try { count = System.Convert.ToInt32(countProp.GetValue(listObj)); }
-                catch { continue; }
-                for (int i = 0; i < count; i++)
+                if (!ReflectAccessor.TryGet(inv, field, out var listObj) || listObj == null)
                 {
-                    object item;
-                    try { item = itemProp.GetValue(listObj, new object[] { i }); }
-                    catch { break; }
-                    if (item == null) continue;
-                    var name = ReflectAccessor.TryGet(item, "name", out var n) && n != null ? n.ToString() : item.ToString();
-                    rows.Add(new ItemRow(name ?? "?", cat, item));
+                    Plugin.LogSrc?.LogWarning($"[Inventory] Field '{field}' missing on FakeInventoryData.");
+                    continue;
                 }
+                Plugin.LogSrc?.LogInfo($"[Inventory] Field '{field}' found, type={listObj.GetType().Name}");
+                var lt = listObj.GetType();
+                var getEnum = lt.GetMethod("GetEnumerator");
+                if (getEnum == null)
+                {
+                    Plugin.LogSrc?.LogWarning($"[Inventory] GetEnumerator not found on {lt.FullName}.");
+                    continue;
+                }
+                var enumerator = getEnum.Invoke(listObj, null);
+                if (enumerator == null) { Plugin.LogSrc?.LogWarning($"[Inventory] enum null for {field}"); continue; }
+                var et = enumerator.GetType();
+                var moveNext = et.GetMethod("MoveNext");
+                var currentProp = et.GetProperty("Current");
+                if (moveNext == null || currentProp == null) { Plugin.LogSrc?.LogWarning($"[Inventory] MoveNext/Current missing on {et.Name}"); continue; }
+                int count = 0;
+                try
+                {
+                    while ((bool)moveNext.Invoke(enumerator, null))
+                    {
+                        var item = currentProp.GetValue(enumerator);
+                        if (item != null)
+                        {
+                            count++;
+                            var name = ReflectAccessor.TryGet(item, "name", out var n) && n != null ? n.ToString() : item.ToString();
+                            rows.Add(new ItemRow(name ?? "?", cat, item));
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Plugin.LogSrc?.LogWarning($"[Inventory] enum {field} failed: {ex.Message}");
+                    break;
+                }
+                Plugin.LogSrc?.LogInfo($"[Inventory] Loaded {count} items from {field} ({cat}).");
             }
             _model.SetRows(rows);
         }
