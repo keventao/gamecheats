@@ -122,6 +122,10 @@ namespace LunHuiCheats
 
                 Registry.Add(new Modules.TimeCheats());
                 Registry.Add(new Modules.DebugDiagnostics());
+                Registry.Add(new Modules.GodMode());
+                Registry.Add(new Modules.PlayerStats());
+                Registry.Add(new Modules.Cultivation());
+                Registry.Add(new Modules.Inventory());
 
                 Registry.RegisterAll(Cfg, HarmonyInstance);
 
