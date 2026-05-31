@@ -1,84 +1,45 @@
-# 轮回修仙路 — Handoff (v0.0.2)
+# 轮回修仙路 — Handoff (v0.0.3 → in-game smoke)
 
-> 上一阶段完成：反向工程 + 框架强化。下一阶段：实现作弊模块。
+> 上一阶段：作弊面板 + 4 模块已实现并合并到 `main`(代码完成,编译/单测绿)。
+> 本阶段(Windows / opencode)：**真机跑 smoke-checklist,确认行为**。游戏内行为尚未验证。
 
-## 环境
-
-- Steam AppID 1993150
-- Unity IL2CPP (GameAssembly.dll present)
-- BepInEx 6 IL2CPP 已装到 `<STEAM>\steamapps\common\轮回修仙路`
-- 我们的 mod (`LunHuiCheats`) 已验证能在游戏中加载
-
-## 已发现的运行时类型（在真实游戏中验证过）
-
-类型名通过 `AccessTools.TypeByName("xxx")` 即可获取。
-
-| 类型 | 全名 | 关键字段/方法 | 模块用途 |
-|---|---|---|---|
-| `UnitData` | `DataLib.UnitData` | `curHp`, `maxHp`, `curPhysicalAttacks`, `curSpellAttacks`, `MoveSpeed`, `bigWorldFlySpeed`, `fightSpeed`, `characterBaseAttributes` | PlayerStats / GodMode |
-| `CharacterData` | `CharacterData` | `unitData`, `currentExp`, `currentLevel`, `curDaoxin`, `forgeLevel`, `danYaoData`, `haveAcquiredProp` | Cultivation / Player |
-| `FakeInventoryData` | `FakeInventoryData` | `AddItem(BaseRewardData, Int32)`, `AddCoin(CoinData, Int32)`, `Clear()`, `size` | Inventory |
-| `CharacterBaseAttributesData` | `Configuration.CharacterBaseAttributesData` | `Hp`, `Attack`, `S_Attack`, `Defense`, `S_Defense`, `CriticalHit`, `Dodge`, `Hit`, `Speed` | 配置参考 |
-| `SpiritRoot` | `DiscipleSpiritData+SpiritRoot` | `mainSpritRootDic`, `spritRootDic`, `GetSpiritRootValue(SpiritRootType)` | Cultivation |
-| `ExperienceData` | `DataLib.ExperienceData` | `year`, `month`, `day`, `maxAge`, `minAge`, `quality`, `talent` | 经历/年龄 |
-| `RoleUpgradeData` | `Configuration.RoleUpgradeData` | `level`, `needExp`, `hp`, `mp`, `attack`, `defense` | 升级配置 |
-| `SkillData` | `DataLib.SkillData` | 80 个属性 | 技能 |
-| `DanYaoData` | `DanYaoData` | 30 个属性 | 丹药 |
-| `PetData` | `DataLib.PetData` | 129 个属性 | 宠物 |
-| `HeartAchievementMethod` | `HeartAchievementMethod` | 47 个属性 | 心法/功法 |
-| `CoinData` | `CoinData` | 25 个属性 | 货币 |
-| `SpiritStoneData` | `SpiritStoneData` | 25 个属性 | 灵石 |
-
-**不存在的类型**: `PlayerUnitData`, `BackpackGoods`, `Cultivation`, `Practice`, `LifeTime`, `Linggen`, `RefiningDanData`
-
-## 模块实现优先级
-
-1. **GodMode** (`godmode`) — 最简单
-   - 目标: `UnitData.curHp`
-   - 方法: Patch HP setter 或每帧恢复
-
-2. **PlayerStats** (`player`)
-   - 目标: `CharacterData` -> `UnitData`
-   - 方法: 反射读写 `curHp`, `curPhysicalAttacks`, `curSpellAttacks`, `MoveSpeed`, `bigWorldFlySpeed`
-
-3. **Inventory** (`inventory`)
-   - 目标: `FakeInventoryData`
-   - 方法: 反射调用 `AddItem`, `AddCoin`, 修改 `size`
-   - 难点: 需先找到 `FakeInventoryData` 实例（可能在 GameManager / Player 上）
-
-4. **Cultivation** (`cultivation`)
-   - 目标: `CharacterData.currentExp`, `currentLevel`, `curDaoxin`
-   - 灵根: `UnitData.discipleSpiritData` -> `SpiritRoot`
-
-5. **TimeCheats** — 已有 placeholder (`Modules/TimeCheats.cs`)，已加 value-change guard
-
-## 框架现状
-
-- `Plugin.cs`：`Registry.Add(new Modules.XxxCheats())` 即可注册新模块
-- `AttachRunnerToGameHost()`：自动探测 8 个常见宿主类型名，fallback 到独立 GameObject
-- `BootstrapHooks.Register()`：如果 `SceneController` 不存在则立即 fallback attach
-- `GameRefs.FindByType<T>(string)` 已 public，方便模块运行时查找对象
-- `DebugDiagnostics` 模块：GUI 中可手动触发 TypeScanner / FieldScanner
-
-## 参考文件
-
-- `refs/01-discovered-types-summary.md` — 详细字段表（含属性类型、方法签名）
-- `refs/lunhui-fieldscan.txt` — 完整字段扫描原始输出 (1,400 行)
-- `refs/lunhui-typescan.txt` — 完整类型扫描原始输出 (19,395 行)
-- `tools/try-trainer-current.ps1` — 如需参考第三方 trainer 面板
-
-## 开发流程
+## 跑起来
 
 ```powershell
-cd "<STEAM>\steamapps\common\轮回修仙路"
-# 修改代码...
+git pull                                  # 取 main 的 v0.0.3
+cd "<STEAM>\steamapps\common\轮回修仙路"   # 或你的游戏路径
+# 在仓库里:
+cd <repo>\轮回修仙路\src\LunHuiCheats
+$env:LUNHUI_GAME_ROOT = "<STEAM>\steamapps\common\轮回修仙路"
 dotnet build -c Release
-powershell tools\install.ps1
-# 启动游戏测试
+powershell ..\..\tools\install.ps1
+# Steam 启动游戏,进存档(到游戏世界),按 P 开面板
 ```
 
-## 风险
+## 跑什么
 
-- `FakeInventoryData.AddItem` 可能需要有效的 `BaseRewardData` 实例
-- 运行时修改经验/等级系统可能触发存档校验，先备份
-- 反射失败时 `AccessTools` 返回 null，需做空检查
+照 `轮回修仙路/docs/smoke-checklist.md` 逐项勾。面板:分类侧栏(战斗/角色/背包/修为/通用/调试)+ 顶部搜索/排序。
+
+**重点验(最可能不工作,按序):**
+1. **背包列出物品** — 选「背包」分类,列表是否填充。空=IL2CPP `Count`/`Item` 反射迭代或 `All*` 字段名错。
+2. **背包 by-id 添加** — 输 ID + 「尝试添加」。`Activator.CreateInstance(BaseRewardData)` 在 IL2CPP 下大概率失败 → 看 LogOutput.log,**只要不崩**即可。
+3. **修为 写入** — 「道心」应 ✓ 生效;**「经验/等级」预期 ✗**(只读属性)。若也 ✓ 更好。
+4. **GodMode 锁血** — 开关后受击 curHp 是否保持=maxHp(多 CharacterData 实例时可能锁错对象)。
+5. **PlayerStats** — 改物攻/法攻/移速/飞行 + 锁定是否生效。
+
+**先备份存档**再测改经验/等级/道心(插件启动会自动备份,但手动也备一份)。
+
+## 回报
+
+- 哪些 checklist 项 ✅ / ❌。
+- ❌ 的:贴 `BepInEx\LogOutput.log` 相关行。
+- 若某游戏字段/方法名不对(反射查不到 → 模块显 `(!)` 或日志报 null),记下真实名字,我据此修(别猜)。
+- 背包列表若为空:把 `All*` 字段在该游戏版本的真实情况说一下。
+
+## 已知 caveat(解读结果用)
+
+- 经验/等级是 `{get;}` 只读 → 写失败是预期,真写入路径可能是 `MySkillLib.AddExp`,待定。
+- 灵根目前只读显示,编辑留二期。
+- 单测里 3 个失败(SaveBackup×2 + RegisterAll)只因非游戏机缺 Unity runtime,Windows 上应过 —— 不是 bug。
+
+参考:`docs/superpowers/specs/` 设计、`docs/superpowers/plans/` 实现计划、`refs/01-discovered-types-summary.md` 类型表。
