@@ -4,7 +4,7 @@ Last updated: 2026-05-31
 
 ## Current Status
 
-Status: **v0.0.2 — reverse-engineering phase complete, handoff ready.**
+Status: **v0.0.3 — cheat panel + 4 modules implemented (code-complete on branch `feat/lunhui-cheat-panel`; awaiting in-game smoke on Windows).**
 
 Game/runtime:
 
@@ -52,28 +52,17 @@ See `refs/01-discovered-types-summary.md` for full details.
 
 ## Next Work
 
-### Phase 1 — Runtime Modules (ready to implement)
+### Phase 1 — Runtime Modules (implemented; code-complete, awaiting in-game smoke)
 
-Priority order:
+实现见分支 `feat/lunhui-cheat-panel`,设计/计划见 `docs/superpowers/`。UI 改为 分类侧栏 + 搜索/排序 面板 (`GuiManager` + `Core/Gui/*`)。
 
-1. **PlayerStats** (`player`) — `CharacterData` -> `UnitData`
-   - 修改: `curHp`, `maxHp`, `curPhysicalAttacks`, `curSpellAttacks`, `MoveSpeed`, `bigWorldFlySpeed`
-   - 技术: AccessTools 反射读写属性
+1. ✅ **PlayerStats** (`player`) — 反射读写 `UnitData.curPhysicalAttacks/curSpellAttacks/MoveSpeed/bigWorldFlySpeed`,每项可锁定
+2. ✅ **GodMode** (`godmode`) — 每帧锁 `UnitData.curHp = maxHp`
+3. ✅ **Inventory** (`inventory`) — 浏览 `All*` 列表(IL2CPP 用 `Count`/`Item` 反射迭代)+ `AddItem/AddCoin`;二期试构造 `BaseRewardData` by id
+4. ⚠️ **Cultivation** (`cultivation`) — `curDaoxin` 可写 ✅;**`currentExp`/`currentLevel` 是只读属性 `{get;}`,反射写会失败**,需另找写入路径(可能 `MySkillLib.AddExp`);灵根目前只读显示
+5. ✅ **Time** (`time`) — placeholder + value-change guard,归类 通用
 
-2. **GodMode** (`godmode`) — 最简单
-   - Patch `UnitData.curHp` setter 或每帧恢复 HP
-
-3. **Inventory** (`inventory`) — `FakeInventoryData`
-   - 反射调用 `AddItem(BaseRewardData, Int32)`, `AddCoin(CoinData, Int32)`
-   - 修改 `size`
-   - 难点: 需先找到 `FakeInventoryData` 实例
-
-4. **Cultivation** (`cultivation`)
-   - 直接修改 `CharacterData.currentExp`, `currentLevel`
-   - 灵根: `UnitData.discipleSpiritData` -> `SpiritRoot`
-   - 道心: `CharacterData.curDaoxin`
-
-5. **Time scale module** — 已有 placeholder，已加 value-change guard
+待办: 在 Windows 真机跑 `docs/smoke-checklist.md`,确认行为;修 Cultivation 经验/等级写入路径;灵根编辑(二期)。
 
 ### Handoff Notes
 
@@ -91,6 +80,14 @@ Priority order:
 - `FakeInventoryData.AddItem()` 可能需要有效的 `BaseRewardData` 实例，不能传 null。
 
 ## Version History
+
+### v0.0.3
+
+- Categorized/sortable/searchable IMGUI cheat panel (sidebar + search/sort; `GuiManager` + `Core/Gui/*`).
+- Plumbing: `ReflectAccessor`, `FilterSort`, `ItemBrowserModel`, `ModuleRegistry.OnUpdateAll/Categories`, cached `GameRefs`, per-frame `OnUpdate` dispatch.
+- Modules: GodMode, PlayerStats, Inventory (browse All* via IL2CPP Count/Item reflection + AddItem/AddCoin + add-by-id), Cultivation (curDaoxin writable; exp/level read-only — write path TBD).
+- xUnit: ReflectAccessor / FilterSort / ItemBrowserModel / registry tests (game-independent, pass on any machine).
+- Code-complete on branch `feat/lunhui-cheat-panel`; in-game smoke pending on Windows.
 
 ### v0.0.2
 
