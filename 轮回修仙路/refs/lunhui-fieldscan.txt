@@ -1,0 +1,1400 @@
+# Field scan at 2026-05-31 14:02:45
+
+## UnitData (DataLib.UnitData)
+# Base: BaseData
+# Namespace: DataLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _bodyAchievementMethod_k__BackingField : AchievementMethod {get;set;}
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _heartAchievementMethod_k__BackingField : HeartAchievementMethod {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  achievementMethods : List`1 {get;set;}
+  AchievementMethods : List`1 {get;set;}
+  apparelEquips : List`1 {get;set;}
+  AttackDistance : Single {get;set;}
+  attackSacle : Single {get;set;}
+  AttackSpeed : Single {get;set;}
+  attackTime : Single {get;set;}
+  attributeAdds : List`1 {get;set;}
+  bagType : BagType {get;set;}
+  basebonusAttributes : BonusAttributes {get;set;}
+  baseSkill : Int32 {get;}
+  bigWorldFlySpeed : Int32 {get;set;}
+  bodyAchievementMethod : AchievementMethod {get;set;}
+  bornLifeDay : Int64 {get;set;}
+  breakData : BreakData {get;set;}
+  Camp : Int32 {get;set;}
+  channelDate : ChannelDate {get;set;}
+  characterBaseAttributes : CharacterBaseAttributesData {get;set;}
+  cloudZoom : Single {get;set;}
+  curAttackSpeed : Single {get;set;}
+  curDutaCount : Int32 {get;set;}
+  curHp : Int64 {get;set;}
+  CurLifetime : Int32 {get;}
+  curPhysicalAttacks : Int64 {get;set;}
+  curPhysicalDefense : Int64 {get;set;}
+  curSpellAttacks : Int64 {get;set;}
+  curSpellDefense : Int64 {get;set;}
+  curStage : Stage {get;set;}
+  description : String {get;set;}
+  discipleSpiritData : DiscipleSpiritData {get;set;}
+  duraMax : Int32 {get;set;}
+  enemyType : EnemyType {get;set;}
+  eventDatas : List`1 {get;set;}
+  experienceCycleLists : ExperienceCycleList {get;set;}
+  extraProperty : ExtraProperty {get;set;}
+  faceModelSaveData : FaceModelSaveData {get;set;}
+  fightSpeed : Single {get;set;}
+  flyTalismanId : Int32 {get;set;}
+  heartAchievementMethod : HeartAchievementMethod {get;set;}
+  HP : Int64 {get;set;}
+  hpPrecent : Single {get;set;}
+  iconName : String {get;set;}
+  IconResName : String {get;set;}
+  id : Int32 {get;set;}
+  ID : Int32 {get;set;}
+  identityId : Int64 {get;set;}
+  identityState : IdentityState {get;set;}
+  Info : String {get;set;}
+  isInit : Boolean {get;set;}
+  IsPlayer : Boolean {get;set;}
+  Job : Int32 {get;set;}
+  Level : Int32 {get;}
+  maxHp : Int64 {get;set;}
+  ModeId : Int32 {get;set;}
+  modelData : ModleData {get;set;}
+  modelScale : Single {get;set;}
+  ModleRadius : Single {get;set;}
+  MoveSpeed : Single {get;set;}
+  moveType : Int32 {get;set;}
+  name : String {get;set;}
+  name_pos : Vector3 {get;set;}
+  nomalAchievementMethod : AchievementMethod {get;set;}
+  nomalSkillId : Int32 {get;set;}
+  ObjectClass : IntPtr {get;}
+  onlyId : Int32 {get;set;}
+  PersonId : Int32 {get;set;}
+  PhysicalAttacks : Int64 {get;set;}
+  PhysicalDefense : Int64 {get;set;}
+  Pointer : IntPtr {get;}
+  pos : Vector3 {get;set;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  Quality : Int32 {get;set;}
+  ResName : String {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  S_EventDatas : List`1 {get;set;}
+  sectData : SectData {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  sex : Sex {get;set;}
+  skillDatas : List`1 {get;set;}
+  SkillDatas : List`1 {get;set;}
+  SkinName : String {get;set;}
+  smallWorldFlySpeed : Int32 {get;set;}
+  socialSystem : SocialSystem {get;set;}
+  SpellAttacks : Int64 {get;set;}
+  SpellDefense : Int64 {get;set;}
+  SquadId : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  studyAchievementMethods : List`1 {get;set;}
+  studyHeartAchMs : List`1 {get;set;}
+  substractLifetimePecent : Single {get;set;}
+  subtablesRoleUpgradeData : SubtablesRoleUpgradeData {get;set;}
+  unlockFlyTalisman : List`1 {get;set;}
+  WasCollected : Boolean {get;}
+  weakness : Single {get;set;}
+  weaponSizeB : Single {get;set;}
+  weaponSizeS : Single {get;set;}
+# Methods (top 30):
+  AddEquip(Item equip, Boolean isNeedAddList, Boolean isNeedOperation)
+  AddEvent(EventData eventData)
+  AddSkill(Int32 skillId, Boolean isNeedOperation)
+  AddSkill(AchievementMethod achievementMethod, Boolean isNeedOperation)
+  AddSkill(SkillData skillData, Boolean isNeedOperation)
+  BaseDataClone()
+  Cast()
+  ChangeLife(Single value)
+  ChangeMode(Int32 modeId)
+  CheckSuperposition(BaseRewardData f)
+  ClearAttributeAdd(AddForm addForm, Boolean isNeedOperation)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetAchievement(Int32 skillId)
+  GetAttributeForm(AddForm addForm)
+  GetCanUse()
+  GetEquipByType(Int32 type)
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+
+## CharacterData (CharacterData)
+# Base: Object
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  achievementSystem : AchievementSystem {get;set;}
+  arrivedMapId : List`1 {get;set;}
+  backPos : Vector3 {get;set;}
+  col : Int32 {get;set;}
+  curDaoxin : Int32 {get;set;}
+  curPos : Vector3 {get;set;}
+  currentExp : Int64 {get;}
+  currentForgeExp : Int32 {get;set;}
+  currentLevel : Int32 {get;}
+  currentSpiritRewardData : DiscipleSpiritData {get;set;}
+  danYaoData : SerializationDictionary`2 {get;set;}
+  enterWolrdId : Int32 {get;set;}
+  finishTaskGroup : List`1 {get;set;}
+  forgeLevel : Int16 {get;set;}
+  haveAcquiredProp : SerializationDictionary`2 {get;set;}
+  interactionTimeData : InteractionTimeData {get;set;}
+  isScanOpen : Boolean {get;set;}
+  lastPos : Vector3 {get;set;}
+  LevelExp : Int64 {get;}
+  m_position : Vector3 {get;set;}
+  mineWorldDataIndex : Int32 {get;set;}
+  monsterBaseLevel : SerializationDictionary`2 {get;set;}
+  NpcTeams : List`1 {get;set;}
+  ObjectClass : IntPtr {get;}
+  playerTransform : Transform {get;set;}
+  Pointer : IntPtr {get;}
+  pos : Vector3 {get;set;}
+  position : Vector3 {get;}
+  rot : Quaternion {get;set;}
+  row : Int32 {get;set;}
+  stateEnum : Int32 {get;set;}
+  taskSaveDataDir : SerializationDictionary`2 {get;set;}
+  tile : Tile {get;set;}
+  unitData : UnitData {get;set;}
+  WasCollected : Boolean {get;}
+  weGameAchievementSyncUtcTicks : Int64 {get;set;}
+  weGameAchievementSyncVersion : Int32 {get;set;}
+  worldId : Int32 {get;set;}
+# Methods (top 30):
+  _init_b__43_0(CharacterBaseAttributesData data)
+  AddDaoxin(Int32 addDaoxin)
+  ArrivedMapId(Int32 mapId)
+  Cast()
+  CheckPlayerByList(List`1 temps)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCurTile()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetType()
+  init()
+  initTask()
+  LevelTeam(Int64 idCard, Int32 exitType)
+  LeveUp(Int32 level, Boolean isCheckExp, Boolean needSavePos)
+  MemberwiseClone()
+  MemberwiseClone()
+  MoveTileByPost(Tile t)
+  Reset()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+  UpdateLevel(Int32 level, Boolean isSavePos)
+
+## PlayerUnitData: NOT FOUND
+
+## BaseData (DataLib.BaseData)
+# Base: BaseRewardData
+# Namespace: DataLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  apparelEquips : List`1 {get;set;}
+  AttackDistance : Single {get;set;}
+  attackSacle : Single {get;set;}
+  AttackSpeed : Single {get;set;}
+  attackTime : Single {get;set;}
+  attributeAdds : List`1 {get;set;}
+  bagType : BagType {get;set;}
+  basebonusAttributes : BonusAttributes {get;set;}
+  baseSkill : Int32 {get;}
+  bornLifeDay : Int64 {get;set;}
+  Camp : Int32 {get;set;}
+  channelDate : ChannelDate {get;set;}
+  cloudZoom : Single {get;set;}
+  curAttackSpeed : Single {get;set;}
+  curDutaCount : Int32 {get;set;}
+  curHp : Int64 {get;set;}
+  CurLifetime : Int32 {get;}
+  curPhysicalAttacks : Int64 {get;set;}
+  curPhysicalDefense : Int64 {get;set;}
+  curSpellAttacks : Int64 {get;set;}
+  curSpellDefense : Int64 {get;set;}
+  curStage : Stage {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  enemyType : EnemyType {get;set;}
+  faceModelSaveData : FaceModelSaveData {get;set;}
+  fightSpeed : Single {get;set;}
+  flyTalismanId : Int32 {get;set;}
+  HP : Int64 {get;set;}
+  hpPrecent : Single {get;set;}
+  iconName : String {get;set;}
+  IconResName : String {get;set;}
+  id : Int32 {get;set;}
+  ID : Int32 {get;set;}
+  identityId : Int64 {get;set;}
+  identityState : IdentityState {get;set;}
+  Info : String {get;set;}
+  Job : Int32 {get;set;}
+  Level : Int32 {get;}
+  maxHp : Int64 {get;set;}
+  ModeId : Int32 {get;set;}
+  modelData : ModleData {get;set;}
+  modelScale : Single {get;set;}
+  ModleRadius : Single {get;set;}
+  MoveSpeed : Single {get;set;}
+  moveType : Int32 {get;set;}
+  name : String {get;set;}
+  name_pos : Vector3 {get;set;}
+  nomalSkillId : Int32 {get;set;}
+  ObjectClass : IntPtr {get;}
+  onlyId : Int32 {get;set;}
+  PersonId : Int32 {get;set;}
+  PhysicalAttacks : Int64 {get;set;}
+  PhysicalDefense : Int64 {get;set;}
+  Pointer : IntPtr {get;}
+  pos : Vector3 {get;set;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  Quality : Int32 {get;set;}
+  ResName : String {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  sex : Sex {get;set;}
+  skillDatas : List`1 {get;set;}
+  SkillDatas : List`1 {get;set;}
+  SkinName : String {get;set;}
+  socialSystem : SocialSystem {get;set;}
+  SpellAttacks : Int64 {get;set;}
+  SpellDefense : Int64 {get;set;}
+  SquadId : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  substractLifetimePecent : Single {get;set;}
+  subtablesRoleUpgradeData : SubtablesRoleUpgradeData {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  AddSkill(Int32 skillId, Boolean isNeedOperation)
+  AddSkill(AchievementMethod achievementMethod, Boolean isNeedOperation)
+  AddSkill(SkillData skillData, Boolean isNeedOperation)
+  BaseDataClone()
+  Cast()
+  ChangeLife(Single value)
+  ChangeMode(Int32 modeId)
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetOnlyId()
+  GetSellPrice()
+  GetSkill(Int32 skillId)
+  GetType()
+  Init(Int32 id, Int32 levelId)
+
+## CharacterBaseAttributesData (Configuration.CharacterBaseAttributesData)
+# Base: IConfig
+# Namespace: Configuration
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  Attack : Int64 {get;set;}
+  attack_Deepen : Int32 {get;set;}
+  Attack_grop : Single {get;set;}
+  attack_Reduction : Int32 {get;set;}
+  AttackSpeed : Single {get;set;}
+  camp : Int32 {get;set;}
+  CriticalHit : Int32 {get;set;}
+  CriticalHit_Deepen : Int32 {get;set;}
+  CriticalHit_Reduction : Int32 {get;set;}
+  CriticalHit_Resistance : Int32 {get;set;}
+  Defense : Int64 {get;set;}
+  Defense_grop : Single {get;set;}
+  DiscipleSoul : String {get;set;}
+  distance : Single {get;set;}
+  Dodge : Int32 {get;set;}
+  Hit : Int32 {get;set;}
+  Hp : Int64 {get;set;}
+  Hp_grop : Single {get;set;}
+  icon : Int32 {get;set;}
+  id : Int32 {get;set;}
+  Info : String {get;set;}
+  job : Int32 {get;set;}
+  mode : Int32 {get;set;}
+  ModleMan : String {get;set;}
+  ModleWomen : String {get;set;}
+  move_type : Int32 {get;set;}
+  name : String {get;set;}
+  Nomal_skill : Int32 {get;set;}
+  ObjectClass : IntPtr {get;}
+  pet_skill : String {get;set;}
+  Pointer : IntPtr {get;}
+  quality : Int32 {get;set;}
+  S_Attack : Int64 {get;set;}
+  S_Attack_grop : Single {get;set;}
+  S_Defense : Int64 {get;set;}
+  S_Defense_grop : Single {get;set;}
+  Speed : Single {get;set;}
+  Speed_ratio : Single {get;set;}
+  useLevel : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+  weapon_show : String {get;set;}
+  xxx : Single {get;set;}
+# Methods (top 30):
+  Cast()
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetType()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## SpiritStoneData (SpiritStoneData)
+# Base: CoinData
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  bagType : BagType {get;set;}
+  coinType : CoinType {get;set;}
+  curDutaCount : Int32 {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  iconName : String {get;set;}
+  identityId : Int64 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetSellPrice()
+  GetType()
+  Init()
+  LoadData()
+  LoadPropsData()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## CoinData (CoinData)
+# Base: BaseRewardData
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  bagType : BagType {get;set;}
+  coinType : CoinType {get;set;}
+  curDutaCount : Int32 {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  iconName : String {get;set;}
+  identityId : Int64 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetSellPrice()
+  GetType()
+  Init()
+  LoadData()
+  LoadPropsData()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## SkillData (DataLib.SkillData)
+# Base: BaseRewardData
+# Namespace: DataLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _animationTime_k__BackingField : Single {get;set;}
+  _bindBones_k__BackingField : String {get;set;}
+  _Camp_k__BackingField : Int32 {get;set;}
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _filterType_k__BackingField : FilterType {get;set;}
+  _HitSound_k__BackingField : String {get;set;}
+  _icon_k__BackingField : String {get;set;}
+  _index_k__BackingField : Int32 {get;set;}
+  _moveDir_k__BackingField : Vector3 {get;set;}
+  _moveType_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _singEffect_k__BackingField : String {get;set;}
+  _skillCheck_k__BackingField : String {get;set;}
+  _skillExtraCounts_k__BackingField : List`1 {get;set;}
+  _skillIndex_k__BackingField : Int32 {get;set;}
+  _skillInfo_k__BackingField : String {get;set;}
+  _skillType_k__BackingField : SkillType {get;set;}
+  _speed_k__BackingField : Single {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  _startEffect_k__BackingField : String {get;set;}
+  _targetType_k__BackingField : TargetType {get;set;}
+  _type_k__BackingField : Int32 {get;set;}
+  _userType_k__BackingField : UserType {get;set;}
+  _warningData_k__BackingField : WarningData {get;set;}
+  animationTime : Single {get;set;}
+  bagType : BagType {get;set;}
+  benginCD : Single {get;set;}
+  bindBones : String {get;set;}
+  BindBones : Il2CppStringArray {get;set;}
+  Camp : Int32 {get;set;}
+  castDist : Single {get;set;}
+  CD : Single {get;set;}
+  checkValue : String {get;set;}
+  curDutaCount : Int32 {get;set;}
+  delayInstantCastUntilAnimationEnd : Boolean {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  filterType : FilterType {get;set;}
+  HitSound : String {get;set;}
+  icon : String {get;set;}
+  iconName : String {get;set;}
+  Id : Int32 {get;set;}
+  identityId : Int64 {get;set;}
+  index : Int32 {get;set;}
+  Level : Int32 {get;set;}
+  linggenLimit : String {get;set;}
+  moveDir : Vector3 {get;set;}
+  moveType : Int32 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  singEffect : String {get;set;}
+  singTime : Single {get;set;}
+  singTimeCd : Single {get;set;}
+  skillCheck : String {get;set;}
+  skillDataConfig : SkillDataConfig {get;set;}
+  skillExtraCounts : List`1 {get;set;}
+  skillIndex : Int32 {get;set;}
+  skillInfo : String {get;set;}
+  skillName : String {get;set;}
+  skillsData : SkillsData {get;set;}
+  skillType : SkillType {get;set;}
+  speed : Single {get;set;}
+  stack_num : Int32 {get;set;}
+  startEffect : String {get;set;}
+  targetType : TargetType {get;set;}
+  type : Int32 {get;set;}
+  userType : UserType {get;set;}
+  warningData : WarningData {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetSellPrice()
+  GetType()
+  init(Int32 skillId, Boolean isReset)
+  Init()
+  LoadData()
+  LoadPropsData()
+  MemberwiseClone()
+  MemberwiseClone()
+  RemoveSkillAddAttribute(SkillAttributeAdd skillAttributeAdd)
+  SkillAddAttribute(SkillAttributeAdd skillAttributeAdd)
+  ToString()
+
+## SkillStateMachine (MySkillLib.SkillStateMachine)
+# Base: MonoBehaviour
+# Namespace: MySkillLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _attacker_k__BackingField : GameObject {get;set;}
+  _skillDataConfig_k__BackingField : SkillDataConfig {get;set;}
+  _target_k__BackingField : GameObject {get;set;}
+  allRunners : List`1 {get;set;}
+  attacker : GameObject {get;set;}
+  enabled : Boolean {get;set;}
+  forwardDir : Vector3 {get;set;}
+  forwardSet : Boolean {get;set;}
+  gameObject : GameObject {get;}
+  hasRegistered : Boolean {get;set;}
+  hideFlags : HideFlags {get;set;}
+  InitPos : Vector3 {get;set;}
+  isActiveAndEnabled : Boolean {get;}
+  isStop : Boolean {get;set;}
+  lifeTime : Single {get;set;}
+  m_CachedPtr : IntPtr {get;set;}
+  MarkPos : Vector3 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  ownerLocalId : Int32 {get;set;}
+  passiveSkillMsg : Dictionary`2 {get;set;}
+  Pointer : IntPtr {get;}
+  skillDataConfig : SkillDataConfig {get;set;}
+  skillFullData : SkillFullInfo {get;set;}
+  startCalled : Boolean {get;set;}
+  tag : String {get;set;}
+  target : GameObject {get;set;}
+  transform : Transform {get;}
+  usedMsg : List`1 {get;set;}
+  useGUILayout : Boolean {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  BroadcastMessage(String methodName, Object parameter, SendMessageOptions options)
+  BroadcastMessage(String methodName, Object parameter)
+  BroadcastMessage(String methodName)
+  BroadcastMessage(String methodName, SendMessageOptions options)
+  CancelInvoke()
+  CancelInvoke(String methodName)
+  Cast()
+  ChangBuffLimit(String limit, GameObject target, MyEvent myEvent)
+  CompareTag(String tag)
+  CreateGCHandle(IntPtr objHdl)
+  DoDamage(GameObject g, Affix affix)
+  EnsureRunningOnMainThread()
+  Equals(Object other)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  FinishSkill()
+  GetCachedPtr()
+  GetComponent(Type type)
+  GetComponent()
+  GetComponent(String type)
+  GetComponentFastPath(Type type, IntPtr oneFurtherThanResultValue)
+  GetComponentInChildren(Type t, Boolean includeInactive)
+  GetComponentInChildren(Boolean includeInactive)
+  GetComponentInChildren()
+  GetComponentInChildren(Type t)
+  GetComponentInParent(Type t, Boolean includeInactive)
+  GetComponentInParent()
+
+## FakeInventoryData (FakeInventoryData)
+# Base: Object
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  AllAchievementMethods : List`1 {get;set;}
+  AllCoins : List`1 {get;set;}
+  AllCreateMaterials : List`1 {get;set;}
+  AllDanFang : List`1 {get;set;}
+  AllDanYao : List`1 {get;set;}
+  AllEDUProps : List`1 {get;set;}
+  AllEquips : List`1 {get;set;}
+  AllFixedTools : List`1 {get;set;}
+  AllFlyTalisman : List`1 {get;set;}
+  AllHeartAchievementMethods : List`1 {get;set;}
+  allInvObjects : List`1 {get;set;}
+  AllInvObjects : List`1 {get;set;}
+  AllMaterials : List`1 {get;set;}
+  AllPetAchievementMethods : List`1 {get;set;}
+  AllPets : List`1 {get;set;}
+  AllSeedMaterials : List`1 {get;set;}
+  AllSpirites : List`1 {get;set;}
+  AllUseItem : List`1 {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  size : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  AddAmount(BaseRewardData baseRewardData, List`1 _baseRewardDataList, Int32 add)
+  AddCoin(CoinData _coinData, Int32 count)
+  AddItem(BaseRewardData baseRewardData, Int32 count)
+  AddItem(List`1 baseRewardDatas)
+  Cast()
+  Clear()
+  ClearUp()
+  ClearUp(List`1 clearUpList)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetAllBackPackInvObjects()
+  GetAllInvObjects(Boolean getCoin)
+  GetAllSellObjects()
+  GetContributionPointseAmount()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetInvObjectsWithoutMainEquip()
+  GetItem(BagType bagType, Int32 rewardId)
+  GetItemNumber(Int32 rewardId)
+  GetSpiritStoneAmount()
+  GetType()
+  LoadData()
+  MemberwiseClone()
+  MemberwiseClone()
+
+## BackpackGoods: NOT FOUND
+
+## BaseRewardData (BaseRewardData)
+# Base: Object
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  bagType : BagType {get;set;}
+  curDutaCount : Int32 {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  iconName : String {get;set;}
+  identityId : Int64 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetSellPrice()
+  GetType()
+  Init()
+  LoadData()
+  LoadPropsData()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## Cultivation: NOT FOUND
+
+## Practice: NOT FOUND
+
+## RoleUpgradeData (Configuration.RoleUpgradeData)
+# Base: IConfig
+# Namespace: Configuration
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  add_potential : Int32 {get;set;}
+  add_potential_time : Int32 {get;set;}
+  age : Int32 {get;set;}
+  Breach : Int32 {get;set;}
+  Breach_pellet : String {get;set;}
+  Breach_time : Int32 {get;set;}
+  BreachFail_age : Int32 {get;set;}
+  BreachFail_exp : Int32 {get;set;}
+  BreachFail_hp : Int32 {get;set;}
+  Destiny : Int32 {get;set;}
+  exp : Int64 {get;set;}
+  Exp : Int32 {get;set;}
+  fight_num : Int32 {get;set;}
+  fly_speed : Int32 {get;set;}
+  grop_coefficient : Single {get;set;}
+  hp_add : Int32 {get;set;}
+  id : Int32 {get;set;}
+  level : Int32 {get;set;}
+  monster_battle_coefficient : String {get;set;}
+  monster_state : String {get;set;}
+  move_speed : Int32 {get;set;}
+  need_camp : Int32 {get;set;}
+  npc_battle_coefficient : String {get;set;}
+  npc_Duel : String {get;set;}
+  npc_kill : String {get;set;}
+  npc_kill_level : String {get;set;}
+  npc_Practice : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  pet_evo : String {get;set;}
+  pet_exp : Int32 {get;set;}
+  pet_num : Int32 {get;set;}
+  Pointer : IntPtr {get;}
+  Practice_addexp : Int32 {get;set;}
+  state : String {get;set;}
+  state_coefficient : Int32 {get;set;}
+  state_id : Int32 {get;set;}
+  useLevel : Int32 {get;set;}
+  void_fly_speed : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetType()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## ExperienceData (DataLib.ExperienceData)
+# Base: ExperienceBaseData
+# Namespace: DataLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  add_MeridianAffix : Int32 {get;set;}
+  age_info : String {get;set;}
+  appointWeight : String {get;set;}
+  baseWeight : Int32 {get;set;}
+  curChiose : Int32 {get;set;}
+  day : Int32 {get;set;}
+  destinyName : String {get;set;}
+  experienceType : Int32 {get;set;}
+  group : Int32 {get;set;}
+  groupWeight : String {get;set;}
+  id : Int64 {get;set;}
+  info : String {get;set;}
+  isShow : Int32 {get;set;}
+  maxAge : Int32 {get;set;}
+  minAge : Int32 {get;set;}
+  month : Int32 {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  qAExperienceDatas : List`1 {get;set;}
+  quality : Int32 {get;set;}
+  randowName : String {get;set;}
+  reward : Int32 {get;set;}
+  serializable : ExperienceBaseDataSerializable {get;set;}
+  sex : Int32 {get;set;}
+  talent : Int32 {get;set;}
+  use : String {get;set;}
+  useInfo : String {get;set;}
+  WasCollected : Boolean {get;}
+  year : Int32 {get;set;}
+# Methods (top 30):
+  Cast()
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetExpericen(ExperienceBaseDataSerializable serializable)
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetQAExpericen(ExperienceBaseDataSerializable serializable)
+  GetType()
+  MemberwiseClone()
+  MemberwiseClone()
+  SelectExperience(Int32 index)
+  SetDate(Int32 year, Int32 month, Int32 day)
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## LifeTime: NOT FOUND
+
+## SpiritRoot (DiscipleSpiritData+SpiritRoot)
+# Base: Object
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  addSpriteRootDic : SerializationDictionary`2 {get;set;}
+  mainSpritRootDic : SerializationDictionary`2 {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  spritRootDic : SerializationDictionary`2 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  AddSpritRoot(SerializationDictionary`2 serializationDictionary, Boolean isAddList)
+  Cast()
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetMainSpritType()
+  GetSpiritRootValue(SpiritRootType spiritRootType)
+  GetSpiritRootValue()
+  GetSpiritRootValueAndIcon(String& iconName)
+  GetType()
+  HasSpiritRoot(SpiritRootType spiritRootType, Int32 value)
+  MemberwiseClone()
+  MemberwiseClone()
+  Reset()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## Linggen: NOT FOUND
+
+## DanYaoData (DanYaoData)
+# Base: BaseRewardData
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  bagType : BagType {get;set;}
+  curDutaCount : Int32 {get;set;}
+  danFangId : Int32 {get;set;}
+  danYao : DanYao {get;set;}
+  danYaoQuality : Int32 {get;set;}
+  description : String {get;set;}
+  drugProperties : Single {get;set;}
+  duraMax : Int32 {get;set;}
+  exUseType : ExUseType {get;set;}
+  iconName : String {get;set;}
+  identityId : Int64 {get;set;}
+  name : String {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  vaule : Single {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+  GetIntroduce()
+  GetLocalId()
+  GetName()
+  GetSellPrice()
+  GetType()
+  Init()
+  LoadData()
+  LoadPropsData()
+  MemberwiseClone()
+  MemberwiseClone()
+  SetQuality(Int32 q)
+  ToString()
+  ToString()
+  TryCast()
+
+## PetData (DataLib.PetData)
+# Base: UnitData
+# Namespace: DataLib
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _bodyAchievementMethod_k__BackingField : AchievementMethod {get;set;}
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _heartAchievementMethod_k__BackingField : HeartAchievementMethod {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  achievementMethods : List`1 {get;set;}
+  AchievementMethods : List`1 {get;set;}
+  addTalent : Il2CppStructArray`1 {get;set;}
+  apparelEquips : List`1 {get;set;}
+  AttackDistance : Single {get;set;}
+  attackSacle : Single {get;set;}
+  AttackSpeed : Single {get;set;}
+  attackTime : Single {get;set;}
+  attributeAdds : List`1 {get;set;}
+  bagType : BagType {get;set;}
+  basebonusAttributes : BonusAttributes {get;set;}
+  baseSkill : Int32 {get;}
+  bigWorldFlySpeed : Int32 {get;set;}
+  BloodEffects : SerializationDictionary`2 {get;set;}
+  BloodName : String {get;set;}
+  BloodNeedId : Int32 {get;set;}
+  BloodNum : Int32 {get;set;}
+  BloodUse : Int32 {get;set;}
+  bodyAchievementMethod : AchievementMethod {get;set;}
+  bornLifeDay : Int64 {get;set;}
+  breakData : BreakData {get;set;}
+  Camp : Int32 {get;set;}
+  channelDate : ChannelDate {get;set;}
+  characterBaseAttributes : CharacterBaseAttributesData {get;set;}
+  cloudZoom : Single {get;set;}
+  curAttackSpeed : Single {get;set;}
+  curDutaCount : Int32 {get;set;}
+  curHp : Int64 {get;set;}
+  CurLifetime : Int32 {get;}
+  curPhysicalAttacks : Int64 {get;set;}
+  curPhysicalDefense : Int64 {get;set;}
+  curSpellAttacks : Int64 {get;set;}
+  curSpellDefense : Int64 {get;set;}
+  curStage : Stage {get;set;}
+  description : String {get;set;}
+  discipleSpiritData : DiscipleSpiritData {get;set;}
+  duraMax : Int32 {get;set;}
+  enemyType : EnemyType {get;set;}
+  eventDatas : List`1 {get;set;}
+  experienceCycleLists : ExperienceCycleList {get;set;}
+  extraProperty : ExtraProperty {get;set;}
+  faceModelSaveData : FaceModelSaveData {get;set;}
+  fightSpeed : Single {get;set;}
+  flyTalismanId : Int32 {get;set;}
+  heartAchievementMethod : HeartAchievementMethod {get;set;}
+  HP : Int64 {get;set;}
+  hpPrecent : Single {get;set;}
+  iconName : String {get;set;}
+  IconResName : String {get;set;}
+  id : Int32 {get;set;}
+  ID : Int32 {get;set;}
+  identityId : Int64 {get;set;}
+  identityState : IdentityState {get;set;}
+  Info : String {get;set;}
+  initTalent : Il2CppStructArray`1 {get;set;}
+  InnateSkills : SerializationDictionary`2 {get;set;}
+  isBorn : Boolean {get;set;}
+  isDead : Boolean {get;set;}
+  isFollow : Boolean {get;set;}
+  isInFight : Boolean {get;set;}
+  isInHome : Boolean {get;set;}
+  isInit : Boolean {get;set;}
+  IsPlayer : Boolean {get;set;}
+  Job : Int32 {get;set;}
+  Level : Int32 {get;}
+  LifeDanYaoUse : SerializationDictionary`2 {get;set;}
+  maxHp : Int64 {get;set;}
+  ModeId : Int32 {get;set;}
+  modelData : ModleData {get;set;}
+  modelScale : Single {get;set;}
+  modelScaleInScene : Single {get;set;}
+  ModleRadius : Single {get;set;}
+  MoveSpeed : Single {get;set;}
+  moveType : Int32 {get;set;}
+  name : String {get;set;}
+  name_pos : Vector3 {get;set;}
+  nomalAchievementMethod : AchievementMethod {get;set;}
+  nomalSkillId : Int32 {get;set;}
+  NurtureSkills : List`1 {get;set;}
+  ObjectClass : IntPtr {get;}
+  onlyId : Int32 {get;set;}
+  PersonId : Int32 {get;set;}
+  petName : String {get;set;}
+  PhysicalAttacks : Int64 {get;set;}
+  PhysicalDefense : Int64 {get;set;}
+  Pointer : IntPtr {get;}
+  pos : Vector3 {get;set;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  Quality : Int32 {get;set;}
+  ResName : String {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  roleUpgradeData : RoleUpgradeData {get;set;}
+  S_EventDatas : List`1 {get;set;}
+  sectData : SectData {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  sex : Sex {get;set;}
+  skillDatas : List`1 {get;set;}
+  SkillDatas : List`1 {get;set;}
+  SkinName : String {get;set;}
+  smallWorldFlySpeed : Int32 {get;set;}
+  socialSystem : SocialSystem {get;set;}
+  SpellAttacks : Int64 {get;set;}
+  SpellDefense : Int64 {get;set;}
+  SquadId : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  studyAchievementMethods : List`1 {get;set;}
+  studyHeartAchMs : List`1 {get;set;}
+  substractLifetimePecent : Single {get;set;}
+  subtablesRoleUpgradeData : SubtablesRoleUpgradeData {get;set;}
+  TalentDanYaoUse : SerializationDictionary`2 {get;set;}
+  talentRandomMul : Il2CppStructArray`1 {get;set;}
+  UnlockedNurtureSkillCount : Int32 {get;set;}
+  unlockFlyTalisman : List`1 {get;set;}
+  WasCollected : Boolean {get;}
+  weakness : Single {get;set;}
+  weaponSizeB : Single {get;set;}
+  weaponSizeS : Single {get;set;}
+# Methods (top 30):
+  AddBloodEffect(Int32 id)
+  AddEquip(Item equip, Boolean isNeedAddList, Boolean isNeedOperation)
+  AddEvent(EventData eventData)
+  AddSkill(Int32 skillId, Boolean isNeedOperation)
+  AddSkill(AchievementMethod achievementMethod, Boolean isNeedOperation)
+  AddSkill(SkillData skillData, Boolean isNeedOperation)
+  BaseDataClone()
+  Cast()
+  ChangeLife(Single value)
+  ChangeMode(Int32 modeId)
+  CheckBloodUpperLimit(Int32 id)
+  CheckGridType(Int32 id)
+  CheckSkillIsStudy(String skillId)
+  CheckSuperposition(BaseRewardData f)
+  ClearAttributeAdd(AddForm addForm, Boolean isNeedOperation)
+  ClearPetSkillAttribute()
+  Clone()
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  Evolve(Int32 type, PetData petData)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  ForgetNurtureSkill(Int32 rewardId, Boolean isNeedOperation)
+  GetAchievement(Int32 skillId)
+  GetAttributeForm(AddForm addForm)
+  GetCanUse()
+
+## HeartAchievementMethod (HeartAchievementMethod)
+# Base: AchievementMethod
+# Namespace: 
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  _description_k__BackingField : String {get;set;}
+  _duraMax_k__BackingField : Int32 {get;set;}
+  _propUse_k__BackingField : String {get;set;}
+  _stack_num_k__BackingField : Int32 {get;set;}
+  addEntrys : List`1 {get;set;}
+  bagType : BagType {get;set;}
+  curDutaCount : Int32 {get;set;}
+  description : String {get;set;}
+  duraMax : Int32 {get;set;}
+  iconName : String {get;set;}
+  identityId : Int64 {get;set;}
+  isHeartAchM : Boolean {get;set;}
+  isInit : Boolean {get;set;}
+  isPetSkillUnlock : Boolean {get;set;}
+  isPlayerOwn : Boolean {get;set;}
+  level : Int32 {get;set;}
+  mainCamp : Int32 {get;set;}
+  mainEntrys : List`1 {get;set;}
+  maxedMainEntryBonusPercents : List`1 {get;set;}
+  maxedMainEntryIndexes : List`1 {get;set;}
+  meridianAffixIds : List`1 {get;set;}
+  MnewSkillData : NewSkillData {get;set;}
+  MoralityInfo : Il2CppStructArray`1 {get;set;}
+  MSkillData : SkillData {get;set;}
+  name : String {get;set;}
+  newSkillData : NewSkillData {get;set;}
+  ObjectClass : IntPtr {get;}
+  otherEntrys : List`1 {get;set;}
+  Pointer : IntPtr {get;}
+  propsData : PropsData {get;set;}
+  propType : PropType {get;set;}
+  propUse : String {get;set;}
+  quality : Int32 {get;set;}
+  rewardId : Int32 {get;set;}
+  rewardNum : Int32 {get;set;}
+  rewardType : RewardType {get;set;}
+  sellCoinType : CoinType {get;set;}
+  sellPrice : Int32 {get;set;}
+  skillData : SkillData {get;set;}
+  skillQuality : Int32 {get;set;}
+  stack_num : Int32 {get;set;}
+  studyLimit : Int32 {get;set;}
+  tiandaoCrystalUseCount : Int32 {get;set;}
+  useIndex : Int32 {get;set;}
+  uselevelLimit : Int32 {get;set;}
+  useType : UseType {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  _GetSellPrice_b__38_0(IConfig config)
+  _Init_b__16_0(NewSkillData n)
+  _LevelUp_b__20_0(IConfig config)
+  AddEntry(HeartAchMEntry addEntry)
+  ApplyMainEntryCrystalBonus(Int32 index, Single baseValue)
+  CalculateAddEntryValue(HeartAchMEntry entry, Int32 count)
+  CalculateMainEntryValue(HeartAchMEntry entry, Int32 index)
+  CalculateMainEntryValueAtLevel(CittaPropertyData data, Int32 camp, Int32 targetLevel)
+  Cast()
+  CheckSuperposition(BaseRewardData f)
+  Clone()
+  CloneEntry(HeartAchMEntry entry)
+  CloneLevelUp()
+  CloneLevelUp(HeartAchMEntry selectedAddEntry)
+  CompareTo(BaseRewardData b)
+  CreateGCHandle(IntPtr objHdl)
+  EnsureCrystalState()
+  EnsureMainEntryBonusState()
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetAddEntryUnlockCount(Int32 targetLevel)
+  GetCanUse()
+  GetHashCode()
+  GetHashCode()
+  GetIdentityIdValue()
+  GetIl2CppType()
+
+## JindanData (Configuration.JindanData)
+# Base: IConfig
+# Namespace: Configuration
+# Fields:
+  isWrapped : Boolean [Assembly]
+  pooledPtr : IntPtr [Assembly]
+# Properties:
+  id : Int32 {get;set;}
+  kill_npc : Int32 {get;set;}
+  need_lingqi : Int32 {get;set;}
+  ObjectClass : IntPtr {get;}
+  Pointer : IntPtr {get;}
+  reward_1 : Int32 {get;set;}
+  reward_2 : Int32 {get;set;}
+  score : String {get;set;}
+  time : Int32 {get;set;}
+  useLevel : Int32 {get;set;}
+  value : Int32 {get;set;}
+  WasCollected : Boolean {get;}
+# Methods (top 30):
+  Cast()
+  CreateGCHandle(IntPtr objHdl)
+  Equals(Object obj)
+  Equals(Object obj)
+  FieldGetter(String typeName, String fieldName, Object& val)
+  FieldSetter(String typeName, String fieldName, Object val)
+  Finalize()
+  Finalize()
+  GetHashCode()
+  GetHashCode()
+  GetIl2CppType()
+  GetType()
+  MemberwiseClone()
+  MemberwiseClone()
+  ToString()
+  ToString()
+  TryCast()
+  Unbox()
+
+## RefiningDanData: NOT FOUND
+
