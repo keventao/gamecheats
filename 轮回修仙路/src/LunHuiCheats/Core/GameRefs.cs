@@ -25,6 +25,8 @@ namespace LunHuiCheats.Core
             {
                 _characterData = null;
                 _inventoryData = null;
+                // Re-arm OnGameReady so modules re-sync their displayed values next load.
+                Plugin.Registry?.ResetGameReady();
             }
             else
             {

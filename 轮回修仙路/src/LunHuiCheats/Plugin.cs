@@ -17,7 +17,7 @@ namespace LunHuiCheats
     {
         public const string PluginId      = "com.kk.lunhui-cheats";
         public const string PluginName    = "轮回修仙路 Cheats";
-        public const string PluginVersion = "0.0.1";
+        public const string PluginVersion = "0.0.3";
 
         // Filled from refs/00-research-checklist.md after version research
         private static readonly string[] KnownCompatibleVersions = { };
