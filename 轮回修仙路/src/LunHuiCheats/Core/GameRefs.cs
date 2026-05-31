@@ -14,12 +14,24 @@ namespace LunHuiCheats.Core
         public static bool IsReady { get; private set; }
 
         private static UnityEngine.Object? _characterData;
+        private static UnityEngine.Object? _inventoryData;
         private static int _lastResolveFrame = -1000;
+        private static int _lastInvResolveFrame = -1000;
 
         public static void SetReady(bool ready)
         {
             IsReady = ready;
-            if (!ready) _characterData = null;
+            if (!ready)
+            {
+                _characterData = null;
+                _inventoryData = null;
+            }
+            else
+            {
+                // Force an immediate re-resolve on the new session.
+                _lastResolveFrame = -1000;
+                _lastInvResolveFrame = -1000;
+            }
             Plugin.LogSrc?.LogInfo($"[GameRefs] IsReady = {ready}");
             if (ready) Plugin.Registry?.NotifyGameReady();
         }
@@ -47,8 +59,18 @@ namespace LunHuiCheats.Core
             }
         }
 
-        /// <summary>FakeInventoryData instance, if it is a UnityEngine.Object in the scene.</summary>
-        public static object? Inventory => FindByTypeObj("FakeInventoryData");
+        /// <summary>FakeInventoryData instance (cached; throttled re-resolve), if it is a UnityEngine.Object in the scene.</summary>
+        public static object? Inventory
+        {
+            get
+            {
+                if (_inventoryData != null) return _inventoryData;
+                if (Time.frameCount - _lastInvResolveFrame < 30) return null; // throttle FindObjectOfType
+                _lastInvResolveFrame = Time.frameCount;
+                _inventoryData = FindByTypeObj("FakeInventoryData");
+                return _inventoryData;
+            }
+        }
 
         public static T? FindByType<T>(string typeName) where T : UnityEngine.Object
             => FindByTypeObj(typeName) as T;
