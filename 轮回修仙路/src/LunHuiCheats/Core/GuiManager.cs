@@ -11,7 +11,6 @@ namespace LunHuiCheats.Core
         private readonly ModuleRegistry _registry;
         private readonly ModConfig _config;
         private bool _open;
-        private int _activeTab;
         private Rect _panelRect;
         private int _lastToggleFrame = -1;
         private bool _dragging;
@@ -19,7 +18,6 @@ namespace LunHuiCheats.Core
         private string _selectedCategory = "";
         private string _search = "";
         private SortKey _sort = SortKey.Name;
-        private Vector2 _moduleScroll;
 
         public GuiManager(ModuleRegistry registry, ModConfig config)
         {
