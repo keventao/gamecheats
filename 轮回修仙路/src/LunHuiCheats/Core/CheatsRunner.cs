@@ -51,6 +51,9 @@ namespace LunHuiCheats.Core
             if (_updateCount == 600 || _updateCount == 3000 || _updateCount == 9000)
                 WriteDiag($"CheatsRunner.Update reached {_updateCount} ticks.");
             _gui?.HandleInput();
+
+            if (GameRefs.IsReady && Plugin.Cfg != null && !Plugin.Cfg.GlobalDisableAll.Value)
+                Plugin.Registry?.OnUpdateAll();
         }
 
         private void OnGUI()
