@@ -29,6 +29,7 @@ namespace LunHuiCheats.Modules
         private readonly ItemBrowserModel _model = new();
         private readonly ItemBrowserView _view = new();
         private int _lastBuildFrame = -1000;
+        private long _newItemId = 1;
 
         public void Register(ModConfig cfg, Harmony harmony)
         {
@@ -70,8 +71,13 @@ namespace LunHuiCheats.Modules
                 GUI.Label(new Rect(0, 0, 360, 20), "未找到 FakeInventoryData（进入游戏世界后生效）");
                 return;
             }
+            var top = new Rect(0, 0, 380, 24);
+            GUI.Label(new Rect(0, 0, 60, 24), "物品ID");
+            _newItemId = GuiWidgets.Int64Field(new Rect(62, 0, 100, 24), "inv.newid", _newItemId);
+            if (GUI.Button(new Rect(166, 0, 90, 24), "尝试添加"))
+                TryAddById(_newItemId, 1);
             RebuildRows();
-            _view.Draw(new Rect(0, 0, 380, 300), _model, OnAdd);
+            _view.Draw(new Rect(0, 28, 380, 272), _model, OnAdd);
         }
 
         private void OnAdd(ItemRow row, long qty)
@@ -93,6 +99,28 @@ namespace LunHuiCheats.Modules
             catch (System.Exception ex)
             {
                 Plugin.LogSrc?.LogWarning($"[Inventory] {method} failed: {ex.Message}");
+            }
+        }
+
+        private void TryAddById(long id, int qty)
+        {
+            var inv = GameRefs.Inventory;
+            if (inv == null) return;
+            var brt = AccessTools.TypeByName("BaseRewardData");
+            if (brt == null) { Plugin.LogSrc?.LogWarning("[Inventory] BaseRewardData type not found."); return; }
+            try
+            {
+                var reward = System.Activator.CreateInstance(brt);
+                if (reward == null) return;
+                // Common id field names on reward data; set whichever exists.
+                ReflectAccessor.TrySet(reward, "id", id);
+                ReflectAccessor.TrySet(reward, "itemId", id);
+                CallAdd(inv, "AddItem", reward, qty);
+                Plugin.LogSrc?.LogInfo($"[Inventory] TryAddById({id}) invoked AddItem.");
+            }
+            catch (System.Exception ex)
+            {
+                Plugin.LogSrc?.LogWarning($"[Inventory] construct BaseRewardData failed: {ex.Message}");
             }
         }
 
