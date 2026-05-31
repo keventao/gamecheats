@@ -20,6 +20,7 @@ namespace LunHuiCheats.Modules
         private float _moveSpeed;
         private int _flySpeed;
         private bool _lockPhys, _lockSpell, _lockMove, _lockFly;
+        private bool _synced;
 
         public void Register(ModConfig cfg, Harmony harmony)
         {
@@ -27,7 +28,7 @@ namespace LunHuiCheats.Modules
                 ? ModuleStatus.Ok : ModuleStatus.Broken;
         }
 
-        public void OnGameReady() { }
+        public void OnGameReady() { _synced = false; }
 
         public void OnUpdate()
         {
@@ -45,28 +46,37 @@ namespace LunHuiCheats.Modules
             var unit = GameRefs.UnitData;
             if (unit == null) { GuiWidgets.Label(c.Line(), "未找到 UnitData（进入游戏世界后生效）"); return; }
 
+            if (!_synced)
+            {
+                _phys      = ReflectAccessor.GetInt64(unit, "curPhysicalAttacks");
+                _spell     = ReflectAccessor.GetInt64(unit, "curSpellAttacks");
+                _moveSpeed = ReflectAccessor.GetSingle(unit, "MoveSpeed");
+                _flySpeed  = ReflectAccessor.GetInt32(unit, "bigWorldFlySpeed");
+                _synced = true;
+            }
+
             // physical attack
             var l1 = c.Line();
             GuiWidgets.Label(new Rect(l1.x, l1.y, 70, l1.height), "物攻");
-            _phys = GuiWidgets.Int64Field(new Rect(l1.x + 72, l1.y, 120, l1.height), "player.phys", _phys == 0 ? ReflectAccessor.GetInt64(unit, "curPhysicalAttacks") : _phys);
+            _phys = GuiWidgets.Int64Field(new Rect(l1.x + 72, l1.y, 120, l1.height), "player.phys", _phys);
             _lockPhys = GuiWidgets.Toggle(new Rect(l1.x + 200, l1.y, 90, l1.height), _lockPhys, "锁定");
 
             // spell attack
             var l2 = c.Line();
             GuiWidgets.Label(new Rect(l2.x, l2.y, 70, l2.height), "法攻");
-            _spell = GuiWidgets.Int64Field(new Rect(l2.x + 72, l2.y, 120, l2.height), "player.spell", _spell == 0 ? ReflectAccessor.GetInt64(unit, "curSpellAttacks") : _spell);
+            _spell = GuiWidgets.Int64Field(new Rect(l2.x + 72, l2.y, 120, l2.height), "player.spell", _spell);
             _lockSpell = GuiWidgets.Toggle(new Rect(l2.x + 200, l2.y, 90, l2.height), _lockSpell, "锁定");
 
             // move speed
             var l3 = c.Line();
             GuiWidgets.Label(new Rect(l3.x, l3.y, 70, l3.height), $"移速 {_moveSpeed:0.0}");
-            _moveSpeed = GuiWidgets.Slider(new Rect(l3.x + 72, l3.y + 6, 120, l3.height), _moveSpeed <= 0 ? ReflectAccessor.GetSingle(unit, "MoveSpeed") : _moveSpeed, 0f, 50f);
+            _moveSpeed = GuiWidgets.Slider(new Rect(l3.x + 72, l3.y + 6, 120, l3.height), _moveSpeed, 0f, 50f);
             _lockMove = GuiWidgets.Toggle(new Rect(l3.x + 200, l3.y, 90, l3.height), _lockMove, "锁定");
 
             // fly speed
             var l4 = c.Line();
             GuiWidgets.Label(new Rect(l4.x, l4.y, 70, l4.height), "飞行速度");
-            _flySpeed = (int)GuiWidgets.Int64Field(new Rect(l4.x + 72, l4.y, 120, l4.height), "player.fly", _flySpeed == 0 ? ReflectAccessor.GetInt32(unit, "bigWorldFlySpeed") : _flySpeed);
+            _flySpeed = (int)GuiWidgets.Int64Field(new Rect(l4.x + 72, l4.y, 120, l4.height), "player.fly", _flySpeed);
             _lockFly = GuiWidgets.Toggle(new Rect(l4.x + 200, l4.y, 90, l4.height), _lockFly, "锁定");
 
             if (GuiWidgets.Button(c.Line(new Rect(0,0,120,24).height), "立即写入一次"))

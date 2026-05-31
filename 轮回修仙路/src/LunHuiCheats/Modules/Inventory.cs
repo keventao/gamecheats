@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using LunHuiCheats.Core;
@@ -52,9 +51,19 @@ namespace LunHuiCheats.Modules
             var rows = new List<ItemRow>();
             foreach (var (field, cat) in Lists)
             {
-                if (!ReflectAccessor.TryGet(inv, field, out var listObj) || listObj is not IEnumerable en) continue;
-                foreach (var item in en)
+                if (!ReflectAccessor.TryGet(inv, field, out var listObj) || listObj == null) continue;
+                var lt = listObj.GetType();
+                var countProp = lt.GetProperty("Count");
+                var itemProp = lt.GetProperty("Item"); // indexer
+                if (countProp == null || itemProp == null) continue;
+                int count;
+                try { count = System.Convert.ToInt32(countProp.GetValue(listObj)); }
+                catch { continue; }
+                for (int i = 0; i < count; i++)
                 {
+                    object item;
+                    try { item = itemProp.GetValue(listObj, new object[] { i }); }
+                    catch { break; }
                     if (item == null) continue;
                     var name = ReflectAccessor.TryGet(item, "name", out var n) && n != null ? n.ToString() : item.ToString();
                     rows.Add(new ItemRow(name ?? "?", cat, item));
@@ -71,7 +80,6 @@ namespace LunHuiCheats.Modules
                 GUI.Label(new Rect(0, 0, 360, 20), "未找到 FakeInventoryData（进入游戏世界后生效）");
                 return;
             }
-            var top = new Rect(0, 0, 380, 24);
             GUI.Label(new Rect(0, 0, 60, 24), "物品ID");
             _newItemId = GuiWidgets.Int64Field(new Rect(62, 0, 100, 24), "inv.newid", _newItemId);
             if (GUI.Button(new Rect(166, 0, 90, 24), "尝试添加"))
@@ -94,7 +102,8 @@ namespace LunHuiCheats.Modules
             try
             {
                 var m = AccessTools.Method(inv.GetType(), method, new[] { payload.GetType(), typeof(int) });
-                m?.Invoke(inv, new object[] { payload, qty });
+                if (m == null) { Plugin.LogSrc?.LogWarning($"[Inventory] method {method}({payload.GetType().Name},int) not found."); return; }
+                m.Invoke(inv, new object[] { payload, qty });
             }
             catch (System.Exception ex)
             {
