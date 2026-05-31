@@ -1,6 +1,6 @@
 # gamecheats Roadmap
 
-Last updated: 2026-05-14
+Last updated: 2026-05-31
 
 This root roadmap is an index and cross-project priority view. Detailed status, implemented features, verification state, risks, and next work live in each project-level `ROADMAP.md`.
 
@@ -15,6 +15,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `FactoryTown/` | BepInEx + Harmony Unity Mono mod | v0.2.0 build-verified; separate `KK 万能工坊` runtime building gets selectable `1 Wood -> one output` omni recipes without polluting vanilla Workshop. | `FactoryTown/ROADMAP.md` |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML workspace | Save editor present; `KK Resource Tuning x2` XML mod generated and locally installed for testing. | `spacehaven/ROADMAP.md` |
 | `fightlife mods/` | Unity Mono managed DLL package | Packaged Windows install files present; source for `CheatMenu.dll` still needs recovery/recreation. | `fightlife mods/ROADMAP.md` |
+| `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | Scaffold only; engine type and cheat scope to confirm. | `轮回修仙路/ROADMAP.md` |
 
 ## Cross-Project Priorities
 
@@ -47,6 +48,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 - `FactoryTown/ROADMAP.md`
 - `spacehaven/ROADMAP.md`
 - `fightlife mods/ROADMAP.md`
+- `轮回修仙路/ROADMAP.md`
 
 ## Supporting Docs
 
@@ -58,3 +60,4 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 - `spacehaven/README.md`
 - `spacehaven/MODDING.md`
 - `fightlife mods/README-安装说明.txt`
+- `轮回修仙路/README.md`

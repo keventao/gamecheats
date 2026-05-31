@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(LUNHUI_GAME_ROOT)</GameRoot>
+    <GameManaged>$(GameRoot)\轮回修仙路_Data\Managed</GameManaged>
+    <BepInExPath>$(GameRoot)\BepInEx</BepInExPath>
+    <PluginInstallDir>$(BepInExPath)\plugins\LunHuiCheats</PluginInstallDir>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+</Project>

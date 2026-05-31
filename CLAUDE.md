@@ -16,7 +16,7 @@ Multi-game, multi-engine cheat/mod workspace. Each top-level dir is **one game**
 | `Timberborn/` | Official mod: `KKDoubleResources` (C#) + `all-in-one-gen` (JSON gen) | mixed |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML | Python/Tk/XML |
 | `fightlife mods/` | Unity Mono managed-DLL injection | packaged binaries (no source) |
-| `宋上繁华/` | empty placeholder | — |
+| `轮回修仙路/` | BepInEx 6 + HarmonyX, Unity IL2CPP | `dotnet` scaffold |
 
 ## Layout (source-type projects)
 

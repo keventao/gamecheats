@@ -16,6 +16,7 @@ Start with a project's local `README.md` and `ROADMAP.md`; they hold authoritati
 | `Timberborn/` | Official mod: `KKDoubleResources` (C#) + `all-in-one-gen` (JSON gen) | mixed |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML | Python/Tk/XML |
 | `fightlife mods/` | Unity Mono managed-DLL injection | packaged binaries (no source) |
+| `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | scaffold |
 
 ## Layout (source-type projects)
 
