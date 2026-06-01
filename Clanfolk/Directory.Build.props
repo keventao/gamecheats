@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(CLANFOLK_GAME_ROOT)</GameRoot>
+    <ModInstallDir>$(GameRoot)\Mods</ModInstallDir>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+</Project>
