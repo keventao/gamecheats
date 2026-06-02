@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
 
@@ -14,12 +16,17 @@ namespace ClanfolkCheats.Core
             if (_cached) return _cachedGM;
             try
             {
-                var gmType = AccessTools.TypeByName("Il2Cpp.GameManager");
+                var gmType = ResolveType("GameManager");
                 if (gmType == null) return null;
-                var instProp = AccessTools.Property(gmType, "instance");
-                _cachedGM = instProp?.GetValue(null, null);
+                _cachedGM = GetStaticSingleton(gmType, "instance")
+                    ?? GetStaticSingleton(gmType, "Instance")
+                    ?? GetStaticSingleton(gmType, "singleton")
+                    ?? GetStaticSingleton(gmType, "Singleton");
                 if (_cachedGM != null)
+                {
                     _cached = true;
+                    MelonLogger.Msg($"[GameRefs] GameManager resolved via {gmType.FullName}");
+                }
                 return _cachedGM;
             }
             catch (Exception ex)
@@ -45,7 +52,7 @@ namespace ClanfolkCheats.Core
                     if (gm == null) return false;
 
                     // Check if EntityManager is populated
-                    var ecType = AccessTools.TypeByName("Il2Cpp.EntityClass");
+                    var ecType = ResolveType("EntityClass");
                     if (ecType == null) return false;
 
                     var itemEC = Enum.Parse(ecType, "Item");
@@ -79,6 +86,45 @@ namespace ClanfolkCheats.Core
                 MelonLogger.Warning($"[GameRefs] GetManager({methodName}) failed: {ex.Message}");
                 return null;
             }
+        }
+
+        public static Type? ResolveType(string name)
+        {
+            var fullName = name.StartsWith("Il2Cpp.", StringComparison.Ordinal) ? name : $"Il2Cpp.{name}";
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type? type = null;
+                try
+                {
+                    type = assembly.GetType(fullName, false)
+                        ?? assembly.GetType(name, false);
+                }
+                catch { }
+                if (type != null) return type;
+            }
+
+            return Type.GetType(fullName, false) ?? Type.GetType(name, false);
+        }
+
+        private static object? GetStaticSingleton(Type type, string memberName)
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+
+            var prop = type.GetProperty(memberName, flags);
+            if (prop != null)
+            {
+                try { return prop.GetValue(null, null); }
+                catch (Exception ex) { MelonLogger.Warning($"[GameRefs] {type.FullName}.{memberName} property failed: {ex.Message}"); }
+            }
+
+            var field = type.GetField(memberName, flags);
+            if (field != null)
+            {
+                try { return field.GetValue(null); }
+                catch (Exception ex) { MelonLogger.Warning($"[GameRefs] {type.FullName}.{memberName} field failed: {ex.Message}"); }
+            }
+
+            return null;
         }
     }
 }

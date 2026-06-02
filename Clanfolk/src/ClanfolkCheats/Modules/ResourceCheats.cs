@@ -31,6 +31,7 @@ namespace ClanfolkCheats.Modules
         private int _discoverFrameCounter;
         private string _lastError = "";
         private int _totalItems;
+        private int _discoverAttempts;
 
         public void Register(HarmonyLib.Harmony harmony)
         {
@@ -61,7 +62,7 @@ namespace ClanfolkCheats.Modules
             for (int i = 0; i < SlotCount; i++)
             {
                 var key = _slots[i];
-                var display = string.IsNullOrEmpty(key) ? "empty" : GetDisplayName(key);
+                var display = string.IsNullOrEmpty(key) ? "empty" : FormatItemName(key);
                 var cnt = !string.IsNullOrEmpty(key) && _playerItemCounts.TryGetValue(key, out var c) ? c : 0;
                 l.Label($"[{i + 1}: {display}]  x{cnt}", 20f);
 
@@ -98,21 +99,24 @@ namespace ClanfolkCheats.Modules
         {
             try
             {
+                _discoverAttempts++;
                 var gm = GameRefs.GetGameManager();
-                if (gm == null) { MelonLogger.Msg("[Rsrc] GameManager null"); _triedDiscover = false; return; }
+                if (gm == null) { RetryLater("GameManager null"); return; }
 
                 var gmType = gm.GetType();
                 MelonLogger.Msg($"[Rsrc] GameManager type: {gmType.FullName}");
                 
-                var ecType = gmType.Assembly.GetType("Il2Cpp.EntityClass");
-                if (ecType == null || !ecType.IsEnum) { MelonLogger.Warning($"[Rsrc] EntityClass not found (null={ecType == null})"); return; }
+                var ecType = gmType.Assembly.GetType("Il2Cpp.EntityClass")
+                    ?? gmType.Assembly.GetType("EntityClass")
+                    ?? GameRefs.ResolveType("EntityClass");
+                if (ecType == null || !ecType.IsEnum) { RetryLater($"EntityClass not found (null={ecType == null})"); return; }
 
                 var itemEC = Enum.Parse(ecType, "Item");
                 var getEM = gmType.GetMethod("GetEntityManager", new Type[] { ecType });
-                if (getEM == null) { MelonLogger.Warning("[Rsrc] GetEntityManager not found"); return; }
+                if (getEM == null) { RetryLater("GetEntityManager not found"); return; }
 
                 var em = getEM.Invoke(gm, new object[] { itemEC });
-                if (em == null) { MelonLogger.Msg("[Rsrc] EntityManager null"); _triedDiscover = false; return; }
+                if (em == null) { RetryLater("EntityManager null"); return; }
 
                 var emType = em.GetType();
                 MelonLogger.Msg($"[Rsrc] EntityManager type: {emType.FullName}");
@@ -121,40 +125,18 @@ namespace ClanfolkCheats.Modules
                 _keyToDisplay.Clear();
                 _playerItemCounts.Clear();
 
-                // Always get prefab list first (all possible items)
-                var ga = emType.GetMethod("GetPrefabArray", Type.EmptyTypes);
-                if (ga != null)
-                {
-                    var arr = ga.Invoke(em, null);
-                    if (arr is System.Collections.IEnumerable iterable)
-                    {
-                        int count = 0;
-                        foreach (var entity in iterable)
-                        {
-                            if (entity == null) continue;
-                            var t = entity.GetType();
-                            var etField = t.GetField("myEntityType");
-                            var key = etField?.GetValue(entity) as string;
-                            if (!string.IsNullOrEmpty(key) && !_playerItemCounts.ContainsKey(key))
-                            {
-                                _playerItemKeys.Add(key);
-                                _playerItemCounts[key] = 0;
-                                var dnField = t.GetField("displayName");
-                                var display = dnField?.GetValue(entity) as string;
-                                _keyToDisplay[key] = !string.IsNullOrEmpty(display) ? display : key;
-                                count++;
-                            }
-                        }
-                        MelonLogger.Msg($"[Rsrc] PrefabArray: {count} items");
-                    }
-                }
-                else
-                {
-                    MelonLogger.Warning("[Rsrc] GetPrefabArray method not found");
-                }
+                var itemManager = InvokeStatic(gmType, "GetItemManager");
+                int prefabCount = AddPrefabs(itemManager, "ItemManager.GetLoadedPrefabArray");
+                if (prefabCount == 0)
+                    prefabCount += AddPrefabs(em, "EntityManager.GetLoadedPrefabArray");
+                if (prefabCount == 0)
+                    prefabCount += AddPrefabs(em, "EntityManager.GetPrefabArray");
+                if (prefabCount == 0)
+                    prefabCount += AddPrefabLookup(em, "myEntityPrefabLookup");
+                MelonLogger.Msg($"[Rsrc] Prefab discovery: {prefabCount} item types");
 
                 // Then scan actual entities for inventory counts
-                var getAllMethod = emType.GetMethod("GetAllEntityList", Type.EmptyTypes);
+                var getAllMethod = emType.GetMethod("GetAllEntityList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (getAllMethod != null)
                 {
                     var allList = getAllMethod.Invoke(em, null) as System.Collections.IList;
@@ -164,11 +146,11 @@ namespace ClanfolkCheats.Modules
                         foreach (var entity in allList)
                         {
                             if (entity == null) continue;
-                            var t = entity.GetType();
-                            var etField = t.GetField("myEntityType");
-                            var key = etField?.GetValue(entity) as string;
-                            if (!string.IsNullOrEmpty(key) && _playerItemCounts.ContainsKey(key))
+                            var key = GetEntityKey(entity);
+                            if (!string.IsNullOrEmpty(key))
                             {
+                                if (!_playerItemCounts.ContainsKey(key))
+                                    AddItemKey(key, GetEntityDisplayName(entity));
                                 _playerItemCounts[key]++;
                             }
                         }
@@ -187,11 +169,139 @@ namespace ClanfolkCheats.Modules
                 }
                 else
                 {
-                    MelonLogger.Warning("[Rsrc] No items found");
-                    _triedDiscover = false;
+                    RetryLater("No items found");
                 }
             }
-            catch (Exception ex) { _lastError = ex.Message; MelonLogger.Error($"[Rsrc] {ex.Message}"); _triedDiscover = false; }
+            catch (Exception ex)
+            {
+                _lastError = ex.Message;
+                MelonLogger.Error($"[Rsrc] {ex.Message}");
+                RetryLater("exception during discovery");
+            }
+        }
+
+        private void RetryLater(string reason)
+        {
+            _triedDiscover = false;
+            if (_discoverAttempts == 1 || _discoverAttempts % 30 == 0)
+                MelonLogger.Msg($"[Rsrc] Waiting for game world: {reason} (attempt {_discoverAttempts})");
+        }
+
+        private int AddPrefabs(object? manager, string source)
+        {
+            if (manager == null) return 0;
+
+            foreach (var methodName in new[] { "GetLoadedPrefabArray", "GetPrefabArray" })
+            {
+                if (!source.EndsWith(methodName, StringComparison.Ordinal)) continue;
+
+                var method = manager.GetType().GetMethod(
+                    methodName,
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    null,
+                    Type.EmptyTypes,
+                    null);
+                if (method == null) continue;
+
+                var added = AddEntities(method.Invoke(manager, null) as System.Collections.IEnumerable);
+                MelonLogger.Msg($"[Rsrc] {source}: {added}");
+                return added;
+            }
+
+            return 0;
+        }
+
+        private int AddPrefabLookup(object manager, string memberName)
+        {
+            var lookup = GetMemberValue(manager, memberName);
+            if (lookup == null) return 0;
+
+            var count = 0;
+            var keys = GetMemberValue(lookup, "Keys") as System.Collections.IEnumerable;
+            if (keys != null)
+            {
+                foreach (var rawKey in keys)
+                {
+                    var key = rawKey as string;
+                    if (!string.IsNullOrEmpty(key) && AddItemKey(key, key))
+                        count++;
+                }
+            }
+
+            if (count > 0)
+                MelonLogger.Msg($"[Rsrc] {memberName}.Keys: {count}");
+            return count;
+        }
+
+        private int AddEntities(System.Collections.IEnumerable? entities)
+        {
+            if (entities == null) return 0;
+
+            var count = 0;
+            foreach (var entity in entities)
+            {
+                if (entity == null) continue;
+                var key = GetEntityKey(entity);
+                if (!string.IsNullOrEmpty(key) && AddItemKey(key, GetEntityDisplayName(entity)))
+                    count++;
+            }
+            return count;
+        }
+
+        private bool AddItemKey(string key, string? display)
+        {
+            if (_playerItemCounts.ContainsKey(key)) return false;
+            _playerItemKeys.Add(key);
+            _playerItemCounts[key] = 0;
+            _keyToDisplay[key] = !string.IsNullOrEmpty(display) ? display! : key;
+            return true;
+        }
+
+        private static object? InvokeStatic(Type type, string methodName)
+        {
+            var method = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            try { return method?.Invoke(null, null); }
+            catch (Exception ex) { MelonLogger.Warning($"[Rsrc] {methodName} failed: {ex.Message}"); return null; }
+        }
+
+        private static string? GetEntityKey(object entity)
+        {
+            return GetMemberValue(entity, "myEntityType") as string
+                ?? GetMemberValue(entity, "GetEntityType") as string;
+        }
+
+        private static string? GetEntityDisplayName(object entity)
+        {
+            return GetMemberValue(entity, "displayName") as string;
+        }
+
+        private static object? GetMemberValue(object instance, string memberName)
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+            var type = instance.GetType();
+
+            var prop = type.GetProperty(memberName, flags);
+            if (prop != null)
+            {
+                try { return prop.GetValue(instance, null); }
+                catch { }
+            }
+
+            var field = type.GetField(memberName, flags);
+            if (field != null)
+            {
+                try { return field.GetValue(instance); }
+                catch { }
+            }
+
+            var method = type.GetMethod(memberName, flags, null, Type.EmptyTypes, null);
+            if (method != null)
+            {
+                try { return method.Invoke(instance, null); }
+                catch { }
+            }
+
+            return null;
         }
 
         private void GiveItem(string name, int count)
@@ -208,11 +318,33 @@ namespace ClanfolkCheats.Modules
                     : Vector3.zero;
 
                 var gmType = gm.GetType();
-                var spawnBatchMethod = gmType.GetMethod("SpawnEntitiesAtPosition");
+                var spawnBatchMethod = gmType.GetMethod(
+                    "SpawnEntitiesAtPosition",
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
+                    null,
+                    new[] { typeof(string), typeof(Vector3), typeof(int), typeof(bool), typeof(float), typeof(bool), typeof(bool) },
+                    null);
                 if (spawnBatchMethod != null)
                 {
-                    try { spawnBatchMethod.Invoke(gm, new object[] { name, pos, count, true, 1f, false, true }); return; }
+                    try { spawnBatchMethod.Invoke(null, new object[] { name, pos, count, true, 1f, false, true }); return; }
                     catch { }
+                }
+
+                var itemManager = InvokeStatic(gmType, "GetItemManager");
+                var spawnItemMethod = itemManager?.GetType().GetMethod(
+                    "SpawnItem",
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    null,
+                    new[] { typeof(string), typeof(Vector3), typeof(Quaternion), typeof(ulong) },
+                    null);
+                if (spawnItemMethod != null)
+                {
+                    for (int i = 0; i < count && i < 200; i++)
+                    {
+                        var p = pos + new Vector3((i % 20) * 0.5f, 0f, (i / 20) * 0.5f);
+                        spawnItemMethod.Invoke(itemManager, new object[] { name, p, Quaternion.identity, 0UL });
+                    }
+                    return;
                 }
 
                 var spawnMethod = gmType.GetMethod("SpawnEntity", new Type[] { typeof(string), typeof(Vector3), typeof(Quaternion) });
@@ -264,24 +396,67 @@ namespace ClanfolkCheats.Modules
                 }
             }
 
-            const int vr = 8;
+            const int vr = 12;
             int mx = Math.Max(0, filtered.Count - vr);
             _scrollOffset = Math.Clamp(_scrollOffset, 0, mx);
 
-            if (ImguiUtil.Button(new Rect(l.X + l.Width - 24f, l.Y, 24f, 20f), "▲") && _scrollOffset > 0) _scrollOffset--;
-            if (ImguiUtil.Button(new Rect(l.X + l.Width - 24f, l.Y + vr * 22f, 24f, 20f), "▼") && _scrollOffset < mx) _scrollOffset++;
+            var listY = l.Y + 22f;
+            var listRect = new Rect(l.X, listY, l.Width, vr * 22f);
+            if (ev != null && listRect.Contains(ev.mousePosition))
+            {
+                if (ev.type == EventType.ScrollWheel)
+                {
+                    ev.Use();
+                    _scrollOffset = Math.Clamp(_scrollOffset + (ev.delta.y > 0 ? 4 : -4), 0, mx);
+                }
+            }
+
+            GUI.Label(new Rect(l.X, l.Y, l.Width - 92f, 20f), $"{filtered.Count} matches");
+            if (ImguiUtil.Button(new Rect(l.X + l.Width - 92f, l.Y, 44f, 20f), "Prev") && _scrollOffset > 0)
+                _scrollOffset = Math.Max(0, _scrollOffset - vr);
+            if (ImguiUtil.Button(new Rect(l.X + l.Width - 46f, l.Y, 44f, 20f), "Next") && _scrollOffset < mx)
+                _scrollOffset = Math.Min(mx, _scrollOffset + vr);
+            l.Y += 22f;
+
+            var scrollX = l.X + l.Width - 16f;
+            var trackRect = new Rect(scrollX, l.Y, 16f, vr * 22f);
+            GUI.Box(trackRect, "");
+            if (mx > 0)
+            {
+                var thumbH = Math.Max(22f, trackRect.height * vr / filtered.Count);
+                var thumbY = trackRect.y + (trackRect.height - thumbH) * _scrollOffset / mx;
+                GUI.Box(new Rect(trackRect.x + 2f, thumbY, trackRect.width - 4f, thumbH), "");
+                if (ev != null && ev.type == EventType.MouseDown && ev.button == 0 && trackRect.Contains(ev.mousePosition))
+                {
+                    ev.Use();
+                    if (ev.mousePosition.y < thumbY)
+                        _scrollOffset = Math.Max(0, _scrollOffset - vr);
+                    else if (ev.mousePosition.y > thumbY + thumbH)
+                        _scrollOffset = Math.Min(mx, _scrollOffset + vr);
+                }
+            }
 
             for (int i = 0; i < vr && (_scrollOffset + i) < filtered.Count; i++)
             {
                 int idx = _scrollOffset + i;
                 var key = filtered[idx];
-                var display = GetDisplayName(key);
-                if (ImguiUtil.Button(new Rect(l.X, l.Y + i * 22f, l.Width - 28f, 20f), $"{display} ({key})"))
+                var display = FormatItemName(key);
+                if (ImguiUtil.Button(new Rect(l.X, l.Y + i * 22f, l.Width - 20f, 20f), display))
                 { _slots[_selectedSlot] = key; _showPicker = false; }
             }
-            l.Y += (vr + 1) * 22f;
-            if (ImguiUtil.Button(new Rect(l.X, l.Y, 60f, 22f), "Close")) _showPicker = false;
+            l.Y += vr * 22f + 4f;
+            if (ImguiUtil.Button(new Rect(l.X, l.Y, 70f, 22f), "Top")) _scrollOffset = 0;
+            if (ImguiUtil.Button(new Rect(l.X + 74f, l.Y, 70f, 22f), "Bottom")) _scrollOffset = mx;
+            if (ImguiUtil.Button(new Rect(l.X + 148f, l.Y, 70f, 22f), "Close")) _showPicker = false;
             l.Y += 28f;
+        }
+
+        private string FormatItemName(string key)
+        {
+            var display = GetDisplayName(key);
+            return string.Equals(display, key, StringComparison.OrdinalIgnoreCase)
+                ? key
+                : $"{display} | {key}";
         }
 
         private string GetDisplayName(string key)
