@@ -12,12 +12,21 @@ namespace ClanfolkCheats.Modules
         public string Name => "角色";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Pending;
 
-        private bool _healthLock;
+        private const float SpeedMultiplier = 3f;
+
         private bool _moodLock;
+        private bool _speedBoost;
+        private bool _speedNeedsReset;
         private bool _noAging;
 
         private object? _unitManager;
         private bool _triedInit;
+
+        // cached reflection members (resolved against the runtime Human type once)
+        private PropertyInfo? _humanListProp;
+        private MethodInfo? _getMoodAttribute;
+        private MethodInfo? _setAttributeProgress;
+        private PropertyInfo? _unitSpeedMultProp;
 
         public void Register(HarmonyLib.Harmony harmony)
         {
@@ -30,13 +39,14 @@ namespace ClanfolkCheats.Modules
             if (_unitManager == null) { l.Label("等待游戏世界加载…"); return; }
             l.Space(4);
 
-            l.Label("生命锁满:");
-            _healthLock = l.Toggle(_healthLock, _healthLock ? "开" : "关");
-
-            l.Space(4);
             l.Label("心情锁满:");
             _moodLock = l.Toggle(_moodLock, _moodLock ? "开" : "关");
-            if (_moodLock) l.Label("  开发中: 需要心情属性字段名。", 18f);
+
+            l.Space(4);
+            l.Label($"移动速度 {SpeedMultiplier:0}倍:");
+            var prev = _speedBoost;
+            _speedBoost = l.Toggle(_speedBoost, _speedBoost ? "开" : "关");
+            if (prev && !_speedBoost) _speedNeedsReset = true;   // toggled off — restore on next tick
 
             l.Space(4);
             l.Label("停止衰老:");
@@ -52,44 +62,60 @@ namespace ClanfolkCheats.Modules
                 TryInit();
             }
 
-            if (!_healthLock && !_moodLock) return;
+            if (!_moodLock && !_speedBoost && !_speedNeedsReset) return;
             if (_unitManager == null) return;
 
             try
             {
-                var humanListField = AccessTools.Field(_unitManager.GetType(), "humanList");
-                if (humanListField == null) return;
-                var humanList = humanListField.GetValue(_unitManager) as IList;
+                var humanList = GetHumanList();
                 if (humanList == null) return;
 
                 foreach (var unit in humanList)
                 {
                     if (unit == null) continue;
-
-                    if (_healthLock)
-                    {
-                        var attrsField = AccessTools.Field(unit.GetType(), "myEntityAttributes");
-                        if (attrsField != null)
-                        {
-                            var attrs = attrsField.GetValue(unit);
-                            if (attrs != null)
-                            {
-                                var healthField = AccessTools.Field(attrs.GetType(), "myHealth");
-                                if (healthField != null)
-                                {
-                                    var health = healthField.GetValue(attrs);
-                                    if (health != null)
-                                    {
-                                        var setHP = AccessTools.Method(health.GetType(), "SetHealthPercent");
-                                        setHP?.Invoke(health, new object[] { 1f });
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    if (_moodLock) LockMood(unit);
+                    if (_speedBoost) SetSpeed(unit, SpeedMultiplier);
+                    else if (_speedNeedsReset) SetSpeed(unit, 1f);
                 }
+
+                // one restore pass is enough; stop fighting the game afterwards
+                if (_speedNeedsReset && !_speedBoost) _speedNeedsReset = false;
             }
             catch { }
+        }
+
+        private IList? GetHumanList()
+        {
+            if (_humanListProp == null)
+                _humanListProp = AccessTools.Property(_unitManager!.GetType(), "humanList");
+            if (_humanListProp != null)
+                return _humanListProp.GetValue(_unitManager) as IList;
+
+            // fallback: some IL2Cpp proxies expose it as a field
+            var f = AccessTools.Field(_unitManager!.GetType(), "humanList");
+            return f?.GetValue(_unitManager) as IList;
+        }
+
+        // unit.GetMoodAttribute().SetAttributeProgress(1f)  — AttributeMood : AttributeGeneric
+        private void LockMood(object unit)
+        {
+            if (_getMoodAttribute == null)
+                _getMoodAttribute = AccessTools.Method(unit.GetType(), "GetMoodAttribute");
+            var mood = _getMoodAttribute?.Invoke(unit, null);
+            if (mood == null) return;
+
+            if (_setAttributeProgress == null)
+                _setAttributeProgress = AccessTools.Method(mood.GetType(), "SetAttributeProgress");
+            _setAttributeProgress?.Invoke(mood, new object[] { 1f });
+        }
+
+        // Unit.unitSpeedMult is a runtime movement multiplier (exposed as a property
+        // by Il2CppInterop). Writing it each tick keeps the boost applied.
+        private void SetSpeed(object unit, float mult)
+        {
+            if (_unitSpeedMultProp == null)
+                _unitSpeedMultProp = AccessTools.Property(unit.GetType(), "unitSpeedMult");
+            _unitSpeedMultProp?.SetValue(unit, mult);
         }
 
         private void TryInit()

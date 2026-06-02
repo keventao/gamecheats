@@ -89,7 +89,7 @@ namespace ClanfolkCheats.Modules
         private string _searchInput = "";
         private int _scrollOffset;
         private bool _showPicker;
-        private int _customQty = 10;
+        private int _customQty = 100;
         private bool _triedDiscover;
         private int _discoverFrameDelay = 120;
         private int _discoverFrameCounter;
@@ -131,8 +131,8 @@ namespace ClanfolkCheats.Modules
                 l.Label($"[{i + 1}: {display}]  x{cnt}", 20f);
 
                 float bx = l.X + 220f;
-                if (ImguiUtil.Button(new Rect(bx, l.Y - 22f, 36f, 22f), "+"))
-                    GiveItem(key, 1);
+                if (ImguiUtil.Button(new Rect(bx, l.Y - 22f, 36f, 22f), "+10"))
+                    GiveItem(key, 10);
                 if (ImguiUtil.Button(new Rect(bx + 40f, l.Y - 22f, 36f, 22f), $"+{_customQty}"))
                     GiveItem(key, _customQty);
                 if (ImguiUtil.Button(new Rect(bx + 80f, l.Y - 22f, 45f, 22f), "选择"))
