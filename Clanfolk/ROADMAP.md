@@ -4,7 +4,7 @@ Last updated: 2026-06-02
 
 ## Current Status
 
-Status: v0.1.1+ — 真实 Harmony 补丁已落地多模块，游戏本地化已对接，物品发现在游戏内验证成功（196 种）。
+Status: v0.1.1+ — 8 模块。移速5x/心情锁/睡眠锁/瞬间工作 游戏内已验证；金钱/资源计数待冒烟确认数值；本地化已对接（196 物品）。
 
 Game/runtime:
 
@@ -28,6 +28,7 @@ Build/God/Stor 三个补丁均成功 Patched，无我方异常。
 | GodMode 神模式 | 🔧 | `[God] Patched AttributeHealth.ChangeCurrentHealth` |
 | Storage 存储 | 🔧 | `[Stor] Patched Item.GetMaxCount`，容量倍率 1/2/5/10x |
 | Money 金钱 | 🔧 | `MoneyManager.GetMoney/ChangeMoney/SetMoney`；+100/+1k/+10k/清零/自定义；待冒烟 |
+| Work 工作 | ✅ | 瞬间工作：prefix 6 个 Apply*Work 的 `deltaTime` ×100（砍伐/采集/开采/建造）；游戏内已验证 |
 
 ## 已实现功能细节
 
@@ -131,6 +132,7 @@ ilspycmd -t Il2Cpp.<TypeName> "$DLL"        # 按全名（命名空间 Il2Cpp）
 - [x] 心情锁满 ✅：拦 `SetCurrentValue` 强制 10000，不掉。
 - [x] 移速 5 倍 ✅。
 - [ ] 金钱：日志 `[Money] OK`；+100/+1k/+10k/清零/设为均改变当前金钱显示。
+- [x] 瞬间工作 ✅：日志 `[Work] Patched 6 work-apply method(s)`；开关 → 砍树/采集/开采/建造秒完成。
 
 ## Next Work
 1. 完成上面冒烟项，逐个把 🔧 转 ✅。
@@ -144,6 +146,12 @@ ilspycmd -t Il2Cpp.<TypeName> "$DLL"        # 按全名（命名空间 Il2Cpp）
 - 直接写运行期字段（如 unitSpeedMult）常被游戏每帧重算覆盖，优先用 Harmony postfix 补 getter。
 
 ## 版本历史
+
+### 2026-06-02（瞬间工作）
+- 新增 Work 模块（第 8 个）✅已验证：prefix `Node.ApplyNode{Harvest,Extraction}Work` /
+  `ClearNodeForHarvest` + `WorldObject.Apply{Object,}HarvestWork` / `ApplyStateWork`
+  共 6 个方法的 `deltaTime` ×100（按参数名注入）→ 砍伐/采集/开采/建造秒完成。refs/05。
+- 弯路：`Unit.GetAppliedWorkTime` postfix ×100 无效（非进度累加点），已弃。
 
 ### 2026-06-02（金钱+睡眠+心情+移速5x，全部游戏内验证）
 - 新增 Money 模块（第 7 个）：MoneyManager.GetMoney/ChangeMoney/SetMoney，refs/04。
@@ -176,3 +184,4 @@ ilspycmd -t Il2Cpp.<TypeName> "$DLL"        # 按全名（命名空间 Il2Cpp）
 - `refs/02-character-attributes.md` - 角色属性 / 移动速度 API（已验证）。
 - `refs/03-entity-counts.md` - 物品库存计数 API（GetEntityCount/GetEntityTypeCount，已验证）。
 - `refs/04-money.md` - 金钱 API（MoneyManager.GetMoney/ChangeMoney/SetMoney，已验证）。
+- `refs/05-work.md` - 瞬间工作 API（Unit.GetAppliedWorkTime postfix ×倍率，已验证）。

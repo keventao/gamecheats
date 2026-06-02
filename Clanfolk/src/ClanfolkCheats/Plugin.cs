@@ -23,6 +23,7 @@ namespace ClanfolkCheats
             Registry.Add(new GodModeCheats());
             Registry.Add(new StorageCheats());
             Registry.Add(new MoneyCheats());
+            Registry.Add(new WorkCheats());
 
             var harmony = new HarmonyLib.Harmony("com.kk.clanfolk-cheats");
             Registry.RegisterAll(harmony);
