@@ -3,8 +3,10 @@
 
 $ErrorActionPreference = "Stop"
 
-# Set game root (adjust if your path differs)
-$env:LUNHUI_GAME_ROOT = "<STEAM>\steamapps\common\轮回修仙路"
+# Set game root (adjust to your Steam install, or pre-set $env:LUNHUI_GAME_ROOT)
+if (-not $env:LUNHUI_GAME_ROOT) {
+    $env:LUNHUI_GAME_ROOT = "<STEAM>\steamapps\common\轮回修仙路"
+}
 
 Write-Host "Building LunHuiCheats..." -ForegroundColor Cyan
 Write-Host "GameRoot: $env:LUNHUI_GAME_ROOT"
