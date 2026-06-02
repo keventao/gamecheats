@@ -16,7 +16,6 @@ namespace ClanfolkCheats.Modules
 
         private bool _moodLock;
         private bool _speedBoost;
-        private bool _speedNeedsReset;
         private bool _noAging;
 
         private object? _unitManager;
@@ -26,11 +25,38 @@ namespace ClanfolkCheats.Modules
         private PropertyInfo? _humanListProp;
         private MethodInfo? _getMoodAttribute;
         private MethodInfo? _setAttributeProgress;
-        private PropertyInfo? _unitSpeedMultProp;
+
+        // read by the Harmony postfix; OnUpdate keeps it in sync with the toggle
+        private static float _sSpeedMult = 1f;
 
         public void Register(HarmonyLib.Harmony harmony)
         {
+            // Move speed: postfix Unit.GetMoveSpeed() and scale the final result.
+            // This is the value movement actually consumes — writing unitSpeedMult
+            // directly had no effect (game recomputes it).
+            try
+            {
+                var unitType = AccessTools.TypeByName("Il2Cpp.Unit");
+                var getMoveSpeed = unitType != null ? AccessTools.Method(unitType, "GetMoveSpeed") : null;
+                if (getMoveSpeed != null)
+                {
+                    harmony.Patch(getMoveSpeed,
+                        postfix: new HarmonyMethod(typeof(CharacterCheats), nameof(Postfix_GetMoveSpeed)));
+                    MelonLogger.Msg("[Char] Patched Unit.GetMoveSpeed");
+                }
+                else
+                {
+                    MelonLogger.Warning("[Char] Unit.GetMoveSpeed not found — speed boost disabled");
+                }
+            }
+            catch (Exception ex) { MelonLogger.Error($"[Char] patch GetMoveSpeed: {ex.Message}"); }
+
             MelonLogger.Msg("[Char] Registered — will init when game world loads.");
+        }
+
+        private static void Postfix_GetMoveSpeed(ref float __result)
+        {
+            __result *= _sSpeedMult;
         }
 
         public void DrawGui(Layout l)
@@ -44,9 +70,7 @@ namespace ClanfolkCheats.Modules
 
             l.Space(4);
             l.Label($"移动速度 {SpeedMultiplier:0}倍:");
-            var prev = _speedBoost;
             _speedBoost = l.Toggle(_speedBoost, _speedBoost ? "开" : "关");
-            if (prev && !_speedBoost) _speedNeedsReset = true;   // toggled off — restore on next tick
 
             l.Space(4);
             l.Label("停止衰老:");
@@ -56,13 +80,15 @@ namespace ClanfolkCheats.Modules
 
         public void OnUpdate()
         {
+            _sSpeedMult = _speedBoost ? SpeedMultiplier : 1f;
+
             if (!_triedInit)
             {
                 _triedInit = true;
                 TryInit();
             }
 
-            if (!_moodLock && !_speedBoost && !_speedNeedsReset) return;
+            if (!_moodLock) return;
             if (_unitManager == null) return;
 
             try
@@ -73,13 +99,8 @@ namespace ClanfolkCheats.Modules
                 foreach (var unit in humanList)
                 {
                     if (unit == null) continue;
-                    if (_moodLock) LockMood(unit);
-                    if (_speedBoost) SetSpeed(unit, SpeedMultiplier);
-                    else if (_speedNeedsReset) SetSpeed(unit, 1f);
+                    LockMood(unit);
                 }
-
-                // one restore pass is enough; stop fighting the game afterwards
-                if (_speedNeedsReset && !_speedBoost) _speedNeedsReset = false;
             }
             catch { }
         }
@@ -107,15 +128,6 @@ namespace ClanfolkCheats.Modules
             if (_setAttributeProgress == null)
                 _setAttributeProgress = AccessTools.Method(mood.GetType(), "SetAttributeProgress");
             _setAttributeProgress?.Invoke(mood, new object[] { 1f });
-        }
-
-        // Unit.unitSpeedMult is a runtime movement multiplier (exposed as a property
-        // by Il2CppInterop). Writing it each tick keeps the boost applied.
-        private void SetSpeed(object unit, float mult)
-        {
-            if (_unitSpeedMultProp == null)
-                _unitSpeedMultProp = AccessTools.Property(unit.GetType(), "unitSpeedMult");
-            _unitSpeedMultProp?.SetValue(unit, mult);
         }
 
         private void TryInit()
