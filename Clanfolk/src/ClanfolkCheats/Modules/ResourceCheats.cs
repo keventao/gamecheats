@@ -13,87 +13,228 @@ namespace ClanfolkCheats.Modules
         public string Name => "资源";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Pending;
 
-        private readonly string[] _slots = new string[5];
+        private const int SlotCount = 5;
+
+        private readonly string[] _slots = new string[SlotCount];
+        private readonly int[] _lockFloors = new int[SlotCount];
+        private readonly bool[] _lockEnabled = new bool[SlotCount];
         private int _selectedSlot;
-        private List<string> _allItemKeys = new();
-        private Dictionary<string, string> _keyToDisplay = new(); // internalName -> displayName
+        private List<string> _playerItemKeys = new();
+        private Dictionary<string, string> _keyToDisplay = new();
+        private Dictionary<string, int> _playerItemCounts = new();
         private string _searchInput = "";
         private int _scrollOffset;
         private bool _showPicker;
-        private Type? _gameManagerType;
-        private object? _clanSetupMgr;
-        private object? _itemManagerInst;
-
-        private const string GameManagerTypeName = "Il2Cpp.GameManager";
+        private int _customQty = 10;
+        private bool _triedDiscover;
+        private int _discoverFrameDelay = 120;
+        private int _discoverFrameCounter;
+        private string _lastError = "";
+        private int _totalItems;
 
         public void Register(HarmonyLib.Harmony harmony)
         {
-            try
+            MelonLogger.Msg("[Rsrc] Registered — will discover items when game world loads.");
+        }
+
+        public void OnUpdate()
+        {
+            if (!_triedDiscover)
             {
-                _gameManagerType = AccessTools.TypeByName(GameManagerTypeName);
-                if (_gameManagerType == null) { MelonLogger.Error("[Rsrc] GameManager not found"); return; }
-
-                var getItemMgr = AccessTools.Method(_gameManagerType, "GetItemManager");
-                if (getItemMgr != null)
-                    _itemManagerInst = getItemMgr.Invoke(null, null);
-
-                var getClanMgr = AccessTools.Method(_gameManagerType, "GetClanSetupManager");
-                if (getClanMgr != null)
-                    _clanSetupMgr = getClanMgr.Invoke(null, null);
-
-                DiscoverAllItemNames();
-
-                if (_allItemKeys.Count == 0)
-                {
-                    MelonLogger.Warning("[Rsrc] No items discovered, using fallback");
-                    _allItemKeys = new List<string> { "Wood", "Stone", "Iron", "Branches", "Water", "Food", "Fish", "Wool", "Flax", "Log" };
-                    foreach (var k in _allItemKeys) _keyToDisplay[k] = k;
-                }
-
-                for (int i = 0; i < _slots.Length && i < _allItemKeys.Count; i++)
-                    _slots[i] = _allItemKeys[i];
-
-                Status = ModuleStatus.Ok;
-                MelonLogger.Msg($"[Rsrc] OK. {_allItemKeys.Count} items, clanMgr={_clanSetupMgr != null}, itemMgr={_itemManagerInst != null}");
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Error($"[Rsrc] Init failed: {ex}");
+                _discoverFrameCounter++;
+                if (_discoverFrameCounter < _discoverFrameDelay) return;
+                _discoverFrameCounter = 0;
+                _triedDiscover = true;
+                MelonLogger.Msg("[Rsrc] Calling TryDiscover...");
+                TryDiscover();
             }
         }
 
         public void DrawGui(Layout l)
         {
-            if (_allItemKeys.Count == 0) { l.Label("Waiting for game world..."); return; }
+            if (_playerItemKeys.Count == 0) { l.Label("Waiting for game world..."); return; }
+            if (!string.IsNullOrEmpty(_lastError)) { l.Label($"Error: {_lastError}", 18f); }
 
-            for (int i = 0; i < _slots.Length; i++)
+            l.Label($"Total: {_playerItemKeys.Count} types, {_totalItems} items in storage", 20f);
+            l.Space(2);
+
+            for (int i = 0; i < SlotCount; i++)
             {
                 var key = _slots[i];
                 var display = string.IsNullOrEmpty(key) ? "empty" : GetDisplayName(key);
-                l.Label($"[{i + 1}: {display}]", 20f);
+                var cnt = !string.IsNullOrEmpty(key) && _playerItemCounts.TryGetValue(key, out var c) ? c : 0;
+                l.Label($"[{i + 1}: {display}]  x{cnt}", 20f);
 
                 float bx = l.X + 220f;
-                if (ImguiUtil.Button(new Rect(bx, l.Y - 22f, 45f, 22f), "+5"))
-                    GiveItem(key, 5);
-                if (ImguiUtil.Button(new Rect(bx + 50f, l.Y - 22f, 50f, 22f), "+50"))
-                    GiveItem(key, 50);
-                if (ImguiUtil.Button(new Rect(bx + 105f, l.Y - 22f, 45f, 22f), "Pick"))
+                if (ImguiUtil.Button(new Rect(bx, l.Y - 22f, 36f, 22f), "+"))
+                    GiveItem(key, 1);
+                if (ImguiUtil.Button(new Rect(bx + 40f, l.Y - 22f, 36f, 22f), $"+{_customQty}"))
+                    GiveItem(key, _customQty);
+                if (ImguiUtil.Button(new Rect(bx + 80f, l.Y - 22f, 45f, 22f), "Pick"))
+                { _selectedSlot = i; _showPicker = true; _scrollOffset = 0; _searchInput = ""; }
+                if (ImguiUtil.Button(new Rect(bx + 129f, l.Y - 22f, 45f, 22f), _lockEnabled[i] ? "Unlock" : "Lock"))
+                    _lockEnabled[i] = !_lockEnabled[i];
+                if (_lockEnabled[i])
                 {
-                    _selectedSlot = i; _showPicker = true; _scrollOffset = 0; _searchInput = "";
+                    GUI.Label(new Rect(bx + 178f, l.Y - 22f, 36f, 22f), $">={_lockFloors[i]}");
+                    _lockFloors[i] = ClampIntInput(bx + 210f, l.Y - 22f, _lockFloors[i]);
                 }
             }
 
+            l.Space(2);
+            l.Label($"Custom qty: {_customQty}", 20f);
+            _customQty = ClampIntInput(l.X + 120f, l.Y - 20f, _customQty, 1, 9999);
+            l.Y += 4f;
+
+            if (l.Button("Fill All Slots", 24f))
+                for (int i = 0; i < SlotCount; i++)
+                    GiveItem(_slots[i], _customQty);
+
             l.Space(4);
             if (_showPicker) DrawPicker(l);
+        }
+
+        private void TryDiscover()
+        {
+            try
+            {
+                var gm = GameRefs.GetGameManager();
+                if (gm == null) { MelonLogger.Msg("[Rsrc] GameManager null"); _triedDiscover = false; return; }
+
+                var gmType = gm.GetType();
+                MelonLogger.Msg($"[Rsrc] GameManager type: {gmType.FullName}");
+                
+                var ecType = gmType.Assembly.GetType("Il2Cpp.EntityClass");
+                if (ecType == null || !ecType.IsEnum) { MelonLogger.Warning($"[Rsrc] EntityClass not found (null={ecType == null})"); return; }
+
+                var itemEC = Enum.Parse(ecType, "Item");
+                var getEM = gmType.GetMethod("GetEntityManager", new Type[] { ecType });
+                if (getEM == null) { MelonLogger.Warning("[Rsrc] GetEntityManager not found"); return; }
+
+                var em = getEM.Invoke(gm, new object[] { itemEC });
+                if (em == null) { MelonLogger.Msg("[Rsrc] EntityManager null"); _triedDiscover = false; return; }
+
+                var emType = em.GetType();
+                MelonLogger.Msg($"[Rsrc] EntityManager type: {emType.FullName}");
+
+                _playerItemKeys.Clear();
+                _keyToDisplay.Clear();
+                _playerItemCounts.Clear();
+
+                // Always get prefab list first (all possible items)
+                var ga = emType.GetMethod("GetPrefabArray", Type.EmptyTypes);
+                if (ga != null)
+                {
+                    var arr = ga.Invoke(em, null);
+                    if (arr is System.Collections.IEnumerable iterable)
+                    {
+                        int count = 0;
+                        foreach (var entity in iterable)
+                        {
+                            if (entity == null) continue;
+                            var t = entity.GetType();
+                            var etField = t.GetField("myEntityType");
+                            var key = etField?.GetValue(entity) as string;
+                            if (!string.IsNullOrEmpty(key) && !_playerItemCounts.ContainsKey(key))
+                            {
+                                _playerItemKeys.Add(key);
+                                _playerItemCounts[key] = 0;
+                                var dnField = t.GetField("displayName");
+                                var display = dnField?.GetValue(entity) as string;
+                                _keyToDisplay[key] = !string.IsNullOrEmpty(display) ? display : key;
+                                count++;
+                            }
+                        }
+                        MelonLogger.Msg($"[Rsrc] PrefabArray: {count} items");
+                    }
+                }
+                else
+                {
+                    MelonLogger.Warning("[Rsrc] GetPrefabArray method not found");
+                }
+
+                // Then scan actual entities for inventory counts
+                var getAllMethod = emType.GetMethod("GetAllEntityList", Type.EmptyTypes);
+                if (getAllMethod != null)
+                {
+                    var allList = getAllMethod.Invoke(em, null) as System.Collections.IList;
+                    if (allList != null)
+                    {
+                        MelonLogger.Msg($"[Rsrc] EntityList: {allList.Count} entities");
+                        foreach (var entity in allList)
+                        {
+                            if (entity == null) continue;
+                            var t = entity.GetType();
+                            var etField = t.GetField("myEntityType");
+                            var key = etField?.GetValue(entity) as string;
+                            if (!string.IsNullOrEmpty(key) && _playerItemCounts.ContainsKey(key))
+                            {
+                                _playerItemCounts[key]++;
+                            }
+                        }
+                    }
+                }
+
+                if (_playerItemKeys.Count > 0)
+                {
+                    _totalItems = 0;
+                    foreach (var c in _playerItemCounts.Values) _totalItems += c;
+
+                    Status = ModuleStatus.Ok;
+                    for (int i = 0; i < SlotCount && i < _playerItemKeys.Count; i++)
+                        _slots[i] = _playerItemKeys[i];
+                    MelonLogger.Msg($"[Rsrc] Found {_playerItemKeys.Count} types, {_totalItems} total items");
+                }
+                else
+                {
+                    MelonLogger.Warning("[Rsrc] No items found");
+                    _triedDiscover = false;
+                }
+            }
+            catch (Exception ex) { _lastError = ex.Message; MelonLogger.Error($"[Rsrc] {ex.Message}"); _triedDiscover = false; }
+        }
+
+        private void GiveItem(string name, int count)
+        {
+            if (string.IsNullOrEmpty(name) || count <= 0) return;
+            try
+            {
+                var gm = GameRefs.GetGameManager();
+                if (gm == null) return;
+
+                var cam = Camera.main;
+                var pos = cam != null
+                    ? cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, 10f))
+                    : Vector3.zero;
+
+                var gmType = gm.GetType();
+                var spawnBatchMethod = gmType.GetMethod("SpawnEntitiesAtPosition");
+                if (spawnBatchMethod != null)
+                {
+                    try { spawnBatchMethod.Invoke(gm, new object[] { name, pos, count, true, 1f, false, true }); return; }
+                    catch { }
+                }
+
+                var spawnMethod = gmType.GetMethod("SpawnEntity", new Type[] { typeof(string), typeof(Vector3), typeof(Quaternion) });
+                if (spawnMethod != null)
+                {
+                    for (int i = 0; i < count && i < 200; i++)
+                    {
+                        var p = pos + new Vector3((i % 20) * 0.5f, 0f, (i / 20) * 0.5f);
+                        spawnMethod.Invoke(gm, new object[] { name, p, Quaternion.identity });
+                    }
+                    return;
+                }
+            }
+            catch (Exception ex) { MelonLogger.Warning($"[Rsrc] GiveItem({name}): {ex.Message}"); }
         }
 
         private void DrawPicker(Layout l)
         {
             l.Label($"Pick item for Slot {_selectedSlot + 1}:", 22f);
 
-            // filter by search input (match against display name or internal key)
             var filtered = new List<string>();
-            foreach (var key in _allItemKeys)
+            foreach (var key in _playerItemKeys)
             {
                 var display = GetDisplayName(key);
                 if (string.IsNullOrEmpty(_searchInput)
@@ -105,6 +246,23 @@ namespace ClanfolkCheats.Modules
             var sr = new Rect(l.X, l.Y, l.Width, 22f);
             GUI.Box(sr, string.IsNullOrEmpty(_searchInput) ? "Type to search..." : _searchInput);
             l.Y += 24f;
+
+            var ev = Event.current;
+            if (ev != null && sr.Contains(ev.mousePosition))
+            {
+                if (ev.type == EventType.KeyDown)
+                {
+                    if (ev.keyCode == KeyCode.Backspace && _searchInput.Length > 0)
+                        _searchInput = _searchInput[..^1];
+                    else if (ev.keyCode == KeyCode.Return || ev.keyCode == KeyCode.KeypadEnter)
+                    { if (filtered.Count > 0) { _slots[_selectedSlot] = filtered[0]; _showPicker = false; } }
+                    else if (ev.keyCode == KeyCode.Escape)
+                        _showPicker = false;
+                    else if (ev.character != 0 && !char.IsControl(ev.character) && _searchInput.Length < 40)
+                        _searchInput += ev.character;
+                    if (ev.type == EventType.KeyDown) { ev.Use(); _scrollOffset = 0; }
+                }
+            }
 
             const int vr = 8;
             int mx = Math.Max(0, filtered.Count - vr);
@@ -133,152 +291,18 @@ namespace ClanfolkCheats.Modules
             return key;
         }
 
-        private void GiveItem(string name, int count)
+        private static int ClampIntInput(float x, float y, int current, int min = 0, int max = 9999)
         {
-            if (string.IsNullOrEmpty(name)) return;
-
-            try
+            var r = new Rect(x, y, 40f, 20f);
+            GUI.Box(r, current.ToString());
+            var ev = Event.current;
+            if (ev == null || !r.Contains(ev.mousePosition)) return current;
+            if (ev.type == EventType.ScrollWheel)
             {
-                // Primary: ItemManager.SpawnItem at camera center or mouse position
-                if (_itemManagerInst != null && TrySpawnItemViaMgr(name, count)) { MelonLogger.Msg($"[Rsrc] +{count} {name} (ItemManager)"); return; }
-                // Fallback: GameManager.SpawnEntity on map
-                if (TrySpawnEntity(name, count)) { MelonLogger.Msg($"[Rsrc] +{count} {name} (SpawnEntity)"); return; }
-                MelonLogger.Warning($"[Rsrc] All methods failed for '{name}'");
+                ev.Use();
+                return Math.Clamp(current + (ev.delta.y > 0 ? -1 : 1), min, max);
             }
-            catch (Exception ex) { MelonLogger.Error($"[Rsrc] GiveItem({name}): {ex.Message}"); }
-        }
-
-        private bool TrySpawnItemViaMgr(string objectType, int count)
-        {
-            try
-            {
-                // Get world position from camera center
-                var cam = Camera.main;
-                Vector3 pos;
-                if (cam != null)
-                {
-                    pos = cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, cam.nearClipPlane + 5f));
-                }
-                else
-                {
-                    pos = Vector3.zero;
-                }
-
-                var spawnMethod = AccessTools.Method(_itemManagerInst!.GetType(), "SpawnItem");
-                if (spawnMethod == null) return false;
-
-                for (int i = 0; i < count && i < 50; i++)
-                {
-                    var p = pos + new Vector3(i % 10 * 0.5f, 0f, i / 10 * 0.5f);
-                    spawnMethod.Invoke(_itemManagerInst, new object[] { objectType, p, Quaternion.identity, 0UL });
-                }
-                return true;
-            }
-            catch (Exception ex) { MelonLogger.Msg($"[Rsrc] ItemManager.SpawnItem failed: {ex.Message}"); return false; }
-        }
-
-        private bool TryAddInvEntity(string entType, int count)
-        {
-            try
-            {
-                var wmMgrType = AccessTools.TypeByName("Il2Cpp.WorldMapManager");
-                if (wmMgrType == null) return false;
-                var getWM = AccessTools.Method(_gameManagerType!, "GetWorldMapManager");
-                if (getWM == null) return false;
-                var wm = getWM.Invoke(null, null);
-                if (wm == null) return false;
-
-                var ecType = AccessTools.TypeByName("Il2Cpp.EntityClass");
-                var itemEC = Enum.Parse(ecType!, "Item");
-                var addMethod = AccessTools.Method(wmMgrType, "AddInvEntity");
-                if (addMethod == null) return false;
-
-                addMethod.Invoke(wm, new object[] { itemEC, entType, count, 1f });
-                return true;
-            }
-            catch { return false; }
-        }
-
-        private bool TrySpawnEntity(string entType, int count)
-        {
-            try
-            {
-                var methods = _gameManagerType!.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
-                MethodInfo? best = null;
-                foreach (var m in methods)
-                {
-                    if (m.Name != "SpawnEntity" || m.IsGenericMethod) continue;
-                    var p = m.GetParameters();
-                    if (p.Length == 3 && p[0].ParameterType == typeof(string) && p[1].ParameterType == typeof(Vector3) && p[2].ParameterType == typeof(Quaternion))
-                    { best = m; break; }
-                }
-                if (best == null) return false;
-
-                var pos = Camera.main != null
-                    ? Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, 10f))
-                    : Vector3.zero;
-
-                for (int i = 0; i < count && i < 50; i++)
-                {
-                    pos.x += 0.5f; pos.z += 0.3f;
-                    best.Invoke(null, new object[] { entType, pos, Quaternion.identity });
-                }
-                return true;
-            }
-            catch { return false; }
-        }
-
-        private void DiscoverAllItemNames()
-        {
-            try
-            {
-                var ecType = AccessTools.TypeByName("Il2Cpp.EntityClass");
-                if (ecType == null || !ecType.IsEnum) { MelonLogger.Warning("[Rsrc] EntityClass enum not found"); return; }
-
-                var itemEC = Enum.Parse(ecType, "Item");
-                var getEM = AccessTools.Method(_gameManagerType!, "GetEntityManager", new Type[] { ecType });
-                if (getEM == null) { MelonLogger.Warning("[Rsrc] GetEntityManager(EntityClass) not found"); return; }
-
-                var em = getEM.Invoke(null, new object[] { itemEC });
-                if (em == null) { MelonLogger.Warning("[Rsrc] EntityManager(Item) is null — world not loaded?"); return; }
-
-                var ga = AccessTools.Method(em.GetType(), "GetPrefabArray");
-                if (ga == null) { MelonLogger.Warning("[Rsrc] GetPrefabArray not found"); return; }
-
-                var arr = ga.Invoke(em, null);
-                if (arr is not System.Collections.IEnumerable iterable) { MelonLogger.Warning("[Rsrc] PrefabArray is not enumerable"); return; }
-
-                var entityTypeType = AccessTools.TypeByName("Il2Cpp.Entity");
-
-                foreach (var entity in iterable)
-                {
-                    if (entity == null) continue;
-
-                    // Get internal type name (myEntityType field)
-                    string? key = null;
-                    var myTypeField = entity.GetType().GetField("myEntityType", BindingFlags.Public | BindingFlags.Instance);
-                    if (myTypeField != null)
-                        key = myTypeField.GetValue(entity) as string;
-
-                    // Get display name
-                    string? display = null;
-                    var dispField = entity.GetType().GetField("displayName", BindingFlags.Public | BindingFlags.Instance);
-                    if (dispField != null)
-                        display = dispField.GetValue(entity) as string;
-
-                    if (!string.IsNullOrEmpty(key))
-                    {
-                        _allItemKeys.Add(key);
-                        _keyToDisplay[key] = !string.IsNullOrEmpty(display) ? display : key;
-                    }
-                }
-
-                MelonLogger.Msg($"[Rsrc] Discovered {_allItemKeys.Count} items from EntityManager(Item)");
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Error($"[Rsrc] Discovery failed: {ex.Message}");
-            }
+            return current;
         }
     }
 }

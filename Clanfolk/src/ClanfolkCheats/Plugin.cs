@@ -9,7 +9,7 @@ namespace ClanfolkCheats
 {
     public class Plugin : MelonMod
     {
-        public const string Version = "0.1.0";
+        public const string Version = "0.1.1";
         internal static ModuleRegistry Registry = null!;
         internal static GuiManager     Gui      = null!;
 
