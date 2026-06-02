@@ -112,7 +112,73 @@ namespace ClanfolkCheats.Modules
                 _triedDiscover = true;
                 MelonLogger.Msg("[Rsrc] Calling TryDiscover...");
                 TryDiscover();
+                return;
             }
+
+            // Post-discovery: keep slot/total counts live (updates after spawning).
+            if (Status == ModuleStatus.Ok && ++_refreshCounter >= 30)
+            {
+                _refreshCounter = 0;
+                RefreshCounts();
+            }
+        }
+
+        // Live counts via the game's own per-manager APIs (verified, refs/03):
+        //   EntityManager.GetEntityCount()                         -> total item entities
+        //   EntityManager.GetEntityTypeCount(key, NONE, isSpoiled) -> per-type count
+        // Only the 5 displayed slots are queried (picker shows no counts), so this is cheap
+        // enough to run every ~30 frames and reflect spawns immediately.
+        private static MethodInfo? _getEntityCountMethod;
+        private static MethodInfo? _getEntityTypeCountMethod;
+        private static object? _growthNoneFlag;
+        private int _refreshCounter;
+
+        private void RefreshCounts()
+        {
+            var em = _itemEntityManager;
+            if (em == null) return;
+            try
+            {
+                var emType = em.GetType();
+
+                if (_getEntityCountMethod == null)
+                    _getEntityCountMethod = emType.GetMethod(
+                        "GetEntityCount",
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                        null, Type.EmptyTypes, null);
+
+                if (_getEntityTypeCountMethod == null)
+                {
+                    _getEntityTypeCountMethod = emType.GetMethod(
+                        "GetEntityTypeCount",
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    var ps = _getEntityTypeCountMethod?.GetParameters();
+                    if (ps != null && ps.Length >= 2 && ps[1].ParameterType.IsEnum)
+                        _growthNoneFlag = Enum.ToObject(ps[1].ParameterType, 0);
+                }
+
+                if (_getEntityCountMethod?.Invoke(em, null) is int total)
+                    _totalItems = total;
+
+                if (_getEntityTypeCountMethod != null)
+                {
+                    var pc = _getEntityTypeCountMethod.GetParameters().Length;
+                    for (int i = 0; i < SlotCount; i++)
+                    {
+                        var key = _slots[i];
+                        if (string.IsNullOrEmpty(key)) continue;
+                        object?[] args = pc switch
+                        {
+                            >= 3 => new object?[] { key, _growthNoneFlag, false },
+                            2 => new object?[] { key, _growthNoneFlag },
+                            _ => new object?[] { key },
+                        };
+                        if (_getEntityTypeCountMethod.Invoke(em, args) is int c)
+                            _playerItemCounts[key] = c;
+                    }
+                }
+            }
+            catch (Exception ex) { MelonLogger.Warning($"[Rsrc] RefreshCounts: {ex.Message}"); }
         }
 
         public void DrawGui(Layout l)
@@ -200,36 +266,16 @@ namespace ClanfolkCheats.Modules
                     prefabCount += AddPrefabLookup(em, "myEntityPrefabLookup");
                 MelonLogger.Msg($"[Rsrc] Prefab discovery: {prefabCount} item types");
 
-                // Then scan actual entities for inventory counts
-                var getAllMethod = emType.GetMethod("GetAllEntityList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (getAllMethod != null)
-                {
-                    var allList = getAllMethod.Invoke(em, null) as System.Collections.IList;
-                    if (allList != null)
-                    {
-                        MelonLogger.Msg($"[Rsrc] EntityList: {allList.Count} entities");
-                        foreach (var entity in allList)
-                        {
-                            if (entity == null) continue;
-                            var key = GetEntityKey(entity);
-                            if (!string.IsNullOrEmpty(key))
-                            {
-                                if (!_playerItemCounts.ContainsKey(key))
-                                    AddItemKey(key, GetEntityDisplayName(entity));
-                                _playerItemCounts[key]++;
-                            }
-                        }
-                    }
-                }
-
+                // Live inventory counts come from RefreshCounts() (GetEntityCount /
+                // GetEntityTypeCount). The old GetAllEntityList scan was dead: its result
+                // is an Il2CppSystem List<Entity>, not a System.Collections.IList, so the
+                // cast always returned null and every count stayed 0.
                 if (_playerItemKeys.Count > 0)
                 {
-                    _totalItems = 0;
-                    foreach (var c in _playerItemCounts.Values) _totalItems += c;
-
                     Status = ModuleStatus.Ok;
                     for (int i = 0; i < SlotCount && i < _playerItemKeys.Count; i++)
                         _slots[i] = _playerItemKeys[i];
+                    RefreshCounts();
                     MelonLogger.Msg($"[Rsrc] Found {_playerItemKeys.Count} types, {_totalItems} total items");
                 }
                 else
