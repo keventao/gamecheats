@@ -1,10 +1,10 @@
 # 轮回修仙路 Cheats Roadmap
 
-Last updated: 2026-05-31
+Last updated: 2026-06-02
 
 ## Current Status
 
-Status: **v0.0.4 — cheat panel + 4 modules; 修复 CharacterData/UnitData 运行时解析 bug（库存捕获曾永久阻断角色数据扫描）+ 库存日志降噪；待 Windows 游戏内冒烟确认。**
+Status: **v0.0.6 — 游戏内大幅验证通过：GameRefs 捕获修复（hook 玩家 stat getter）、修为/角色改增量 UI、等级 +N 修正、背包物品库选择器（PropsData 全道具 + bag_type 子分类 tab）。已知遗留：角色属性升级后被游戏重算重置（需加"锁定"每帧重应用）；spawn 字段拷贝改进但物品入包效果待最终确认。详见版本历史 + 下一步。**
 
 Game/runtime:
 
@@ -59,7 +59,7 @@ See `refs/01-discovered-types-summary.md` for full details.
 1. ✅ **PlayerStats** (`player`) — 反射读写 `UnitData.curPhysicalAttacks/curSpellAttacks/MoveSpeed/bigWorldFlySpeed`,每项可锁定
 2. ✅ **GodMode** (`godmode`) — 每帧锁 `UnitData.curHp = maxHp`
 3. ✅ **Inventory** (`inventory`) — 浏览 `All*` 列表(IL2CPP 用 `Count`/`Item` 反射迭代)+ `AddItem/AddCoin`;二期试构造 `BaseRewardData` by id
-4. ⚠️ **Cultivation** (`cultivation`) — `curDaoxin` 可写 ✅;**`currentExp`/`currentLevel` 是只读属性 `{get;}`,反射写会失败**,需另找写入路径(可能 `MySkillLib.AddExp`);灵根目前只读显示
+4. ⚠️ **Cultivation** (`cultivation`) — `curDaoxin` 可写 ✅;`currentExp`/`currentLevel` 只读 `{get;}`,**已改走 dump 到的真实方法**:等级→`CharacterData.UpdateLevel(level, isSavePos)`,经验→游戏自带 `CharacterData.FieldSetter("CharacterData","currentExp",val)`(经 `ReflectAccessor.TryInvoke` 反射调用);灵根目前只读显示。**待 Windows 游戏内冒烟确认两条写入路径真生效**
 5. ✅ **Time** (`time`) — placeholder + value-change guard,归类 通用
 
 待办: 在 Windows 真机跑 `docs/smoke-checklist.md`,确认行为;修 Cultivation 经验/等级写入路径;灵根编辑(二期)。
@@ -80,6 +80,64 @@ See `refs/01-discovered-types-summary.md` for full details.
 - `FakeInventoryData.AddItem()` 可能需要有效的 `BaseRewardData` 实例，不能传 null。
 
 ## Version History
+
+### v0.0.6（游戏内验证：捕获修复 + 增量 UI + 物品库选择器）
+
+一次长会话，多数功能在 Windows 游戏内实测。
+
+**GameRefs 捕获修复（核心）**
+- 根因：`CharacterData : Object`（非 MonoBehaviour），世界扫描永远找不到；原 hook 的
+  `init/AddDaoxin/LeveUp` 都是稀有/一次性事件，存档已加载时不触发 → 玩家数据从没捕获。
+- 修：`BootstrapHooks` 改 hook 玩家 HUD 每帧读的属性 getter（`get_currentLevel`/`get_currentExp`），
+  被动捕获活的 CharacterData；`GameRefs.PassCharacterData` 改"首次非空即锁定"。
+- 注：`get_curDaoxin`/`get_unitData` 是 IL2CPP 字段访问器、patch 不了（无害，前两个够用）。
+- **游戏内确认**：日志 `[GameRefs] Captured CharacterData via hook. type=CharacterData`。✅
+
+**增量 UI（修为 + 角色）**
+- 修为：显示当前 等级/道心 + 增量框 + 「+N」。道心→`AddDaoxin(delta)`；等级→`UpdateLevel(delta)`。
+  **等级 bug 修正**：`UpdateLevel(n)` 是"加 n 级"非"设为 n"（实测 13+`UpdateLevel(14)`→27），改传 delta。✅
+- 经验：只读（`currentExp` 无 setter、派生值；设等级即可）。
+- 角色：物攻/法攻/移速/飞速 同款增量 UI（`UnitData` 可写属性，`TrySet` 当前+delta）。✅ 生效。
+
+**背包物品库选择器（重点新功能）**
+- 配置库入口：`DataLib.GMDataBaseSystem` 静态非泛型重载
+  `List<Object> SearchConfAllStatic(DBName, Il2CppSystem.Type)`（泛型 `<T>` 重载在 IL2CPP 下
+  反射调不动，此重载把元素 Type 当参数传）。元素 `Il2CppSystem.Object` 按 Pointer 重包成具体类型。
+- 枚举 `PropsData`（DBName.Props=24）= 全道具 862 条；按 `bag_type` 分**子分类 tab**（全部/丹药/装备/材料/…）。
+- DBName 关键值：Props=24, RewardLibrary=26, EquipLibrary=75, DanyaoLibrary1=77, Jindan=66, TalismanLibrary=36。
+- spawn：点物品「+数量」→ 建 `BaseRewardData`，把 PropsData 配置字段拷进去
+  （id→rewardId、bag_type→bagType、prop_type→propType 及跨枚举 rewardType、prop_quality→quality、
+  stack_num、prop_use→propUse、name…）→ `AddItem`。
+
+**框架**
+- `ReflectAccessor.TryInvoke(instance, method, out result, params args)` — 按名+参数个数反射调 IL2CPP 方法。
+- 面板加宽（640×600，运行时强制下限覆盖旧配置）+ tab/内容加边距。
+
+### 已知遗留（下次优先）
+
+1. **角色属性升级后重置**：物攻等增量是一次性写入，玩家**升级时游戏按"基础属性+等级"重算 → 覆盖**。
+   需加"锁定"开关：`PlayerStats.OnUpdate` 每帧重应用记录的目标值（即旧 lock 机制，增量模型下保留最后设定值）。
+2. **spawn 入包效果待最终确认**：v0.0.6 已把配置字段拷进 reward（对比 `[SpawnDump] REAL` vs `MINE`），
+   AddItem 返回 True，但需游戏内确认物品真出现且可用；若仍不行，考虑游戏工厂 `RewardLibararyDataControll.CreateReward`。
+3. 子分类 tab 标签：`BagLabel` 把 BagType 英文名映射中文，未覆盖的回退英文（看 `[Props]` 日志补全）。
+4. 各表名字字段：部分库（装备/丹药等）`strFields` 少，名字可能走本地化，picker 仅显有的字符串字段。
+
+### v0.0.5（修为 经验/等级 写入路径）
+
+- **问题**：`currentExp`/`currentLevel` 是 IL2CPP 只读自动属性 `{get;}`，经 Il2CppInterop
+  无托管 backing field，`ReflectAccessor.TrySet` 必败（v0.0.4 仍在尝试，UI 显 ✗）。
+- **修**：dump (`refs/lunhui-fieldscan.txt` CharacterData 段) 找到真实方法：
+  `UpdateLevel(Int32 level, Boolean isSavePos)`、`LeveUp(Int32, Boolean, Boolean)`、
+  游戏自带 native 字段写入器 `FieldSetter(String typeName, String fieldName, Object val)`。
+  - `ReflectAccessor` 新增 `TryInvoke(instance, method, out result, params args)`——按名+参数个数
+    匹配 IL2CPP 方法，逐参 Coerce 后反射调用，带缓存。
+  - `Cultivation` 写入按钮:道心→`TrySet(curDaoxin)`;等级→`UpdateLevel(level,true)`;
+    经验→`FieldSetter("CharacterData","currentExp",exp)`;写后 `_synced=false` 重读回显游戏实际接受值。
+- 编译：0 错误（6 个预存 nullable 警告）。已装 `BepInEx\plugins\LunHuiCheats\`。
+- **待 Windows 游戏内确认**：进世界按 P → 修为面板改等级/经验 → 点写入 →
+  日志 `[Cultivation] write ... level=True`(方法存在=True)+ **游戏内等级/经验数值真变化**。
+  若 `UpdateLevel` 只刷显示不改数据，改试 `LeveUp(level,false,true)`；
+  若 `FieldSetter` 的 fieldName 命名不符，看 LogOutput.log 报错后据真实名调整(别猜)。
 
 ### v0.0.4（GameRefs 解析 bug 修复 + 库存日志降噪）
 

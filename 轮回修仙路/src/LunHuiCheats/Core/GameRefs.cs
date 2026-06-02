@@ -123,8 +123,13 @@ namespace LunHuiCheats.Core
 
         public static void PassCharacterData(object instance)
         {
+            // Capture-once: hooked on hot property getters (get_currentLevel/Exp/...) that the
+            // HUD calls every frame. Keep the FIRST non-null instance — on world-enter that is the
+            // player (HUD draws player level/exp first); later monster getters during combat must
+            // not overwrite it. Also avoids per-frame log spam.
+            if (_characterData != null || instance == null) return;
             _characterData = instance;
-            Plugin.LogSrc?.LogInfo("[GameRefs] Captured CharacterData via hook.");
+            Plugin.LogSrc?.LogInfo($"[GameRefs] Captured CharacterData via hook. type={instance.GetType().FullName}");
         }
 
         private static void ResolveAll(UnityEngine.Object? seed)

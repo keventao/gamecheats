@@ -6,8 +6,8 @@ using UnityEngine;
 namespace LunHuiCheats.Modules
 {
     /// <summary>
-    /// Read/write player battle stats on DataLib.UnitData. Each numeric stat has a
-    /// "lock" toggle that re-applies the edited value every frame.
+    /// Player battle stats on DataLib.UnitData (increment model): each stat shows its current
+    /// live value + a delta box + "+N" button that sets value = current + delta. 物攻/法攻/移速/飞速.
     /// </summary>
     public sealed class PlayerStats : ICheatModule
     {
@@ -16,11 +16,9 @@ namespace LunHuiCheats.Modules
         public string Category => "角色";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Pending;
 
-        private long _phys, _spell;
-        private float _moveSpeed;
-        private int _flySpeed;
-        private bool _lockPhys, _lockSpell, _lockMove, _lockFly;
-        private bool _synced;
+        private long _physDelta = 1000, _spellDelta = 1000;
+        private int _moveDelta = 5, _flyDelta = 5;
+        private string _status = "";
 
         public void Register(ModConfig cfg, Harmony harmony)
         {
@@ -28,17 +26,8 @@ namespace LunHuiCheats.Modules
                 ? ModuleStatus.Ok : ModuleStatus.Broken;
         }
 
-        public void OnGameReady() { _synced = false; }
-
-        public void OnUpdate()
-        {
-            var unit = GameRefs.UnitData;
-            if (unit == null) return;
-            if (_lockPhys)  ReflectAccessor.SetInt64(unit, "curPhysicalAttacks", _phys);
-            if (_lockSpell) ReflectAccessor.SetInt64(unit, "curSpellAttacks", _spell);
-            if (_lockMove)  ReflectAccessor.SetSingle(unit, "MoveSpeed", _moveSpeed);
-            if (_lockFly)   ReflectAccessor.SetInt32(unit, "bigWorldFlySpeed", _flySpeed);
-        }
+        public void OnGameReady() { _status = ""; }
+        public void OnUpdate() { }   // increment-on-button, nothing locked per frame
 
         public void DrawGui()
         {
@@ -46,51 +35,55 @@ namespace LunHuiCheats.Modules
             var unit = GameRefs.UnitData;
             if (unit == null) { GuiWidgets.Label(c.Line(), "未找到 UnitData（进入游戏世界后生效）"); return; }
 
-            if (!_synced)
+            // Read live each frame so "当前值" refreshes after every +N apply.
+            long curPhys  = ReflectAccessor.GetInt64(unit, "curPhysicalAttacks");
+            long curSpell = ReflectAccessor.GetInt64(unit, "curSpellAttacks");
+            float curMove = ReflectAccessor.GetSingle(unit, "MoveSpeed");
+            int curFly    = ReflectAccessor.GetInt32(unit, "bigWorldFlySpeed");
+
+            // 物攻
+            var r1 = c.Line();
+            GuiWidgets.Label(c.Slice(ref r1, 150), $"当前物攻 {curPhys}");
+            _physDelta = GuiWidgets.Int64Field(c.Slice(ref r1, 60), "player.physDelta", _physDelta);
+            if (GuiWidgets.Button(c.Slice(ref r1, 110), $"物攻 +{_physDelta}"))
             {
-                _phys      = ReflectAccessor.GetInt64(unit, "curPhysicalAttacks");
-                _spell     = ReflectAccessor.GetInt64(unit, "curSpellAttacks");
-                _moveSpeed = ReflectAccessor.GetSingle(unit, "MoveSpeed");
-                _flySpeed  = ReflectAccessor.GetInt32(unit, "bigWorldFlySpeed");
-                _synced = true;
+                bool ok = ReflectAccessor.TrySet(unit, "curPhysicalAttacks", curPhys + _physDelta);
+                _status = $"物攻 {curPhys} → {curPhys + _physDelta} {(ok ? "✓" : "✗")}";
             }
 
-            // physical attack
-            var l1 = c.Line();
-            GuiWidgets.Label(new Rect(l1.x, l1.y, 70, l1.height), "物攻");
-            _phys = GuiWidgets.Int64Field(new Rect(l1.x + 72, l1.y, 120, l1.height), "player.phys", _phys);
-            _lockPhys = GuiWidgets.Toggle(new Rect(l1.x + 200, l1.y, 90, l1.height), _lockPhys, "锁定");
-
-            // spell attack
-            var l2 = c.Line();
-            GuiWidgets.Label(new Rect(l2.x, l2.y, 70, l2.height), "法攻");
-            _spell = GuiWidgets.Int64Field(new Rect(l2.x + 72, l2.y, 120, l2.height), "player.spell", _spell);
-            _lockSpell = GuiWidgets.Toggle(new Rect(l2.x + 200, l2.y, 90, l2.height), _lockSpell, "锁定");
-
-            // move speed
-            var l3 = c.Line();
-            GuiWidgets.Label(new Rect(l3.x, l3.y, 70, l3.height), $"移速 {_moveSpeed:0.0}");
-            _moveSpeed = GuiWidgets.Slider(new Rect(l3.x + 72, l3.y + 6, 120, l3.height), _moveSpeed, 0f, 50f);
-            _lockMove = GuiWidgets.Toggle(new Rect(l3.x + 200, l3.y, 90, l3.height), _lockMove, "锁定");
-
-            // fly speed
-            var l4 = c.Line();
-            GuiWidgets.Label(new Rect(l4.x, l4.y, 70, l4.height), "飞行速度");
-            _flySpeed = (int)GuiWidgets.Int64Field(new Rect(l4.x + 72, l4.y, 120, l4.height), "player.fly", _flySpeed);
-            _lockFly = GuiWidgets.Toggle(new Rect(l4.x + 200, l4.y, 90, l4.height), _lockFly, "锁定");
-
-            if (GuiWidgets.Button(c.Line(new Rect(0,0,120,24).height), "立即写入一次"))
+            // 法攻
+            var r2 = c.Line();
+            GuiWidgets.Label(c.Slice(ref r2, 150), $"当前法攻 {curSpell}");
+            _spellDelta = GuiWidgets.Int64Field(c.Slice(ref r2, 60), "player.spellDelta", _spellDelta);
+            if (GuiWidgets.Button(c.Slice(ref r2, 110), $"法攻 +{_spellDelta}"))
             {
-                ReflectAccessor.SetInt64(unit, "curPhysicalAttacks", _phys);
-                ReflectAccessor.SetInt64(unit, "curSpellAttacks", _spell);
-                ReflectAccessor.SetSingle(unit, "MoveSpeed", _moveSpeed);
-                ReflectAccessor.SetInt32(unit, "bigWorldFlySpeed", _flySpeed);
+                bool ok = ReflectAccessor.TrySet(unit, "curSpellAttacks", curSpell + _spellDelta);
+                _status = $"法攻 {curSpell} → {curSpell + _spellDelta} {(ok ? "✓" : "✗")}";
             }
+
+            // 移速（Single，整数增量）
+            var r3 = c.Line();
+            GuiWidgets.Label(c.Slice(ref r3, 150), $"当前移速 {curMove:0.0}");
+            _moveDelta = (int)GuiWidgets.Int64Field(c.Slice(ref r3, 60), "player.moveDelta", _moveDelta);
+            if (GuiWidgets.Button(c.Slice(ref r3, 110), $"移速 +{_moveDelta}"))
+            {
+                bool ok = ReflectAccessor.TrySet(unit, "MoveSpeed", curMove + _moveDelta);
+                _status = $"移速 {curMove:0.0} → {curMove + _moveDelta:0.0} {(ok ? "✓" : "✗")}";
+            }
+
+            // 飞行速度
+            var r4 = c.Line();
+            GuiWidgets.Label(c.Slice(ref r4, 150), $"当前飞速 {curFly}");
+            _flyDelta = (int)GuiWidgets.Int64Field(c.Slice(ref r4, 60), "player.flyDelta", _flyDelta);
+            if (GuiWidgets.Button(c.Slice(ref r4, 110), $"飞速 +{_flyDelta}"))
+            {
+                bool ok = ReflectAccessor.TrySet(unit, "bigWorldFlySpeed", curFly + _flyDelta);
+                _status = $"飞速 {curFly} → {curFly + _flyDelta} {(ok ? "✓" : "✗")}";
+            }
+
+            if (_status.Length > 0) GuiWidgets.Label(c.Line(), _status);
         }
 
-        public void DisableAll()
-        {
-            _lockPhys = _lockSpell = _lockMove = _lockFly = false;
-        }
+        public void DisableAll() { }
     }
 }

@@ -16,6 +16,7 @@ namespace LunHuiCheats.Core
 
         private static readonly Dictionary<(Type, string), PropertyInfo?> _props = new();
         private static readonly Dictionary<(Type, string), FieldInfo?> _fields = new();
+        private static readonly Dictionary<(Type, string, int), MethodInfo?> _methods = new();
 
         public static bool TryGet(object? instance, string member, out object? value)
         {
@@ -38,6 +39,29 @@ namespace LunHuiCheats.Core
             var f = GetField(t, member);
             if (f != null) { f.SetValue(instance, Coerce(value, f.FieldType)); return true; }
             return false;
+        }
+
+        /// <summary>
+        /// Invokes an IL2CPP instance method by name, matched on argument count.
+        /// Coerces each arg to the parameter type. Returns false if no matching
+        /// method (by name + arity) exists or the invoke throws.
+        /// </summary>
+        public static bool TryInvoke(object? instance, string method, out object? result, params object?[] args)
+        {
+            result = null;
+            if (instance == null) return false;
+            var t = instance.GetType();
+            var mi = GetMethod(t, method, args.Length);
+            if (mi == null) return false;
+            try
+            {
+                var ps = mi.GetParameters();
+                var coerced = new object?[ps.Length];
+                for (int i = 0; i < ps.Length; i++) coerced[i] = Coerce(args[i], ps[i].ParameterType);
+                result = mi.Invoke(instance, coerced);
+                return true;
+            }
+            catch { return false; }
         }
 
         public static long GetInt64(object? instance, string member, long fallback = 0)
@@ -79,6 +103,18 @@ namespace LunHuiCheats.Core
             var key = (t, name);
             if (!_fields.TryGetValue(key, out var f)) { f = t.GetField(name, Flags); _fields[key] = f; }
             return f;
+        }
+
+        private static MethodInfo? GetMethod(Type t, string name, int argCount)
+        {
+            var key = (t, name, argCount);
+            if (!_methods.TryGetValue(key, out var m))
+            {
+                foreach (var cand in t.GetMethods(Flags))
+                    if (cand.Name == name && cand.GetParameters().Length == argCount) { m = cand; break; }
+                _methods[key] = m;
+            }
+            return m;
         }
     }
 }

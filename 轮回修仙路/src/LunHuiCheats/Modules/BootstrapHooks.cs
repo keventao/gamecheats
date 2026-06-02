@@ -36,9 +36,23 @@ namespace LunHuiCheats.Modules
                 PatchCaptureMethod(harmony, "FakeInventoryData", "LoadData", nameof(CaptureInventory));
                 PatchCaptureMethod(harmony, "FakeInventoryData", "GetAllBackPackInvObjects", nameof(CaptureInventory));
                 PatchCaptureMethod(harmony, "FakeInventoryData", "AddItem", nameof(CaptureInventory));
+                // init/AddDaoxin/LeveUp are rare one-shot events: init() already ran while the
+                // existing save loaded (before these patches applied), and AddDaoxin/LeveUp only
+                // fire on specific player actions. Result: the live player CharacterData was never
+                // captured (log had zero "Captured CharacterData via hook"), and the world-scan
+                // fallbacks can't find it because CharacterData : Object is not a Component and is
+                // held in no static member. Fix: also hook the player-stat property GETTERS, which
+                // the in-game HUD reads continuously on the player's instance — passive capture on
+                // a hot path, same proven pattern as the inventory LoadData hook. First non-null
+                // capture wins (see GameRefs.PassCharacterData), so the player (whose level/exp the
+                // HUD draws on world-enter) is grabbed before any monster instance in combat.
                 PatchCaptureMethod(harmony, "CharacterData", "init", nameof(CaptureCharacterData));
                 PatchCaptureMethod(harmony, "CharacterData", "AddDaoxin", nameof(CaptureCharacterData));
                 PatchCaptureMethod(harmony, "CharacterData", "LeveUp", nameof(CaptureCharacterData));
+                PatchCaptureMethod(harmony, "CharacterData", "get_currentLevel", nameof(CaptureCharacterData));
+                PatchCaptureMethod(harmony, "CharacterData", "get_currentExp", nameof(CaptureCharacterData));
+                PatchCaptureMethod(harmony, "CharacterData", "get_curDaoxin", nameof(CaptureCharacterData));
+                PatchCaptureMethod(harmony, "CharacterData", "get_unitData", nameof(CaptureCharacterData));
             }
             catch (Exception ex)
             {

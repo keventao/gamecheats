@@ -17,8 +17,8 @@ namespace LunHuiCheats.Core
             File = file;
             ToggleKey        = file.Bind("General", "ToggleKey",        KeyCode.P,  "Hotkey to toggle the cheats panel.");
             GlobalDisableAll = file.Bind("General", "GlobalDisableAll", false,      "When true, all module behaviors are suppressed regardless of per-module settings.");
-            PanelWidth       = file.Bind("UI",      "PanelWidth",       460,        "Cheats panel width in pixels.");
-            PanelHeight      = file.Bind("UI",      "PanelHeight",      520,        "Cheats panel height in pixels.");
+            PanelWidth       = file.Bind("UI",      "PanelWidth",       640,        "Cheats panel width in pixels.");
+            PanelHeight      = file.Bind("UI",      "PanelHeight",      600,        "Cheats panel height in pixels.");
         }
     }
 }

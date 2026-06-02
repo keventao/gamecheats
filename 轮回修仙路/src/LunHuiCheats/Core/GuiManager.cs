@@ -23,7 +23,11 @@ namespace LunHuiCheats.Core
         {
             _registry   = registry;
             _config     = config;
-            _panelRect  = new Rect(40, 40, config.PanelWidth.Value, config.PanelHeight.Value);
+            // Clamp to a sane minimum so a stale saved config (old 460×520) can't crop the
+            // wider module layouts / right-edge buttons.
+            _panelRect  = new Rect(40, 40,
+                Mathf.Max(config.PanelWidth.Value, 640),
+                Mathf.Max(config.PanelHeight.Value, 600));
         }
 
         public void HandleInput()
@@ -83,9 +87,9 @@ namespace LunHuiCheats.Core
             // Background box
             GUI.Box(_panelRect, "");
 
-            float x = _panelRect.x + 8;
-            float y = _panelRect.y + 4;
-            float w = _panelRect.width - 16;
+            float x = _panelRect.x + 16;
+            float y = _panelRect.y + 8;
+            float w = _panelRect.width - 32;
 
             // Title
             GUI.Label(new Rect(x, y, w, 20), "轮回修仙路 Cheats");
@@ -129,10 +133,10 @@ namespace LunHuiCheats.Core
             var categories = _registry.Categories();
             if (_selectedCategory == "" && categories.Count > 0) _selectedCategory = categories[0];
 
-            float sidebarW = 96f;
-            float contentX = x + sidebarW + 6;
-            float contentW = w - sidebarW - 6;
-            float areaH = _panelRect.height - (y - _panelRect.y) - 8;
+            float sidebarW = 104f;
+            float contentX = x + sidebarW + 12;
+            float contentW = w - sidebarW - 12;
+            float areaH = _panelRect.height - (y - _panelRect.y) - 12;
 
             for (int i = 0; i < categories.Count; i++)
             {
