@@ -8,7 +8,7 @@ namespace ClanfolkCheats.Modules
 {
     public class TimeCheats : ICheatModule
     {
-        public string Name => "Time";
+        public string Name => "时间";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Ok;
 
         private static readonly int[]  Scales = { 1, 2, 5, 10 };
@@ -29,7 +29,7 @@ namespace ClanfolkCheats.Modules
                 TryInit();
             }
 
-            l.Label("Game Speed:");
+            l.Label("游戏速度:");
 
             const float btnW = 64f, btnH = 26f;
             for (int i = 0; i < Scales.Length; i++)
@@ -44,10 +44,10 @@ namespace ClanfolkCheats.Modules
             l.Y += btnH + 6f;
 
             var actual = _timeManager != null ? "game TimeScale" : $"Time.timeScale = {Time.timeScale:F1}";
-            l.Label($"Target: x{Scales[_selected]}   ({actual})");
+            l.Label($"目标: x{Scales[_selected]}   ({actual})");
 
             l.Space(8);
-            if (l.Button("Reset to x1", 28f))
+            if (l.Button("重置 x1", 28f))
             {
                 _selected = 0;
                 SetSpeed(1);

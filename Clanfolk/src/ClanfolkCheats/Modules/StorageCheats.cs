@@ -33,10 +33,10 @@ namespace ClanfolkCheats.Modules
 
         public void DrawGui(Layout l)
         {
-            l.Label("Storage Controls", 22f);
+            l.Label("存储控制", 22f);
             l.Space(4);
 
-            l.Label($"Capacity Multiplier: {_capacityMult:F1}x");
+            l.Label($"容量倍率: {_capacityMult:F1}x");
 
             var ev = Event.current;
             if (ev != null && ev.type == EventType.ScrollWheel

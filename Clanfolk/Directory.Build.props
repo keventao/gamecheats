@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
-    <GameRoot Condition="'$(GameRoot)' == ''">$(CLANFOLK_GAME_ROOT)</GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == '' And '$(CLANFOLK_GAME_ROOT)' != ''">$(CLANFOLK_GAME_ROOT)</GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == '' And '$(CLANFOLK_GAME_ROOT)' == ''"><CLANFOLK_GAME_ROOT></GameRoot>
     <ModInstallDir>$(GameRoot)\Mods</ModInstallDir>
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>

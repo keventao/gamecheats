@@ -22,6 +22,70 @@ namespace ClanfolkCheats.Modules
         private List<string> _playerItemKeys = new();
         private Dictionary<string, string> _keyToDisplay = new();
         private Dictionary<string, int> _playerItemCounts = new();
+        private static readonly Dictionary<string, string> ZhNames = new()
+        {
+            { "ItemWood", "木材" }, { "Wood", "木材" }, { "Log", "原木" }, { "Plank", "木板" },
+            { "ItemStone", "石头" }, { "Stone", "石头" }, { "Rock", "岩石" }, { "Flint", "燧石" },
+            { "ItemIron", "铁" }, { "Iron", "铁" }, { "IronOre", "铁矿石" }, { "IronIngot", "铁锭" },
+            { "ItemCopper", "铜" }, { "Copper", "铜" }, { "CopperOre", "铜矿石" },
+            { "ItemGold", "金" }, { "Gold", "金" }, { "GoldOre", "金矿石" }, { "GoldIngot", "金锭" },
+            { "ItemCoal", "煤" }, { "Coal", "煤" },
+            { "ItemClay", "黏土" }, { "Clay", "黏土" },
+            { "ItemSand", "沙" }, { "Sand", "沙" },
+            { "ItemFiber", "纤维" }, { "Fiber", "纤维" },
+            { "ItemWool", "羊毛" }, { "Wool", "羊毛" },
+            { "ItemLeather", "皮革" }, { "Leather", "皮革" },
+            { "ItemHide", "皮" }, { "Hide", "皮" },
+            { "ItemStraw", "稻草" }, { "Straw", "稻草" }, { "Hay", "干草" },
+            { "ItemThatch", "茅草" }, { "Thatch", "茅草" },
+            { "ItemWheat", "小麦" }, { "Wheat", "小麦" },
+            { "ItemFlour", "面粉" }, { "Flour", "面粉" },
+            { "ItemBread", "面包" }, { "Bread", "面包" },
+            { "ItemMeat", "肉" }, { "Meat", "肉" }, { "RawMeat", "生肉" }, { "CookedMeat", "熟肉" },
+            { "ItemFish", "鱼" }, { "Fish", "鱼" },
+            { "ItemBerry", "浆果" }, { "Berry", "浆果" }, { "Berries", "浆果" },
+            { "ItemFruit", "水果" }, { "Fruit", "水果" },
+            { "ItemVegetable", "蔬菜" }, { "Vegetable", "蔬菜" },
+            { "ItemGrain", "谷物" }, { "Grain", "谷物" },
+            { "ItemWater", "水" }, { "Water", "水" }, { "FreshWater", "淡水" },
+            { "ItemMud", "泥" }, { "Mud", "泥" },
+            { "ItemReed", "芦苇" }, { "Reed", "芦苇" },
+            { "ItemThread", "线" }, { "Thread", "线" }, { "String", "线绳" },
+            { "ItemCloth", "布" }, { "Cloth", "布" }, { "Linen", "亚麻布" },
+            { "ItemMilk", "牛奶" }, { "Milk", "牛奶" },
+            { "ItemEgg", "蛋" }, { "Egg", "蛋" },
+            { "ItemSeed", "种子" }, { "Seed", "种子" }, { "Seeds", "种子" },
+            { "ItemSapling", "树苗" }, { "Sapling", "树苗" },
+            { "ItemTool", "工具" }, { "Tool", "工具" },
+            { "ItemAxe", "斧" }, { "Axe", "斧" }, { "StoneAxe", "石斧" }, { "IronAxe", "铁斧" },
+            { "ItemPickaxe", "镐" }, { "Pickaxe", "镐" }, { "Pick", "镐" },
+            { "ItemShovel", "铲" }, { "Shovel", "铲" },
+            { "ItemSword", "剑" }, { "Sword", "剑" },
+            { "ItemBow", "弓" }, { "Bow", "弓" },
+            { "ItemArrow", "箭" }, { "Arrow", "箭" },
+            { "ItemSpear", "矛" }, { "Spear", "矛" },
+            { "ItemShield", "盾" }, { "Shield", "盾" },
+            { "ItemArmor", "护甲" }, { "Armor", "护甲" },
+            { "ItemPotion", "药水" }, { "Potion", "药水" },
+            { "ItemMedicine", "药" }, { "Medicine", "药" },
+            { "ItemHerb", "草药" }, { "Herb", "草药" },
+            { "ItemFur", "毛皮" }, { "Fur", "毛皮" },
+            { "ItemBone", "骨头" }, { "Bone", "骨头" },
+            { "ItemAntler", "鹿角" }, { "Antler", "鹿角" },
+            { "ItemBrick", "砖" }, { "Brick", "砖" },
+            { "ItemMortar", "砂浆" }, { "Mortar", "砂浆" },
+            { "ItemGlass", "玻璃" }, { "Glass", "玻璃" },
+            { "ItemCharcoal", "木炭" }, { "Charcoal", "木炭" },
+            { "ItemTorch", "火把" }, { "Torch", "火把" },
+            { "ItemCandle", "蜡烛" }, { "Candle", "蜡烛" },
+            { "ItemOil", "油" }, { "Oil", "油" },
+            { "ItemHoney", "蜂蜜" }, { "Honey", "蜂蜜" },
+            { "ItemSalt", "盐" }, { "Salt", "盐" },
+            { "ItemMap", "地图" }, { "Map", "地图" },
+            { "ItemBook", "书" }, { "Book", "书" },
+            { "ItemCoin", "硬币" }, { "Coin", "硬币" }, { "Money", "钱" },
+            { "ItemClothing", "衣服" }, { "Clothing", "衣服" },
+        };
         private string _searchInput = "";
         private int _scrollOffset;
         private bool _showPicker;
@@ -53,16 +117,16 @@ namespace ClanfolkCheats.Modules
 
         public void DrawGui(Layout l)
         {
-            if (_playerItemKeys.Count == 0) { l.Label("Waiting for game world..."); return; }
-            if (!string.IsNullOrEmpty(_lastError)) { l.Label($"Error: {_lastError}", 18f); }
+            if (_playerItemKeys.Count == 0) { l.Label("等待游戏世界加载…"); return; }
+            if (!string.IsNullOrEmpty(_lastError)) { l.Label($"错误: {_lastError}", 18f); }
 
-            l.Label($"Total: {_playerItemKeys.Count} types, {_totalItems} items in storage", 20f);
+            l.Label($"共 {_playerItemKeys.Count} 种, {_totalItems} 件物品", 20f);
             l.Space(2);
 
             for (int i = 0; i < SlotCount; i++)
             {
                 var key = _slots[i];
-                var display = string.IsNullOrEmpty(key) ? "empty" : FormatItemName(key);
+                var display = string.IsNullOrEmpty(key) ? "空" : FormatItemName(key);
                 var cnt = !string.IsNullOrEmpty(key) && _playerItemCounts.TryGetValue(key, out var c) ? c : 0;
                 l.Label($"[{i + 1}: {display}]  x{cnt}", 20f);
 
@@ -71,9 +135,9 @@ namespace ClanfolkCheats.Modules
                     GiveItem(key, 1);
                 if (ImguiUtil.Button(new Rect(bx + 40f, l.Y - 22f, 36f, 22f), $"+{_customQty}"))
                     GiveItem(key, _customQty);
-                if (ImguiUtil.Button(new Rect(bx + 80f, l.Y - 22f, 45f, 22f), "Pick"))
+                if (ImguiUtil.Button(new Rect(bx + 80f, l.Y - 22f, 45f, 22f), "选择"))
                 { _selectedSlot = i; _showPicker = true; _scrollOffset = 0; _searchInput = ""; }
-                if (ImguiUtil.Button(new Rect(bx + 129f, l.Y - 22f, 45f, 22f), _lockEnabled[i] ? "Unlock" : "Lock"))
+                if (ImguiUtil.Button(new Rect(bx + 129f, l.Y - 22f, 45f, 22f), _lockEnabled[i] ? "解锁" : "锁定"))
                     _lockEnabled[i] = !_lockEnabled[i];
                 if (_lockEnabled[i])
                 {
@@ -83,11 +147,11 @@ namespace ClanfolkCheats.Modules
             }
 
             l.Space(2);
-            l.Label($"Custom qty: {_customQty}", 20f);
+            l.Label($"自定义数量: {_customQty}", 20f);
             _customQty = ClampIntInput(l.X + 120f, l.Y - 20f, _customQty, 1, 9999);
             l.Y += 4f;
 
-            if (l.Button("Fill All Slots", 24f))
+            if (l.Button("全部填充", 24f))
                 for (int i = 0; i < SlotCount; i++)
                     GiveItem(_slots[i], _customQty);
 
@@ -253,8 +317,69 @@ namespace ClanfolkCheats.Modules
             if (_playerItemCounts.ContainsKey(key)) return false;
             _playerItemKeys.Add(key);
             _playerItemCounts[key] = 0;
-            _keyToDisplay[key] = !string.IsNullOrEmpty(display) ? display! : key;
+            var resolved = !string.IsNullOrEmpty(display) && display != key
+                ? display!
+                : ResolveZhName(key);
+            _keyToDisplay[key] = resolved;
             return true;
+        }
+
+        private static string ResolveZhName(string key)
+        {
+            var zh = TryGameLocalize(key);
+            if (!string.IsNullOrEmpty(zh) && zh != key)
+                return zh;
+            if (ZhNames.TryGetValue(key, out var mapped))
+                return mapped;
+            foreach (var kvp in ZhNames)
+            {
+                if (key.IndexOf(kvp.Key, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return kvp.Value;
+            }
+            return key;
+        }
+
+        private static string? TryGameLocalize(string key)
+        {
+            try
+            {
+                var gm = GameRefs.GetGameManager();
+                if (gm == null) return null;
+                var gmType = gm.GetType();
+
+                var getTB = gmType.GetMethod("GetTextBible", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                if (getTB == null) return null;
+
+                var textBible = getTB.Invoke(null, null);
+                if (textBible == null) return null;
+
+                var getLookup = textBible.GetType().GetMethod("GetTextLookupDictionary",
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (getLookup == null) return null;
+
+                var dict = getLookup.Invoke(textBible, null) as System.Collections.IDictionary;
+                if (dict == null) return null;
+
+                if (dict.Contains(key))
+                {
+                    var val = dict[key] as string;
+                    if (!string.IsNullOrEmpty(val) && val != key)
+                        return val;
+                }
+
+                foreach (System.Collections.DictionaryEntry entry in dict)
+                {
+                    var dictKey = entry.Key as string;
+                    if (dictKey != null && key.IndexOf(dictKey, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        var val = entry.Value as string;
+                        if (!string.IsNullOrEmpty(val))
+                            return val;
+                    }
+                }
+            }
+            catch { }
+            return null;
         }
 
         private static object? InvokeStatic(Type type, string methodName)
@@ -363,7 +488,7 @@ namespace ClanfolkCheats.Modules
 
         private void DrawPicker(Layout l)
         {
-            l.Label($"Pick item for Slot {_selectedSlot + 1}:", 22f);
+            l.Label($"选择物品 — 槽位 {_selectedSlot + 1}:", 22f);
 
             var filtered = new List<string>();
             foreach (var key in _playerItemKeys)
@@ -376,7 +501,7 @@ namespace ClanfolkCheats.Modules
             }
 
             var sr = new Rect(l.X, l.Y, l.Width, 22f);
-            GUI.Box(sr, string.IsNullOrEmpty(_searchInput) ? "Type to search..." : _searchInput);
+            GUI.Box(sr, string.IsNullOrEmpty(_searchInput) ? "输入搜索…" : _searchInput);
             l.Y += 24f;
 
             var ev = Event.current;
@@ -411,10 +536,10 @@ namespace ClanfolkCheats.Modules
                 }
             }
 
-            GUI.Label(new Rect(l.X, l.Y, l.Width - 92f, 20f), $"{filtered.Count} matches");
-            if (ImguiUtil.Button(new Rect(l.X + l.Width - 92f, l.Y, 44f, 20f), "Prev") && _scrollOffset > 0)
+            GUI.Label(new Rect(l.X, l.Y, l.Width - 92f, 20f), $"{filtered.Count} 条结果");
+            if (ImguiUtil.Button(new Rect(l.X + l.Width - 92f, l.Y, 44f, 20f), "上页") && _scrollOffset > 0)
                 _scrollOffset = Math.Max(0, _scrollOffset - vr);
-            if (ImguiUtil.Button(new Rect(l.X + l.Width - 46f, l.Y, 44f, 20f), "Next") && _scrollOffset < mx)
+            if (ImguiUtil.Button(new Rect(l.X + l.Width - 46f, l.Y, 44f, 20f), "下页") && _scrollOffset < mx)
                 _scrollOffset = Math.Min(mx, _scrollOffset + vr);
             l.Y += 22f;
 
@@ -445,9 +570,9 @@ namespace ClanfolkCheats.Modules
                 { _slots[_selectedSlot] = key; _showPicker = false; }
             }
             l.Y += vr * 22f + 4f;
-            if (ImguiUtil.Button(new Rect(l.X, l.Y, 70f, 22f), "Top")) _scrollOffset = 0;
-            if (ImguiUtil.Button(new Rect(l.X + 74f, l.Y, 70f, 22f), "Bottom")) _scrollOffset = mx;
-            if (ImguiUtil.Button(new Rect(l.X + 148f, l.Y, 70f, 22f), "Close")) _showPicker = false;
+            if (ImguiUtil.Button(new Rect(l.X, l.Y, 70f, 22f), "顶部")) _scrollOffset = 0;
+            if (ImguiUtil.Button(new Rect(l.X + 74f, l.Y, 70f, 22f), "底部")) _scrollOffset = mx;
+            if (ImguiUtil.Button(new Rect(l.X + 148f, l.Y, 70f, 22f), "关闭")) _showPicker = false;
             l.Y += 28f;
         }
 
@@ -456,13 +581,27 @@ namespace ClanfolkCheats.Modules
             var display = GetDisplayName(key);
             return string.Equals(display, key, StringComparison.OrdinalIgnoreCase)
                 ? key
-                : $"{display} | {key}";
+                : $"{display} ({key})";
         }
 
         private string GetDisplayName(string key)
         {
             if (_keyToDisplay.TryGetValue(key, out var dn) && !string.IsNullOrEmpty(dn) && dn != key)
                 return dn;
+
+            var zh = TryGameLocalize(key);
+            if (!string.IsNullOrEmpty(zh) && zh != key)
+                return zh;
+
+            if (ZhNames.TryGetValue(key, out var mapped))
+                return mapped;
+
+            foreach (var kvp in ZhNames)
+            {
+                if (key.IndexOf(kvp.Key, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return kvp.Value;
+            }
+
             return key;
         }
 

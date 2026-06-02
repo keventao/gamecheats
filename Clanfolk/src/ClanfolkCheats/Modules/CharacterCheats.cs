@@ -26,22 +26,22 @@ namespace ClanfolkCheats.Modules
 
         public void DrawGui(Layout l)
         {
-            l.Label("Character Controls", 22f);
-            if (_unitManager == null) { l.Label("Waiting for game world..."); return; }
+            l.Label("角色控制", 22f);
+            if (_unitManager == null) { l.Label("等待游戏世界加载…"); return; }
             l.Space(4);
 
-            l.Label("Health Lock (keep full HP):");
-            _healthLock = l.Toggle(_healthLock, _healthLock ? "ON" : "OFF");
+            l.Label("生命锁满:");
+            _healthLock = l.Toggle(_healthLock, _healthLock ? "开" : "关");
 
             l.Space(4);
-            l.Label("Mood Lock (keep max mood):");
-            _moodLock = l.Toggle(_moodLock, _moodLock ? "ON" : "OFF");
-            if (_moodLock) l.Label("  WIP: needs mood attribute field name.", 18f);
+            l.Label("心情锁满:");
+            _moodLock = l.Toggle(_moodLock, _moodLock ? "开" : "关");
+            if (_moodLock) l.Label("  开发中: 需要心情属性字段名。", 18f);
 
             l.Space(4);
-            l.Label("No Aging:");
-            _noAging = l.Toggle(_noAging, _noAging ? "ON" : "OFF");
-            if (_noAging) l.Label("  WIP: needs growth/age attribute.", 18f);
+            l.Label("停止衰老:");
+            _noAging = l.Toggle(_noAging, _noAging ? "开" : "关");
+            if (_noAging) l.Label("  开发中: 需要成长/年龄属性。", 18f);
         }
 
         public void OnUpdate()
