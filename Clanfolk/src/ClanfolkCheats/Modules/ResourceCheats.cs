@@ -183,6 +183,7 @@ namespace ClanfolkCheats.Modules
                 if (em == null) { RetryLater("EntityManager null"); return; }
 
                 var emType = em.GetType();
+                _itemEntityManager = em;   // kept for GetEntityTypeToken -> GetText fallback
                 MelonLogger.Msg($"[Rsrc] EntityManager type: {emType.FullName}");
 
                 _playerItemKeys.Clear();
@@ -326,7 +327,7 @@ namespace ClanfolkCheats.Modules
 
         private static string ResolveZhName(string key)
         {
-            var zh = TryGameLocalize(key);
+            var zh = TryGameLocalize(key) ?? TryTokenLocalize(key);
             if (!string.IsNullOrEmpty(zh) && zh != key)
                 return zh;
             if (ZhNames.TryGetValue(key, out var mapped))
@@ -337,6 +338,51 @@ namespace ClanfolkCheats.Modules
                     return kvp.Value;
             }
             return key;
+        }
+
+        // Key-only fallback: GameManager.GetTextBible().GetText(key, GrowthStage.NONE).
+        // Used when discovery only yielded a string key (no live Entity to call
+        // GetEntityName on, e.g. the prefab-lookup path). GetText returns the
+        // current-language text for a text-bible key, or echoes the key if unknown.
+        private static MethodInfo? _getTextMethod;
+        private static object? _getTextDefaultFlag;
+        private static object? _itemEntityManager;
+        private static MethodInfo? _getTokenMethod;
+
+        // Second key-only fallback: EntityManager.GetEntityTypeToken(key) -> string[],
+        // then GetText on each token, returning the first that localizes. The name token
+        // is conventionally first; iterating in order returns it. Used only when neither
+        // GetEntityName nor a direct GetText(key) produced a name.
+        private static string? TryTokenLocalize(string key)
+        {
+            try
+            {
+                var em = _itemEntityManager;
+                if (em == null) return null;
+
+                if (_getTokenMethod == null)
+                    _getTokenMethod = em.GetType().GetMethod(
+                        "GetEntityTypeToken",
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                        null,
+                        new[] { typeof(string) },
+                        null);
+                if (_getTokenMethod == null) return null;
+
+                var tokens = _getTokenMethod.Invoke(em, new object[] { key }) as System.Collections.IEnumerable;
+                if (tokens == null) return null;
+
+                foreach (var t in tokens)
+                {
+                    var token = t as string;
+                    if (string.IsNullOrEmpty(token)) continue;
+                    var localized = TryGameLocalize(token);
+                    if (!string.IsNullOrEmpty(localized) && localized != token && localized != key)
+                        return localized;
+                }
+            }
+            catch { }
+            return null;
         }
 
         private static string? TryGameLocalize(string key)
@@ -353,30 +399,30 @@ namespace ClanfolkCheats.Modules
                 var textBible = getTB.Invoke(null, null);
                 if (textBible == null) return null;
 
-                var getLookup = textBible.GetType().GetMethod("GetTextLookupDictionary",
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (getLookup == null) return null;
-
-                var dict = getLookup.Invoke(textBible, null) as System.Collections.IDictionary;
-                if (dict == null) return null;
-
-                if (dict.Contains(key))
+                if (_getTextMethod == null)
                 {
-                    var val = dict[key] as string;
-                    if (!string.IsNullOrEmpty(val) && val != key)
-                        return val;
-                }
-
-                foreach (System.Collections.DictionaryEntry entry in dict)
-                {
-                    var dictKey = entry.Key as string;
-                    if (dictKey != null && key.IndexOf(dictKey, StringComparison.OrdinalIgnoreCase) >= 0)
+                    foreach (var m in textBible.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                     {
-                        var val = entry.Value as string;
-                        if (!string.IsNullOrEmpty(val))
-                            return val;
+                        if (m.Name != "GetText") continue;
+                        var ps = m.GetParameters();
+                        if (ps.Length >= 1 && ps[0].ParameterType == typeof(string))
+                        {
+                            _getTextMethod = m;
+                            // second param is the GrowthStage enum (default NONE == 0)
+                            _getTextDefaultFlag = ps.Length >= 2 && ps[1].ParameterType.IsEnum
+                                ? Enum.ToObject(ps[1].ParameterType, 0)
+                                : null;
+                            break;
+                        }
                     }
                 }
+                if (_getTextMethod == null) return null;
+
+                var pc = _getTextMethod.GetParameters().Length;
+                var args = pc >= 2 ? new object?[] { key, _getTextDefaultFlag } : new object?[] { key };
+                var val = _getTextMethod.Invoke(textBible, args) as string;
+                if (!string.IsNullOrEmpty(val) && val != key)
+                    return val;
             }
             catch { }
             return null;
@@ -397,6 +443,12 @@ namespace ClanfolkCheats.Modules
 
         private static string? GetEntityDisplayName(object entity)
         {
+            // Entity.GetEntityName() is the game's own virtual localizer — returns the
+            // current-language (Chinese) name for every item. displayName field is a
+            // last-resort fallback (often empty on prefabs).
+            var name = GetMemberValue(entity, "GetEntityName") as string;
+            if (!string.IsNullOrEmpty(name))
+                return name;
             return GetMemberValue(entity, "displayName") as string;
         }
 
@@ -589,7 +641,7 @@ namespace ClanfolkCheats.Modules
             if (_keyToDisplay.TryGetValue(key, out var dn) && !string.IsNullOrEmpty(dn) && dn != key)
                 return dn;
 
-            var zh = TryGameLocalize(key);
+            var zh = TryGameLocalize(key) ?? TryTokenLocalize(key);
             if (!string.IsNullOrEmpty(zh) && zh != key)
                 return zh;
 
