@@ -29,6 +29,7 @@ namespace LunHuiCheats.Modules
         private readonly ItemBrowserView _view = new();
         private int _lastBuildFrame = -1000;
         private long _newItemId = 1;
+        private bool _logged;   // log per-list discovery once, not every rebuild (was spamming)
 
         public void Register(ModConfig cfg, Harmony harmony)
         {
@@ -36,7 +37,7 @@ namespace LunHuiCheats.Modules
                 ? ModuleStatus.Ok : ModuleStatus.Broken;
         }
 
-        public void OnGameReady() { }
+        public void OnGameReady() { _logged = false; }
         public void OnUpdate() { }
 
         private void RebuildRows()
@@ -55,7 +56,7 @@ namespace LunHuiCheats.Modules
                     Plugin.LogSrc?.LogWarning($"[Inventory] Field '{field}' missing on FakeInventoryData.");
                     continue;
                 }
-                Plugin.LogSrc?.LogInfo($"[Inventory] Field '{field}' found, type={listObj.GetType().Name}");
+                if (!_logged) Plugin.LogSrc?.LogInfo($"[Inventory] Field '{field}' found, type={listObj.GetType().Name}");
                 var lt = listObj.GetType();
                 var getEnum = lt.GetMethod("GetEnumerator");
                 if (getEnum == null)
@@ -88,8 +89,9 @@ namespace LunHuiCheats.Modules
                     Plugin.LogSrc?.LogWarning($"[Inventory] enum {field} failed: {ex.Message}");
                     break;
                 }
-                Plugin.LogSrc?.LogInfo($"[Inventory] Loaded {count} items from {field} ({cat}).");
+                if (!_logged) Plugin.LogSrc?.LogInfo($"[Inventory] Loaded {count} items from {field} ({cat}).");
             }
+            _logged = true;
             _model.SetRows(rows);
         }
 

@@ -4,7 +4,7 @@ Last updated: 2026-05-31
 
 ## Current Status
 
-Status: **v0.0.3 — cheat panel + 4 modules implemented (code-complete on branch `feat/lunhui-cheat-panel`; awaiting in-game smoke on Windows).**
+Status: **v0.0.4 — cheat panel + 4 modules; 修复 CharacterData/UnitData 运行时解析 bug（库存捕获曾永久阻断角色数据扫描）+ 库存日志降噪；待 Windows 游戏内冒烟确认。**
 
 Game/runtime:
 
@@ -80,6 +80,19 @@ See `refs/01-discovered-types-summary.md` for full details.
 - `FakeInventoryData.AddItem()` 可能需要有效的 `BaseRewardData` 实例，不能传 null。
 
 ## Version History
+
+### v0.0.4（GameRefs 解析 bug 修复 + 库存日志降噪）
+
+- **修 CharacterData/UnitData 永远 null 的真因**：`GameRefs.PassInventory` 在首次捕获
+  库存时把共享标志 `_resolved=true`，于是 CharacterData 的多阶段回退扫描（Phase2-5）
+  被永久跳过 → `CharacterData`/`UnitData`（=`CharacterData.unitData`）始终 null →
+  PlayerStats/GodMode/Cultivation 面板显示"未找到"。
+  修：删除 `_resolved` gate，getter 在**自身目标**为 null 时按 1.5s 节流重跑 `ResolveAll`；
+  Phase5 深转储（写 `lunhui-deepdump.txt`）加 `_deepDumpDone` 一次性守卫，避免重扫刷盘。
+- **库存刷屏**：`RebuildRows` 每 ~1s 给 8 个列表各打 found/loaded 日志 → 改 `_logged` 一次性。
+- 测试：16/19 通过；3 失败为环境问题（测试宿主加载不到 `UnityEngine.CoreModule`，
+  `SaveBackup`/`ModuleRegistry` 经 `Plugin` 静态初始化触发），非本次改动引入。
+- 待 Windows 游戏内确认：进世界按 P → 各模块找到活数据；日志 `[GameRefs] Done: CharacterData=True`。
 
 ### v0.0.3
 

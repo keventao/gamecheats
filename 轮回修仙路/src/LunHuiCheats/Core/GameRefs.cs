@@ -14,7 +14,7 @@ namespace LunHuiCheats.Core
 
         private static object? _characterData;
         private static object? _inventoryData;
-        private static bool _resolved;
+        private static bool _deepDumpDone;
 
         private static readonly BindingFlags WalkFlags =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
@@ -26,7 +26,8 @@ namespace LunHuiCheats.Core
             {
                 _characterData = null;
                 _inventoryData = null;
-                _resolved = false;
+                _lastResolveAttempt = -999f;
+                _deepDumpDone = false;
                 Plugin.Registry?.ResetGameReady();
             }
             Plugin.LogSrc?.LogInfo($"[GameRefs] IsReady = {ready}");
@@ -45,7 +46,7 @@ namespace LunHuiCheats.Core
         {
             get
             {
-                if (!_resolved && IsReady) ResolveAll(null);
+                EnsureResolved();
                 return _characterData;
             }
         }
@@ -63,9 +64,25 @@ namespace LunHuiCheats.Core
         {
             get
             {
-                if (!_resolved && IsReady) ResolveAll(null);
+                EnsureResolved();
                 return _inventoryData;
             }
+        }
+
+        // Re-run the full multi-phase scan whenever a target is still missing. The old code
+        // gated on a single `_resolved` flag that PassInventory/PassCharacterData set to true
+        // on the FIRST capture — so once the inventory hook fired, the CharacterData fallback
+        // scan (Phase2-5) never ran and CharacterData/UnitData stayed null forever. Throttled
+        // so DrawGui/OnUpdate calling this per frame doesn't re-scan every frame.
+        private static float _lastResolveAttempt = -999f;
+        private static void EnsureResolved()
+        {
+            if (!IsReady) return;
+            if (_characterData != null && _inventoryData != null) return;
+            float now = Time.realtimeSinceStartup;
+            if (now - _lastResolveAttempt < 1.5f) return;
+            _lastResolveAttempt = now;
+            ResolveAll(null);
         }
 
         /// <summary>Called by BootstrapHooks to capture live instances via Harmony patch.</summary>
@@ -92,7 +109,6 @@ namespace LunHuiCheats.Core
                 }
             }
             _inventoryData = instance;
-            _resolved = true;
             int cnt = 0;
             try
             {
@@ -108,13 +124,11 @@ namespace LunHuiCheats.Core
         public static void PassCharacterData(object instance)
         {
             _characterData = instance;
-            _resolved = true;
             Plugin.LogSrc?.LogInfo("[GameRefs] Captured CharacterData via hook.");
         }
 
         private static void ResolveAll(UnityEngine.Object? seed)
         {
-            _resolved = true;
             List<GameObject>? dumpRoots = null;
             try
             {
@@ -147,8 +161,13 @@ namespace LunHuiCheats.Core
                     ScanStaticMembers();
                 }
 
-                if (_characterData == null || _inventoryData == null)
+                // Phase5 is the heavyweight pass (walks every MonoBehaviour, rewrites
+                // lunhui-deepdump.txt). EnsureResolved re-runs ResolveAll on a throttle while
+                // targets are missing, so cap the deep dump to once per world to avoid
+                // re-scanning/rewriting the file every retry.
+                if ((_characterData == null || _inventoryData == null) && !_deepDumpDone)
                 {
+                    _deepDumpDone = true;
                     Plugin.LogSrc?.LogInfo("[GameRefs] Phase5: deep-property dump of all MonoBehaviours...");
                     DeepDumpAllMbs(dumpRoots);
                 }
