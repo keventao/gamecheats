@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using BepInEx.Configuration;
 using Xunit;
 
 namespace LunHuiCheats.Tests
@@ -18,7 +21,15 @@ namespace LunHuiCheats.Tests
             var registry = new Core.ModuleRegistry();
             var module = new TestModule();
             registry.Add(module);
-            registry.RegisterAll(new Core.ModConfig(null!), new HarmonyLib.Harmony("test"));
+            var cfgPath = Path.Combine(Path.GetTempPath(), $"lunhui-tests-{Guid.NewGuid():N}.cfg");
+            try
+            {
+                registry.RegisterAll(new Core.ModConfig(new ConfigFile(cfgPath, false)), new HarmonyLib.Harmony("test"));
+            }
+            finally
+            {
+                if (File.Exists(cfgPath)) File.Delete(cfgPath);
+            }
             Assert.Equal(Core.ModuleStatus.Ok, module.Status);
         }
 

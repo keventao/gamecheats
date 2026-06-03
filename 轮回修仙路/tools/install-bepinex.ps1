@@ -14,8 +14,16 @@ if (-not (Test-Path $zipPath)) {
     exit 1
 }
 
+$expectedSha256 = "3616d6a67f5f595973ec4aa7bd7edaf7f799d5bb9926f7146a6dcc7b4abf478f"
+$actualSha256 = (Get-FileHash -LiteralPath $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actualSha256 -ne $expectedSha256) {
+    Write-Error "BepInEx zip checksum mismatch. Expected $expectedSha256 but found $actualSha256"
+    exit 1
+}
+
 Write-Host "Installing BepInEx 6 IL2CPP to: $GameRoot"
 Write-Host "Extracting from: $zipPath"
+Write-Host "Verified SHA256: $actualSha256"
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory($zipPath, $GameRoot)

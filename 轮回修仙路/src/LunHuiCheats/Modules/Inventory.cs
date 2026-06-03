@@ -126,7 +126,9 @@ namespace LunHuiCheats.Modules
             try
             {
                 object dbVal = Enum.ToObject(dbEnum, 24);
-                var listObj = mi.Invoke(null, new object[] { dbVal, Il2CppInterop.Runtime.Il2CppType.From(cfgT) });
+                var cfgIl2CppType = ToIl2CppType(cfgT);
+                if (cfgIl2CppType == null) { _spawnStatus = "Il2CppType 转换失败"; return; }
+                var listObj = mi.Invoke(null, new object[] { dbVal, cfgIl2CppType });
                 if (listObj == null) { _spawnStatus = "返回 null"; return; }
                 var lt = listObj.GetType();
                 int cnt = Convert.ToInt32(lt.GetProperty("Count").GetValue(listObj));
@@ -242,6 +244,22 @@ namespace LunHuiCheats.Modules
                 return Activator.CreateInstance(wrapperType, ptr) ?? il2cppObj;
             }
             catch { return il2cppObj; }
+        }
+
+        // Use reflection to avoid requiring generated Il2Cppmscorlib at test build time.
+        private static object ToIl2CppType(Type wrapperType)
+        {
+            try
+            {
+                var converter = Type.GetType("Il2CppInterop.Runtime.Il2CppType, Il2CppInterop.Runtime");
+                var from = converter?.GetMethod("From", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Type) }, null);
+                return from?.Invoke(null, new object[] { wrapperType });
+            }
+            catch (Exception ex)
+            {
+                Plugin.LogSrc?.LogWarning($"[Inventory] Il2CppType conversion failed: {ex.Message}");
+                return null;
+            }
         }
 
         private static object TryActivator(Type brt)

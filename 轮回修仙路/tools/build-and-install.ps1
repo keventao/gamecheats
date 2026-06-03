@@ -36,8 +36,23 @@ if (-not (Test-Path $pluginDir)) {
     New-Item -ItemType Directory -Path $pluginDir -Force | Out-Null
 }
 
-$dllSource = "$srcDir\bin\Release\netstandard2.1\LunHuiCheats.dll"
+$projectFile = Join-Path $srcDir "LunHuiCheats.csproj"
+$projectXml = [xml](Get-Content -LiteralPath $projectFile)
+$targetFramework = $projectXml.Project.PropertyGroup.TargetFramework |
+    Where-Object { $_ } |
+    Select-Object -First 1
+if (-not $targetFramework) {
+    Write-Error "Could not read TargetFramework from $projectFile"
+    exit 1
+}
+
+$dllSource = Join-Path $srcDir "bin\Release\$targetFramework\LunHuiCheats.dll"
 $dllDest = "$pluginDir\LunHuiCheats.dll"
+
+if (-not (Test-Path $dllSource)) {
+    Write-Error "Build output not found: $dllSource"
+    exit 1
+}
 
 Copy-Item -Path $dllSource -Destination $dllDest -Force
 Write-Host "Installed to: $dllDest" -ForegroundColor Green

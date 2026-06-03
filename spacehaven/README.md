@@ -54,13 +54,17 @@ If the editor cannot find saves, set `SPACEHAVEN_SAVES` or browse to the save fi
 
 ## macOS
 
-Double-click `mac/SpaceHavenEditor.app`, or run `mac/run.command`.
-
-If Gatekeeper blocks the unsigned app, right-click the app and choose `Open`, or remove quarantine:
+Recommended: run the source launcher:
 
 ```bash
-xattr -dr com.apple.quarantine "mac/SpaceHavenEditor.app"
+./mac/run.command
 ```
+
+`mac/SpaceHavenEditor.app` is kept only as a convenience bundle. Do not remove
+Gatekeeper quarantine or bypass macOS trust checks for the bundled app unless it
+has been rebuilt, signed/notarized, and verified against a published checksum.
+
+For the most auditable path, run `python3 mac/editor.py` from this folder.
 
 The editor checks an explicit path argument, `SPACEHAVEN_SAVES`, and the bundled `savegames/` fallback.
 

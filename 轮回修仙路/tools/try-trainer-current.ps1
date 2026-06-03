@@ -14,6 +14,8 @@
       * It MIRRORS the game into %TEMP%\lunhui-trainer-test\game (a copy).
       * It BACKS UP the save folder to %TEMP%\lunhui-trainer-test\save-backup.
       * It never touches the real game install unless you pass -NoCopy.
+      * With -NoCopy, existing loader files are preserved unless you also pass
+        -AllowRealInstallOverwrite; overwritten files are moved to a backup first.
 
     Delete %TEMP%\lunhui-trainer-test to undo everything.
 
@@ -30,13 +32,19 @@
     copy, and launch via Steam. Use only if the sandboxed copy refuses to start
     (Steam DRM). The save is still backed up first.
 
+.PARAMETER AllowRealInstallOverwrite
+    Required with -NoCopy when existing loader artifacts are present. Existing
+    artifacts are moved to a timestamped backup under %TEMP%\lunhui-trainer-test
+    before the trainer package is extracted.
+
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File tools/try-trainer-current.ps1 -GameRoot "<STEAM>\steamapps\common\轮回修仙路"
 #>
 param(
     [string]$GameRoot = $env:LUNHUI_GAME_ROOT,
     [int]$TimeoutSec = 180,
-    [switch]$NoCopy
+    [switch]$NoCopy,
+    [switch]$AllowRealInstallOverwrite
 )
 
 $ErrorActionPreference = "Stop"
@@ -44,6 +52,10 @@ $ErrorActionPreference = "Stop"
 function Info($m)  { Write-Host "[try-trainer] $m" -ForegroundColor Cyan }
 function Warn($m)  { Write-Host "[try-trainer] $m" -ForegroundColor Yellow }
 function Good($m)  { Write-Host "[try-trainer] $m" -ForegroundColor Green }
+
+function Get-Sha256($path) {
+    (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
 
 # ---------------------------------------------------------------------------
 # 0. Validate inputs
@@ -66,6 +78,7 @@ if (-not $trainerZip) {
     exit 1
 }
 Info "Trainer zip:  $($trainerZip.FullName)"
+Info "Trainer SHA256: $(Get-Sha256 $trainerZip.FullName)"
 Info "Game root:    $GameRoot"
 
 # Workspace under %TEMP% so nothing pollutes git or the real install.
@@ -96,11 +109,6 @@ if (Test-Path $saveDir) {
 if ($NoCopy) {
     $target = $GameRoot
     Warn "-NoCopy: installing trainer INTO the real game dir: $target"
-    # Preserve any existing loader so we can warn the user it was clobbered.
-    $existing = Join-Path $target "BepInEx"
-    if (Test-Path $existing) {
-        Warn "Existing BepInEx found in real install — it will be removed for this test."
-    }
 } else {
     $target = $sandbox
     Info "Mirroring game into sandbox (this can be several GB / minutes)..."
@@ -122,9 +130,34 @@ $loaderArtifacts = @(
     "BepInEx", "dotnet", "winhttp.dll", "doorstop_config.ini",
     ".doorstop_version", "changelog.txt", ".doorstop_version.txt"
 )
+$existingArtifacts = @()
 foreach ($a in $loaderArtifacts) {
     $p = Join-Path $target $a
-    if (Test-Path $p) { Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue }
+    if (Test-Path $p) { $existingArtifacts += $p }
+}
+if ($NoCopy -and $existingArtifacts.Count -gt 0 -and -not $AllowRealInstallOverwrite) {
+    Write-Error @"
+-NoCopy would replace existing loader artifacts in the real game install:
+$($existingArtifacts -join "`n")
+
+Re-run with -AllowRealInstallOverwrite to move them to a timestamped backup first,
+or omit -NoCopy to use the sandbox copy.
+"@
+    exit 1
+}
+if ($NoCopy -and $existingArtifacts.Count -gt 0) {
+    $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
+    $artifactBackup = Join-Path $base "real-install-loader-backup-$stamp"
+    New-Item -ItemType Directory -Path $artifactBackup -Force | Out-Null
+    Warn "Backing up existing real-install loader artifacts to: $artifactBackup"
+    foreach ($p in $existingArtifacts) {
+        Move-Item -LiteralPath $p -Destination (Join-Path $artifactBackup (Split-Path -Leaf $p)) -Force
+    }
+    Good "Existing loader artifacts moved to backup."
+} else {
+    foreach ($p in $existingArtifacts) {
+        Remove-Item -LiteralPath $p -Recurse -Force -ErrorAction Stop
+    }
 }
 
 # ---------------------------------------------------------------------------

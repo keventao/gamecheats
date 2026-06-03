@@ -12,11 +12,18 @@ FightLife Vanguard 修改器 — Windows 安装说明
   游戏必须为 Unity Mono 后端（有 FightLife Vanguard_Data/Managed 目录）。
   本 mod 在 Unity 6000.2.6f2 版本下验证通过。其他版本可能因字段名变化失效。
 
+二进制来源 / 完整性：
+  本目录当前只包含已打包 DLL，没有可审计源码。修改前请先恢复或重建源码。
+  CheatMenu.dll SHA256:
+    0f1e616f8aeda9641c9e4e1195f134a6c1a4116b59f26d85f768504a1fec5390
+  若 DLL 被替换，必须同步更新校验值，并记录来源、版本和构建方式。
+
 安装步骤：
 
 1. 关闭游戏。
 
 2. 进入游戏安装目录下的 FightLife Vanguard_Data\Managed\
+   - 先计算本文件夹 CheatMenu.dll 的 SHA256，并确认与上方校验值一致
    - 若存在 CheatMenu.dll，备份为 CheatMenu.dll.original.bak
    - 将本文件夹的 CheatMenu.dll 复制进去
 

@@ -29,6 +29,13 @@ BepInEx 6 IL2CPP cheat panel for *轮回修仙路* (Steam AppID 1993150), an ope
 ### Step 1 — Install BepInEx 6 IL2CPP
 
 BepInEx 6 IL2CPP x64 (build 755) is included in `tools/BepInEx-Unity.IL2CPP-win-x64.zip`.
+The installer verifies the bundled archive before extraction:
+
+- `tools/BepInEx-Unity.IL2CPP-win-x64.zip`
+  - SHA256: `3616d6a67f5f595973ec4aa7bd7edaf7f799d5bb9926f7146a6dcc7b4abf478f`
+
+Do not replace this archive without updating the checksum and recording the
+source/version in this section.
 
 **一键安装：**
 ```powershell
@@ -36,6 +43,18 @@ powershell tools/install-bepinex.ps1 -GameRoot "<STEAM>\steamapps\common\轮回�
 ```
 
 **手动安装：** 解压 `tools/BepInEx-Unity.IL2CPP-win-x64.zip`，把 `winhttp.dll`、`.doorstop_version`、`doorstop_config.ini`、`BepInEx/` 文件夹放到游戏根目录（跟游戏 `.exe` 同目录）。
+
+### Bundled trainer provenance
+
+`《轮回修仙路》基础功能库1.0.4_BepInEx版.zip` is a third-party compatibility
+reference package used by `tools/try-trainer-current.ps1`. The script prints
+its SHA256 before use:
+
+- SHA256: `03beffe324e6dfde5e2da64ce003995f0e0a8c26be2c46a0c9b16b75b23319ab`
+
+Prefer the sandbox mode. Direct real-install testing with `-NoCopy` refuses to
+overwrite existing loader artifacts unless `-AllowRealInstallOverwrite` is also
+passed; existing artifacts are moved to a timestamped backup first.
 
 ### Step 2 — 首次启动游戏
 
