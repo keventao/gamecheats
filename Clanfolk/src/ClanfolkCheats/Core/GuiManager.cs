@@ -23,7 +23,7 @@ namespace ClanfolkCheats.Core
         {
             var ev = Event.current;
 
-            if (ev != null && ev.type == EventType.KeyDown && ev.keyCode == KeyCode.F1
+            if (ev != null && ev.type == EventType.KeyDown && ev.keyCode == KeyCode.P
                 && UnityEngine.Time.frameCount != _lastToggleFrame)
             {
                 _lastToggleFrame = UnityEngine.Time.frameCount;
@@ -47,7 +47,7 @@ namespace ClanfolkCheats.Core
             var tagRect = new Rect(8, 8, 380, 22);
             var prev = GUI.color;
             GUI.color = Color.yellow;
-            GUI.Box(tagRect, $"Clanfolk Cheats v{Plugin.Version} — F1 toggle | open={_open}");
+            GUI.Box(tagRect, $"Clanfolk Cheats v{Plugin.Version} — P toggle | open={_open}");
             GUI.color = prev;
 
             if (!_open) return;

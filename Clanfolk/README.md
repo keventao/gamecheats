@@ -2,7 +2,7 @@
 
 MelonLoader + HarmonyX cheat panel for Clanfolk.
 
-The panel is opened with F1. UI rendering is fully custom-painted IMGUI because
+The panel is opened with P. UI rendering is fully custom-painted IMGUI because
 the generated IL2CPP Unity IMGUI bindings may not reliably return values from
 several standard GUI calls.
 
@@ -42,7 +42,7 @@ dotnet build Clanfolk/src/ClanfolkCheats/ClanfolkCheats.csproj -c Release /p:Gam
 <game>/Mods/
 ```
 
-5. Restart the game and press F1.
+5. Restart the game and press P.
 
 ## Development
 

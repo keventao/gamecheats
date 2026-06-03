@@ -7,11 +7,11 @@
 - [ ] MelonLoader console window appears
 - [ ] `ClanfolkCheats v0.1.0 loaded (6 modules)` in console
 
-### F1 Panel
-- [ ] F1 opens the cheat panel
-- [ ] F1 closes the panel
+### P Panel
+- [ ] P opens the cheat panel
+- [ ] P closes the panel
 - [ ] Panel is draggable by title bar
-- [ ] Corner tag visible: "Clanfolk Cheats v0.1.0 — F1 toggle"
+- [ ] Corner tag visible: "Clanfolk Cheats v0.1.0 — P toggle"
 - [ ] Status indicator shows "In Game" when in a save
 
 ### Time Tab
