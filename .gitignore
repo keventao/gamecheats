@@ -49,3 +49,6 @@ Humanica/UserData/
 
 # Generated Space Haven mods from local game assets
 spacehaven/generated/
+
+# Claude-Code-Game-Studios template (local sub-project, not pushed)
+/Claude-Code-Game-Studios/
