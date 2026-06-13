@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SatisfactoryTrainer.Tests/SatisfactoryTrainer.Tests.csproj" />
+  <Project Path="SatisfactoryTrainer/SatisfactoryTrainer.csproj" />
+</Solution>

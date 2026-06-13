@@ -1,0 +1,6 @@
+# Published trainer build output (self-contained exe + native runtime)
+**/publish/
+*.exe
+
+# Local-only decompiles / extracted symbols
+refs/decompiled/

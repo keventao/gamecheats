@@ -17,6 +17,7 @@ Multi-game, multi-engine cheat/mod workspace. Each top-level dir is **one game**
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML | Python/Tk/XML |
 | `fightlife mods/` | Unity Mono managed-DLL injection | packaged binaries (no source) |
 | `轮回修仙路/` | BepInEx 6 + HarmonyX, Unity IL2CPP | `dotnet` scaffold |
+| `Satisfactory/` | External memory trainer (no injection), Unreal Engine 5.3 | `dotnet` (publish `win-x64`) |
 
 ## Layout (source-type projects)
 

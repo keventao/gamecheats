@@ -17,6 +17,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `fightlife mods/` | Unity Mono managed DLL package | Packaged Windows install files present; source for `CheatMenu.dll` still needs recovery/recreation. | `fightlife mods/ROADMAP.md` |
 | `Clanfolk/` | MelonLoader + HarmonyX, Unity IL2CPP | v0.1.0 skeleton with Time (working) + Resource (ItemManager.SpawnItem); Build/Character/God/Storage skeletons. | `Clanfolk/ROADMAP.md` |
 | `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | Scaffold only; engine type and cheat scope to confirm. | `轮回修仙路/ROADMAP.md` |
+| `Satisfactory/` | External C# trainer, UE5.3 (build 493833) | Code complete + 20 tests pass; PDB-sourced offsets. Instant Manual Craft (F2) + Achievement Enable (F1) await in-game smoke. | `Satisfactory/ROADMAP.md` |
 
 ## Cross-Project Priorities
 
