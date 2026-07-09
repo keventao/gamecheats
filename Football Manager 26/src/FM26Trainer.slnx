@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FM26Trainer.Tests/FM26Trainer.Tests.csproj" />
+  <Project Path="FM26Trainer/FM26Trainer.csproj" />
+</Solution>
+

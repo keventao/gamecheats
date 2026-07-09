@@ -14,6 +14,7 @@ Start with a project's local `README.md` and `ROADMAP.md`; they hold authoritati
 | `FactoryTown/` | BepInEx + Harmony, Unity Mono | `dotnet` |
 | `Farthest Frontier/` | Harmony plugin, Unity Mono | `dotnet` |
 | `Timberborn/` | Official mod: `KKDoubleResources` (C#) + `all-in-one-gen` (JSON gen) | mixed |
+| `Football Manager 26/` | External C# trainer, macOS Unity IL2CPP | `dotnet` |
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML | Python/Tk/XML |
 | `fightlife mods/` | Unity Mono managed-DLL injection | packaged binaries (no source) |
 | `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | scaffold |
