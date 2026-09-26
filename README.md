@@ -18,6 +18,7 @@ Start with a project's local `README.md` and `ROADMAP.md`; they hold authoritati
 | `spacehaven/` | Save editor + Space Haven Mod Loader XML | Python/Tk/XML |
 | `fightlife mods/` | Unity Mono managed-DLL injection | packaged binaries (no source) |
 | `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | scaffold |
+| `Valheim/` | EasySpawner zh-localization fork, BepInEx 5 + Harmony, Unity Mono | `dotnet` |
 
 ## Layout (source-type projects)
 

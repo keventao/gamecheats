@@ -1,6 +1,6 @@
 # gamecheats Roadmap
 
-Last updated: 2026-07-08
+Last updated: 2026-09-26
 
 This root roadmap is an index and cross-project priority view. Detailed status, implemented features, verification state, risks, and next work live in each project-level `ROADMAP.md`.
 
@@ -19,6 +19,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `轮回修仙路/` | BepInEx/MelonLoader Unity mod (engine TBD) | Scaffold only; engine type and cheat scope to confirm. | `轮回修仙路/ROADMAP.md` |
 | `Satisfactory/` | External C# trainer, UE5.3 (build 493833) | Code complete + 20 tests pass; PDB-sourced offsets. Instant Manual Craft (F2) + Achievement Enable (F1) await in-game smoke. | `Satisfactory/ROADMAP.md` |
 | `Football Manager 26/` | External C# trainer, macOS Unity IL2CPP | Mac realtime memory I/O base added; CE target families identified for fitness, injuries, and happiness; live pointer resolution pending. | `Football Manager 26/ROADMAP.md` |
+| `Valheim/` | EasySpawner zh-localization fork, BepInEx + Harmony Unity Mono | v1.7.0-zh.1 build-verified; UI + in-game messages + CJK font done; in-game layout smoke pending. | `Valheim/ROADMAP.md` |
 
 ## Cross-Project Priorities
 
@@ -30,6 +31,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 6. Smoke test Timberborn `KKDoubleResources`; `all-in-one-gen` v0.1.4 already passed user smoke.
 7. Recover or recreate FightLife `CheatMenu.dll` source and add safer installer/uninstaller scripts.
 8. Run FM26 `probe` against the live Mac process, then resolve CE symbolic pointers before adding the three toggles.
+9. In-game smoke Valheim EasySpawner zh: fonts/boxes, layout truncation, localized prefab names, spawn/undo messages.
 
 ## Shared Standards
 
@@ -55,6 +57,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 - `Clanfolk/ROADMAP.md`
 - `轮回修仙路/ROADMAP.md`
 - `Football Manager 26/ROADMAP.md`
+- `Valheim/ROADMAP.md`
 
 ## Supporting Docs
 
