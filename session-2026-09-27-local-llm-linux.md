@@ -209,3 +209,46 @@
 - **F8**：启动设备菜单（选 UEFI: SanDisk）；**Del/F2**：进 BIOS。
 - U 盘不出现：BIOS 里 CSM=Disabled，Secure Boot 保持开启。
 - 默认启动项调整：BIOS Boot Priority，或 Bazzite 内 `efibootmgr`。
+
+
+## 十、最终决定：放弃 Fedora Kinoite 中转，改为直接安装 Bazzite（2026-09-28 04:13，覆盖第八/九节旧路线）
+
+### Fedora Kinoite 实际安装结果
+- Fedora Kinoite 44 在本机连续遇到多个严重问题：
+  1. 安装后首次启动长期停留在特殊临时账户 `plasma-setup`，官方 Plasma Setup 首次用户创建界面出现 QML 错误（包括 `Cannot read property 'height/width' of null`、`scrollToCurrentLanguage is not defined`）。
+  2. 重装过程中 Anaconda/OSTree 部署阶段曾直接崩溃。
+  3. 清理 EFI 中旧的 `EFI\fedora` 后再次安装，仍然遇到首次用户创建问题。
+  4. 后来通过 OpenCode / D-Bus 路线一度成功创建正式用户 `keven`，终端可见 `keven@Keven`；但重启后图形登录界面仍异常：只显示背景/图片，看不到 `keven` 用户，也没有密码输入框，无法正常图形登录。
+- 结论：**不再继续修 Fedora Kinoite，也不再使用“先装 Kinoite → rebase Bazzite”的替代路线。**
+
+### 新计划（最终）
+- 用户决定购买一个容量足够的新 U 盘（建议 **16GB 或 32GB**）。
+- 直接写入并安装 **Bazzite NVIDIA KDE** 官方镜像；这里的“ba”指的就是 **Bazzite**。
+- 目标仍然是：
+  - Windows + Bazzite 双系统
+  - Linux 装在 **Samsung 970 EVO Plus 500GB**
+  - Windows C/D 保持在 **Samsung 980 PRO 1TB**
+  - RTX 4060 Ti 8GB 使用 Bazzite NVIDIA 版本
+- 不再使用当前 8GB SanDisk（实际 7.36GB）作为 Bazzite 安装盘。
+
+### 安装 Bazzite 前清理 970 的安全边界（重要）
+- Windows 目前能够正常启动；Windows Boot Manager 相关 EFI 文件位于 970 上的 500MiB EFI 分区中。
+- 在 Windows 侧清理现有 Linux 时，**只删除 Fedora/Linux 创建的分区**：
+  - 约 **2GiB ext4**（旧 Fedora `/boot`）
+  - 约 **452/462GiB Btrfs**（旧 Fedora 系统）
+- **必须保留，不删除、不格式化：**
+  - 约 **500MiB EFI System Partition**（Windows Boot Manager 在这里；此前确认 `EFI\Microsoft` 和 `EFI\Boot` 正常）
+  - 约 **128MiB Reserved/MSR**
+  - 约 **577MiB NTFS Recovery/Windows 小分区**
+- Samsung 980 PRO 1TB 的 Windows C/D 分区完全不碰。
+
+### 下一次续接从这里开始
+1. 用户购买 16GB/32GB U 盘。
+2. 在 Windows 下载官方 **Bazzite NVIDIA KDE** 镜像并校验。
+3. 使用官方推荐写盘工具制作 U 盘。
+4. 必要时先在 Windows 侧仅删除 970 上的 Fedora ext4/Btrfs 分区，保留 EFI/MSR/NTFS 小分区。
+5. F8 启动菜单 → UEFI U 盘 → 直接安装 Bazzite 到 970。
+6. 安装时优先确认不会格式化/删除保存 Windows Boot Manager 的 500MiB EFI 分区。
+7. Bazzite 首次正常登录后，再处理 Clash Verge、Steam、游戏迁移和 NVIDIA/Proton 设置。
+
+> **最新决策优先级：本节覆盖前面“继续修 Kinoite / Kinoite rebase Bazzite”的所有待办。**
