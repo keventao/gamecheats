@@ -147,3 +147,11 @@
 ### 备注
 - 970 标称 500GB（十进制），系统显示 465.8GB（GiB）属正常，非缺容量。
 - 桌面环境选 KDE（bazzite-nvidia 即 KDE）；Kinoite 正是 KDE Atomic，对应正确。
+
+### 安装时“不要设置 root 账户”详解
+- **root** = Linux 超级管理员，权限最高。安装器（Anaconda）除了创建日常用户（keven），还有一个单独的 **Root Account（根账户）** 页面。
+- Fedora/Bazzite 默认设计：**root 账户保持锁定/禁用**，需要管理员权限时用日常账户执行 `sudo 命令`（输自己的密码）。
+- 安装时创建的第一个用户自动加入 **wheel 组**，自带 sudo 权限，无需 root 密码即可做所有管理操作。
+- 手动设 root 密码会偏离 Bazzite 默认配置，rebase 后可能引入不必要差异。
+- 具体操作：在 **Root Account** 界面选 **Disable/锁定根账户**（或跳过、保持默认），不勾 “Allow root login with password”，密码框**留空**。
+- ⚠️ 区分：**root 密码留空 ≠ 用户密码留空**；自己的用户（keven）用户名和密码必须照常设置。
