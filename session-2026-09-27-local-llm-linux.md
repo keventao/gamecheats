@@ -1,6 +1,8 @@
 # 会话记录：本机 LLM 环境 + Linux 双系统（2026-09-27）
 
 > 下次继续时，对 pi 说：读一下 `~/session-2026-09-27-local-llm-linux.md`
+>
+> **此文件同步在私有仓库：https://github.com/keventao/gamecheats（main 分支根目录），换电脑/Mac 的 pi 可从仓库拉取续接。**
 
 ---
 
@@ -185,7 +187,19 @@
 | Project Zomboid | 🟢 原生 | Steam 直装 | 官方 Linux 版，工坊 MOD/联机正常 |
 | 黑神话：悟空 | 🟡 Proton Gold | Steam + Proton | 无反作弊；4060 Ti 台式机体验接近 Windows（Deck 才跑不动） |
 | 魔兽世界 | 🟡 Lutris Gold | Lutris + 战网脚本 | DX11/DX12 均可，多数人帧数更高；暴雪大版本后偶尔需等脚本更新 |
+| 辐射 76（误打误撞查到） | 🟡 Proton Gold | Steam + Proton | 网游、无强制 Linux 反作弊问题，96GB |
 
 - 前三个零配置；黑神话 Bazzite 默认开 Proton 直接启动。
 - WoW 装法：Lutris（商店可装）搜 World of Warcraft 一键脚本自动配战网。D 盘已有 89.5GB WoW 文件，可尝试复制到 Linux 分区让战网验证复用。
 - 网游通病：暴雪更新后偶尔短暂抽风，一般几天内 Lutris 脚本更新修复。
+
+## 九、最新进度（当晚 22:40）与 Mac 续接点
+
+- ✅ Fedora Media Writer 已把 Kinoite ISO 写入 SanDisk U 盘（G:），写入+校验完成（用户看到 76% 后继续等待完成）。
+- ⏭️ **下一步（从这里继续）**：
+  1. 重启 → 启动菜单（华硕 F8 / 微星 F11 / 技嘉 F12）→ 选 **UEFI: SanDisk**
+  2. Start Fedora Kinoite 44 → Live 桌面双击 Install to Hard Drive
+  3. 安装目标 **Samsung 970（466GB）空闲空间**，自动分区；**Root 账户留空/禁用**；设自己的用户密码
+  4. 装完重启进 Kinoite → **先装 Clash Verge（rpm 在 D 盘 Downloads）开 TUN → 再 rebase bazzite-nvidia:stable**
+  5. rebase 重启后 `ujust _install-system-flatpaks`、`ujust verify-image`
+- Mac 上续接：`gh repo clone keventao/gamecheats`（或 git pull）→ 让 pi 读其中的本 md 即可。
