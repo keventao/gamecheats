@@ -176,3 +176,16 @@
 - Kinoite/Bazzite 是**完整图形桌面（KDE Plasma）**，不是命令行系统：有桌面、任务栏、开始菜单、系统托盘、文件管理器 Dolphin、Firefox、图形设置、Steam、应用商店。
 - U 盘启动选 Start Fedora Kinoite 直接进图形 Live 桌面，双击桌面图标开始图形化安装。
 - 终端只是可选快捷工具，rebase/装 Clash 用命令是因为复制粘贴更快不易错；日常使用可全程鼠标。
+
+### 常玩游戏 Linux 兼容性（2026-09-27 核实）
+| 游戏 | 等级 | 运行方式 | 备注 |
+|---|---|---|---|
+| RimWorld | 🟢 原生 | Steam 直装 | 官方 Linux 版，创意工坊 MOD 正常 |
+| Valheim | 🟢 原生 | Steam 直装 | 官方 Linux 版；BepInEx 有 Linux 版 |
+| Project Zomboid | 🟢 原生 | Steam 直装 | 官方 Linux 版，工坊 MOD/联机正常 |
+| 黑神话：悟空 | 🟡 Proton Gold | Steam + Proton | 无反作弊；4060 Ti 台式机体验接近 Windows（Deck 才跑不动） |
+| 魔兽世界 | 🟡 Lutris Gold | Lutris + 战网脚本 | DX11/DX12 均可，多数人帧数更高；暴雪大版本后偶尔需等脚本更新 |
+
+- 前三个零配置；黑神话 Bazzite 默认开 Proton 直接启动。
+- WoW 装法：Lutris（商店可装）搜 World of Warcraft 一键脚本自动配战网。D 盘已有 89.5GB WoW 文件，可尝试复制到 Linux 分区让战网验证复用。
+- 网游通病：暴雪更新后偶尔短暂抽风，一般几天内 Lutris 脚本更新修复。
