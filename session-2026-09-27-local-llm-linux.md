@@ -203,3 +203,9 @@
   4. 装完重启进 Kinoite → **先装 Clash Verge（rpm 在 D 盘 Downloads）开 TUN → 再 rebase bazzite-nvidia:stable**
   5. rebase 重启后 `ujust _install-system-flatpaks`、`ujust verify-image`
 - Mac 上续接：`gh repo clone keventao/gamecheats`（或 git pull）→ 让 pi 读其中的本 md 即可。
+
+### 主板与启动按键
+- 主板：**华硕 ASUS TUF GAMING B760M-PLUS**（mATX，BIOS 1820，纯 UEFI/GPT）。
+- **F8**：启动设备菜单（选 UEFI: SanDisk）；**Del/F2**：进 BIOS。
+- U 盘不出现：BIOS 里 CSM=Disabled，Secure Boot 保持开启。
+- 默认启动项调整：BIOS Boot Priority，或 Bazzite 内 `efibootmgr`。
