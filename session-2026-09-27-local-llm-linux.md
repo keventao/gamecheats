@@ -155,3 +155,24 @@
 - 手动设 root 密码会偏离 Bazzite 默认配置，rebase 后可能引入不必要差异。
 - 具体操作：在 **Root Account** 界面选 **Disable/锁定根账户**（或跳过、保持默认），不勾 “Allow root login with password”，密码框**留空**。
 - ⚠️ 区分：**root 密码留空 ≠ 用户密码留空**；自己的用户（keven）用户名和密码必须照常设置。
+
+### 上海网络与更新问题（重要）
+- Bazzite 系统更新从 **ghcr.io（GitHub 容器仓库）** 拉 OCI 镜像层，国内直连基本被墙/极不稳定；软件走 **Flathub**（能连但一般）。
+- 双系统 Bazzite 与 Windows 独立，**不会共享 Windows 侧 Clash**，需在 Linux 里单独装代理。
+- Flathub 可换国内镜像缓解，但 **ghcr.io 无国内镜像，系统更新/rebase 必须走代理**。
+
+### Clash Verge Rev（Linux 版已备好）
+- 官网有 Linux 版（deb/rpm，v2.5.6 无 AppImage）。
+- ✅ 已下载：`C:\Users\keven\Downloads\Clash.Verge-2.5.6-1.x86_64.rpm`（98MB，借 WSL 代理先下好，避免装完系统裸连 GitHub 太慢）。
+- Bazzite/Kinoite 里安装（不可变系统装本地 rpm）：
+  ```bash
+  rpm-ostree install ~/Clash.Verge-2.5.6-1.x86_64.rpm
+  systemctl reboot
+  ```
+- 启动后导入订阅，设置开 **TUN Mode**（系统级接管流量，终端 rpm-ostree/flatpak 才能走代理），`curl ipinfo.io` 验证出口新加坡。
+- **调整后的执行顺序：Kinoite 装好 → 立刻装 Clash 开 TUN → 再 rebase Bazzite**（rebase 本身也从 ghcr.io 下载，量大）。
+
+### 关于图形界面（给第一次用 Linux 桌面的自己）
+- Kinoite/Bazzite 是**完整图形桌面（KDE Plasma）**，不是命令行系统：有桌面、任务栏、开始菜单、系统托盘、文件管理器 Dolphin、Firefox、图形设置、Steam、应用商店。
+- U 盘启动选 Start Fedora Kinoite 直接进图形 Live 桌面，双击桌面图标开始图形化安装。
+- 终端只是可选快捷工具，rebase/装 Clash 用命令是因为复制粘贴更快不易错；日常使用可全程鼠标。
