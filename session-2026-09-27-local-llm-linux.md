@@ -279,3 +279,33 @@
 ### 备注
 - 本机 gamecheats 工作副本在 9 月 27 日晚曾被截断（index/refs 及大量文件变成 0 字节）；
   已确认 GitHub main（含 Mac 推送的 `7d69047`）最新且完整，本次以远程为准重新克隆。
+
+
+## 十二、Bazzite 中文支持（2026-09-28 核实，装前答疑）
+
+### 安装时选简体中文会不会卡死？——不会
+- Bazzite 安装器就是 Fedora 的 **Anaconda**，原生支持简体中文，选中文只决定系统语言，安全。
+- 之前 Kinoite 的卡死发生在**装完后**的 Plasma 首次建用户向导（plasma-setup 的 QML bug），
+  **与安装器语言无关**；Bazzite 首次启动也不走那个有 bug 的向导。
+- 备用做法：安装器选英文、进系统再切中文，效果一样。
+
+### 界面汉化程度
+- KDE Plasma 桌面 / 设置 / 文件管理器汉化完整；自带 Noto Sans CJK 字体，不会出现方块。
+- Steam 客户端、游戏模式（Steam UI）也有中文。
+- Bazzite 专属工具（`Bazzite Portal`、`ujust` 脚本、开机菜单）基本是英文，不影响日常使用。
+
+### 中文输入法（需手动开一次）
+Bazzite 自带 Fcitx5 框架，但拼音引擎默认未启用。装好后在终端：
+```bash
+rpm-ostree install fcitx5-chinese-addons
+systemctl reboot
+```
+重启后：系统设置 → 键盘 → 虚拟键盘选 **Fcitx5** → 打开 Fcitx5 配置添加「拼音」→ `Ctrl+空格` 切换。
+
+### 镜像与写盘
+- 官方镜像已下完：`C:\Users\keven\Downloads\bazzite-nvidia-stable-live-amd64.iso`
+  （8,513,628,160 字节 ≈ 7.93GiB，用 aria2 -x16 多线程下载，峰值约 10MiB/s）。
+- 用 **Fedora Media Writer → Custom Image** 写入 ≥16GB U 盘（8GB SanDisk 装不下），写完自带校验。
+- 启动：重启 F8 → UEFI:U 盘 → 装到 970；**复用、不要格式化含 Windows Boot Manager 的 EFI 分区**。
+
+> 来源：docs.bazzite.gg、ASCII.jp 的 Bazzite 实测（确认 Fcitx5 内置、拼音需手动启用）。
