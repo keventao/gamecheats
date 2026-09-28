@@ -252,3 +252,30 @@
 7. Bazzite 首次正常登录后，再处理 Clash Verge、Steam、游戏迁移和 NVIDIA/Proton 设置。
 
 > **最新决策优先级：本节覆盖前面“继续修 Kinoite / Kinoite rebase Bazzite”的所有待办。**
+
+
+## 十一、Fedora 清理实测结果（2026-09-28）
+
+### 磁盘真实布局（用 PowerShell 核实，纠正“在 E 盘”的猜测）
+- **磁盘 0 = Samsung 970 465.8GB：Fedora Kinoite 所在盘**
+  - p1 500MiB **EFI（Windows 启动分区，必须保留）**；p2 128MiB MSR；p3 577MiB Recovery
+  - p4 2GB Linux（旧 `/boot`，GPT `0FC63DAF`）；p5 462.4GB Linux（旧系统）
+- **磁盘 1 = Samsung 980 931.5GB：Windows**，C:149GB + D:781GB，全程不动。
+- 当时看到的 **E:/F: 其实是插着的 SanDisk 57GB U 盘**，不是 Kinoite。
+
+### 启动方式
+- UEFI NVRAM 里有 “Fedora” 项 `{7ae37664-baf6-11f1-bd8e-806e6f6e6963}`，
+  路径 `\EFI\fedora\shimx64.efi`；该 ESP 同时含 `\EFI\Microsoft`（Windows Boot Manager）。
+
+### 今日已完成
+- ✅ ESP 挂载到 Z:，手动删除 `Z:\EFI\fedora`；已确认 `Microsoft`、`Boot` 仍在。
+- （尚未重启，Windows 启动待重启验证。）
+
+### 待办
+1. 删除失效 UEFI 项：`bcdedit /delete {7ae37664-baf6-11f1-bd8e-806e6f6e6963}`
+2. 删除磁盘 0 的 **p4、p5** 两个 Linux 分区（**保留** p1 EFI / p2 MSR / p3 Recovery），释放约 464GB。
+3. 重启确认直接进 Windows；之后再按第十节直接装 Bazzite NVIDIA。
+
+### 备注
+- 本机 gamecheats 工作副本在 9 月 27 日晚曾被截断（index/refs 及大量文件变成 0 字节）；
+  已确认 GitHub main（含 Mac 推送的 `7d69047`）最新且完整，本次以远程为准重新克隆。
