@@ -27,6 +27,6 @@ public class Plugin : BasePlugin
             new HarmonyLib.Harmony("com.keventao.zedzone.hplock").PatchAll();
             Log.LogInfo("Harmony patches applied (NoMalfunction)");
         } catch (Exception e) { Log.LogError("Harmony PatchAll failed: " + e.GetType().Name + " " + e.Message); }
-        Log.LogInfo("ZedZoneHpLock v0.5.0 loaded: infinite reserve ammo + CanFire + uGUI ammo toggle");
+        Log.LogInfo("ZedZoneHpLock v0.7.0 loaded: +10 attr/skill/perk points");
     }
 }

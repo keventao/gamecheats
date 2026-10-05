@@ -70,6 +70,10 @@
 | 自研 v0.4.17 卡壳抑制版 | ⚠️ 半通过（2026-10-05） | 首个 Harmony 补丁（`WeaponMalfunction` Prefix false，单重载，加载成功）；`partsprice=0`（spawned）；显示依旧 |
 | 自研 v0.4.18 实弹验证版 | ✅ 功能通过，显示存疑（2026-10-05） | live 枪 `isMalfunction=False`；用户实测：**刷的枪显示 0/故障，但装弹后一直能正常开火** → 纯显示层 artifact，功能无碍 |
 | 自研 v0.5.0 无限弹药版 | ✅ 通过（2026-10-05） | 储备弹药每帧顶满（Ammo/Arrow 全背包）+ `CanFire`恒真 Harmony + 面板第三开关；打空/R 换弹验证通过 |
+| 自研 v0.6.0 属性点版 | ✅ 通过（2026-10-05） | `CharacterData.characterAttrPoint += 10`，双路径（游戏内 playerData / 建人物 `NewGameSubMonitorPanel_NewCharacter.characterData`）；建人物默认 8 点可叠加 |
+| 自研 v0.7.0 三点数版 | ✅ 通过（2026-10-06） | `characterSkillPoint`（默认 10）/`characterPerkPoint`（默认 5）同逻辑三按钮一排；建人物全程加点（attr 8→98 / skill 10→95 / perk 5→95），存档/云同步正常 |
+| 红字调查（2026-10-06） | ⚠️ 结论：游戏侧，与插件无直接关联 | Player.log 两个 `IndexOutOfRangeException`：① 近战命中链 `OnMeleeWeaponHit→AddAttrExp→RefreshPerks→RefreshInventorySize`；② 悬停物品 `GetItemDetailString`。BepInEx 日志零 Error；均为游戏代码栈（EA Beta 已知类问题）。用户决定不做无 mod 对照测试，接受现状 |
+| 自研 v0.5.0 无限弹药版 | ✅ 通过（2026-10-05） | 储备弹药每帧顶满（Ammo/Arrow 全背包）+ `CanFire`恒真 Harmony + 面板第三开关；打空/R 换弹验证通过 |
 | 无限耐久 | ⏸️ 待插件加载后测 | |
 | 无限子弹 | ⏸️ 待插件加载后测 | |
 | 不卡壳 | ⏸️ 待插件加载后测 | |

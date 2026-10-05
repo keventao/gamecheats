@@ -173,7 +173,7 @@ public class ItemPanel : MonoBehaviour
         cgo.AddComponent<GraphicRaycaster>();
 
         root = NewGO("Root");
-        var rrt = RT(root, cgo.transform, 640, 700);
+        var rrt = RT(root, cgo.transform, 640, 740);
         rootRT = rrt;
         rrt.anchorMin = new Vector2(0.5f, 0.5f); rrt.anchorMax = new Vector2(0.5f, 0.5f); rrt.pivot = new Vector2(0.5f, 0.5f);
         rrt.anchoredPosition = Vector2.zero;
@@ -181,7 +181,7 @@ public class ItemPanel : MonoBehaviour
         rimg.color = new Color(0.09f, 0.10f, 0.13f, 0.95f);
 
         float y = -10;
-        var title = MkText(root.transform, "ZedZone Mod v0.5.0", 17, 300);
+        var title = MkText(root.transform, "ZedZone Mod v0.7.0", 17, 300);
         title.rectTransform.anchoredPosition = new Vector2(10, y);
         var census = MkButton(root.transform, "普查武器", 80, 30, () => CensusWeapons());
         census.GetComponent<RectTransform>().anchoredPosition = new Vector2(330, y);
@@ -198,6 +198,13 @@ public class ItemPanel : MonoBehaviour
         y -= 30;
         ammoToggle = MkToggle(root.transform, "无限弹药", Toggles.InfiniteAmmo, v => Toggles.InfiniteAmmo = v);
         ammoToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, y);
+        y -= 30;
+        var attrBtn = MkButton(root.transform, "+10 属性点", 190, 30, () => AddPoints("attr", 10, "属性点"));
+        attrBtn.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, y);
+        var skBtn = MkButton(root.transform, "+10 技能点", 190, 30, () => AddPoints("skill", 10, "技能点"));
+        skBtn.GetComponent<RectTransform>().anchoredPosition = new Vector2(210, y);
+        var pkBtn = MkButton(root.transform, "+10 特性点", 190, 30, () => AddPoints("perk", 10, "特性点"));
+        pkBtn.GetComponent<RectTransform>().anchoredPosition = new Vector2(410, y);
         y -= 36;
         var sl = MkText(root.transform, "搜索:", 14, 60);
         sl.rectTransform.anchoredPosition = new Vector2(10, y);
@@ -273,7 +280,7 @@ public class ItemPanel : MonoBehaviour
         catch (Exception e) { Log("scroll diag FAIL " + e.GetType().Name); }
 
         statusText = MkText(root.transform, string.Empty, 13, 620);
-        statusText.rectTransform.anchoredPosition = new Vector2(10, -656);
+        statusText.rectTransform.anchoredPosition = new Vector2(10, -700);
 
         root.SetActive(false);
         built = true;
@@ -298,7 +305,7 @@ public class ItemPanel : MonoBehaviour
             Vector3 mp = Input.mousePosition;
             float cx = Screen.width * 0.5f + rootRT.anchoredPosition.x;
             float cy = Screen.height * 0.5f + rootRT.anchoredPosition.y;
-            bool inTitle = mp.x >= cx - 320 && mp.x <= cx + 320 && mp.y >= cy + 310 && mp.y <= cy + 350;
+            bool inTitle = mp.x >= cx - 320 && mp.x <= cx + 320 && mp.y >= cy + 330 && mp.y <= cy + 370;
             if (Input.GetMouseButtonDown(0) && inTitle) { dragging = false; dragPrev = mp; }
             if (Input.GetMouseButton(0) && dragPrev != Vector3.zero) {
                 if (!dragging && (mp - dragPrev).magnitude > 4f && inTitle) dragging = true;
@@ -383,6 +390,48 @@ public class ItemPanel : MonoBehaviour
                 Log("listdiag " + info);
             } else Log("listdiag EMPTY");
         } catch (Exception e) { Log("listdiag FAIL " + e.GetType().Name); }
+    }
+
+    private void AddPoints(string kind, int n, string label)
+    {
+        Log("AddPoints " + kind + " +" + n);
+        try {
+            var gc = GameController.instance;
+            if (gc != null && gc.gameData != null && gc.gameData.playerData != null) {
+                var pd = gc.gameData.playerData;
+                int now = AddPointsTo(pd, kind, n);
+                if (statusText != null) statusText.text = label + " +" + n + "（当前" + now + ")";
+                Log("AddPoints ingame " + kind + " now=" + now);
+                return;
+            }
+        } catch (Exception e) { Log("AddPoints ingame FAIL " + e.GetType().Name); }
+        try {
+            var all = Resources.FindObjectsOfTypeAll(Il2CppType.Of<NewGameSubMonitorPanel_NewCharacter>());
+            if (all != null) {
+                foreach (var o in all) {
+                    var p = o.TryCast<NewGameSubMonitorPanel_NewCharacter>();
+                    if (p == null) continue;
+                    var cd = p.characterData;
+                    if (cd == null) continue;
+                    int now = AddPointsTo(cd, kind, n);
+                    if (statusText != null) statusText.text = label + " +" + n + "（当前" + now + ")";
+                    Log("AddPoints creation " + kind + " now=" + now);
+                    return;
+                }
+            }
+            if (statusText != null) statusText.text = "进游戏或建人物界面可用";
+        } catch (Exception e) {
+            if (statusText != null) statusText.text = "Error: " + e.GetType().Name;
+            Log("AddPoints creation FAIL " + e);
+        }
+    }
+
+    private static int AddPointsTo(CharacterData cd, string kind, int n)
+    {
+        if (kind == "skill") { cd.characterSkillPoint = cd.characterSkillPoint + n; return cd.characterSkillPoint; }
+        if (kind == "perk") { cd.characterPerkPoint = cd.characterPerkPoint + n; return cd.characterPerkPoint; }
+        cd.characterAttrPoint = cd.characterAttrPoint + n;
+        return cd.characterAttrPoint;
     }
 
     private void CensusWeapons()

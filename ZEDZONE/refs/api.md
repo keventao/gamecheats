@@ -42,6 +42,24 @@ GameController.instance
 | `..._WeaponMalfunction` | `BasicRangedWeapon.WeaponMalfunction` Prefix false | 去卡壳 |
 | `Scripts` | `AddSkillPoint/AddPerkPoint/AddAttrPoint`、`MaxBackpackSize`、`ZeroBackpackWeight`、`AddCar`（经 `InGameController+BasicVehicle+MapController`）、`Cure`（遍历 `CharacterBodyPartsData` + `CharacterStatusData`） | |
 
+## 点数 API（v0.6.0/v0.7.0 实测）
+
+- `CharacterData.characterAttrPoint` / `.characterSkillPoint` / `.characterPerkPoint`
+  （`get/set_*` 实名，直接 `+= 10`；另有 `AddSkillPoint(Int32)` 方法）
+- 建人物默认：属性 8 / 技能 10 / 特性 5（用户确认值）
+- 双路径：游戏内走 `GameController.instance.gameData.playerData`；
+  建人物界面走 `NewGameSubMonitorPanel_NewCharacter.characterData`
+  （`FindObjectsOfTypeAll` + `TryCast` 找面板，`get_characterData()` 直接改，建物 UI 实时刷新）
+- 存档/云同步对改后点数正常（`保存角色` + SteamCloud 上传成功）
+
+## 红字调查（2026-10-06，未定性为插件问题）
+
+- `Player.log` 两个 `IndexOutOfRangeException`（BepInEx 日志零 Error）：
+  ① 近战链 `OnMeleeWeaponHit→AddAttrExp→RefreshPerks→RefreshInventorySize`；
+  ② 悬停 `GetItemDetailString`。
+- 嫌疑：极端点数值撑爆按正常范围建的表 / 刷的裸物品缺说明字段。
+  用户跳过无-mod对照测试，接受现状。复发时再议。
+
 ## 本游戏被裁剪（stripped）的 API（实测）- IMGUI：`GUILayout.FlexibleSpace`、`GUILayout.Begin/EndScrollView`、`GUIStyle.font` setter
   → `NotSupportedException: Method unstripping failed`（共 1228 个复活失败方法）
 - OS 字体：`Font.CreateDynamicFontFromOSFont` 全灭（`TypeLoadException`）

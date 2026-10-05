@@ -11,6 +11,7 @@ BepInEx 6 IL2CPP 修改器：F1 呼出 uGUI 面板，血量/耐力锁定 + 全�
 - 血量锁定：每帧 `hp` 回满到 `maxhp`，`maxhp` 只读（升级/加点涨上限不受影响），面板可开关
 - 耐力/疲劳锁定：`energy→maxEnergy`、`fatigue→0`，面板可开关
 - 物品添加：`ItemManager.instance.itemAttrDic` 全枚举（滤 `hiddenItem`），17 分类 + 中文搜索 + 真滚动列表，点击按 `stackNumber` 最大堆叠入库（走游戏原生 `GameController.AddItemToPlayer`）
+- 点数：属性/技能/特性 `+10` 一排按钮，双路径（游戏内 `playerData` + 建人物 `NewGameSubMonitorPanel_NewCharacter.characterData`）
 - 面板：F1 开关，深色可拖动，中文（游戏自带思源黑体直赋）
 
 ## 目录
