@@ -31,6 +31,7 @@ public class ItemPanel : MonoBehaviour
 
     private Toggle hpToggle;
     private Toggle stToggle;
+    private Toggle ammoToggle;
     private InputField searchInput;
     private string lastSearch = "@@init@@";
     private int catIndex;
@@ -180,7 +181,7 @@ public class ItemPanel : MonoBehaviour
         rimg.color = new Color(0.09f, 0.10f, 0.13f, 0.95f);
 
         float y = -10;
-        var title = MkText(root.transform, "ZedZone Mod v0.4.18", 17, 300);
+        var title = MkText(root.transform, "ZedZone Mod v0.5.0", 17, 300);
         title.rectTransform.anchoredPosition = new Vector2(10, y);
         var census = MkButton(root.transform, "普查武器", 80, 30, () => CensusWeapons());
         census.GetComponent<RectTransform>().anchoredPosition = new Vector2(330, y);
@@ -194,6 +195,9 @@ public class ItemPanel : MonoBehaviour
         y -= 30;
         stToggle = MkToggle(root.transform, "耐力/疲劳锁定", Toggles.Stamina, v => Toggles.Stamina = v);
         stToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, y);
+        y -= 30;
+        ammoToggle = MkToggle(root.transform, "无限弹药", Toggles.InfiniteAmmo, v => Toggles.InfiniteAmmo = v);
+        ammoToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, y);
         y -= 36;
         var sl = MkText(root.transform, "搜索:", 14, 60);
         sl.rectTransform.anchoredPosition = new Vector2(10, y);
@@ -221,7 +225,7 @@ public class ItemPanel : MonoBehaviour
         }
 
         var scrollGO = NewGO("Scroll");
-        var srt = RT(scrollGO, root.transform, 620, 380);
+        var srt = RT(scrollGO, root.transform, 620, 350);
         srt.anchorMin = new Vector2(0, 1); srt.anchorMax = new Vector2(0, 1); srt.pivot = new Vector2(0, 1);
         srt.anchoredPosition = new Vector2(10, y - 8);
         var simg = scrollGO.AddComponent<Image>();
@@ -286,6 +290,7 @@ public class ItemPanel : MonoBehaviour
         }
         if (hpToggle != null && hpToggle.isOn != Toggles.Hp) hpToggle.isOn = Toggles.Hp;
         if (stToggle != null && stToggle.isOn != Toggles.Stamina) stToggle.isOn = Toggles.Stamina;
+        if (ammoToggle != null && ammoToggle.isOn != Toggles.InfiniteAmmo) ammoToggle.isOn = Toggles.InfiniteAmmo;
         // Title-bar drag (top 40px of panel). A press without movement still
         // reaches the buttons normally; only a real move drags the window.
         try {

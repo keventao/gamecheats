@@ -20,6 +20,7 @@ Game/runtime:
 - F1 uGUI panel (runtime-built, draggable, dark, CJK via bundled SourceHanSans): verified
 - Item browser: 17 categories + search + real ScrollRect + paged add at `stackNumber` via `GameController.AddItemToPlayer`: verified (`via=AddItemToPlayer` in logs)
 - Spawned guns: **fire normally once loaded** (user-verified sustained fire); malfunction suppressed via Harmony (`WeaponMalfunction` Prefix false)
+- Infinite reserve ammo (`AmmoLock` tops up Ammo/Arrow stacks, `CanFire` forced true): verified empty mag + R reload
 - Display-only artifact (open): spawned ranged weapons show durability 0 + fault label while fully functional; `ItemData.durability` is percent 0-100 (all natural guns census at exactly 100); replenish path for the display value still unknown
 
 ## Needs Smoke Test

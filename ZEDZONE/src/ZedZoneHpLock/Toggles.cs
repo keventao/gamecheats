@@ -5,4 +5,5 @@ public static class Toggles
 {
     public static bool Hp = true;
     public static bool Stamina = true;
+    public static bool InfiniteAmmo = true;
 }

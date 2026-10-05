@@ -12,3 +12,15 @@ public static class NoMalfunctionPatch
 {
     static bool Prefix() { return false; }
 }
+
+// v0.5.0: CanFire forced true while InfiniteAmmo is on (single overload,
+// explicit name — no ambiguity risk). Reload then always succeeds because
+// AmmoLock keeps reserves topped up.
+[HarmonyPatch(typeof(BasicRangedWeapon), "CanFire")]
+public static class CanFirePatch
+{
+    static void Postfix(BasicRangedWeapon __instance, ref bool __result)
+    {
+        if (Toggles.InfiniteAmmo) __result = true;
+    }
+}
