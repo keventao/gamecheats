@@ -180,8 +180,12 @@ public class ItemPanel : MonoBehaviour
         rimg.color = new Color(0.09f, 0.10f, 0.13f, 0.95f);
 
         float y = -10;
-        var title = MkText(root.transform, "ZedZone Mod v0.4.6", 17, 400);
+        var title = MkText(root.transform, "ZedZone Mod v0.4.18", 17, 300);
         title.rectTransform.anchoredPosition = new Vector2(10, y);
+        var census = MkButton(root.transform, "普查武器", 80, 30, () => CensusWeapons());
+        census.GetComponent<RectTransform>().anchoredPosition = new Vector2(330, y);
+        var clear = MkButton(root.transform, "清除卡壳", 80, 30, () => ClearMalfunction());
+        clear.GetComponent<RectTransform>().anchoredPosition = new Vector2(420, y);
         var close = MkButton(root.transform, "X", 50, 30, () => ToggleShow());
         close.GetComponent<RectTransform>().anchoredPosition = new Vector2(580, y);
         y -= 36;
@@ -376,6 +380,55 @@ public class ItemPanel : MonoBehaviour
         } catch (Exception e) { Log("listdiag FAIL " + e.GetType().Name); }
     }
 
+    private void CensusWeapons()
+    {
+        try {
+            var gc = GameController.instance;
+            if (gc == null || gc.gameData == null || gc.gameData.playerData == null) return;
+            var inv = gc.gameData.playerData.inventoryData;
+            if (inv == null) return;
+            foreach (var wt in new ItemType[] { ItemType.RangedWeapon, ItemType.MeleeWeapon }) {
+                var list = inv.GetItemListByType(wt);
+                if (list == null) continue;
+                foreach (var it in list) {
+                    string nm = "?";
+                    ItemAttr aa = null;
+                    try { aa = ItemManager.instance.GetItemAttrById(it.itemId); if (aa != null) nm = aa.ItemName_EN; } catch { }
+                    string extra2 = string.Empty;
+                    try {
+                        var rwx = aa.TryCast<ItemAttr_RangedWeapon>();
+                        if (rwx != null) {
+                            float price = -1f;
+                            try { price = it.GetInstalledGunPartsPrice(); } catch { }
+                            extra2 = " attrhp=" + rwx.hp + " partdur=" + ItemAttr_RangedWeapon.GetGunPartDurability(it) + " partsprice=" + price;
+                        }
+                    } catch (Exception e2) { extra2 = " partdur FAIL " + e2.GetType().Name; }
+                    Log("invdump " + wt + " id=" + it.itemId + " dur=" + it.durability + " num=" + it.itemNumberFloat + " " + nm + extra2);
+                }
+            }
+        } catch (Exception e) { Log("invdump FAIL " + e.GetType().Name); }
+    }
+
+    private void ClearMalfunction()
+    {
+        try {
+            var gc = GameController.instance;
+            if (gc == null) { if (statusText != null) statusText.text = "先读档"; return; }
+            var pc = gc.playerCharacter;
+            if (pc == null) { if (statusText != null) statusText.text = "没找到玩家角色"; return; }
+            var gun = pc.rangedWeapon;
+            Log("clearbtn gun=" + (gun == null ? "null" : ("malf=" + gun.isMalfunction)));
+            if (gun == null) { if (statusText != null) statusText.text = "手上没拿枪（先装备）"; return; }
+            if (!gun.isMalfunction) { if (statusText != null) statusText.text = "枪没卡壳"; return; }
+            pc.ClearWeaponMalfunction(gun);
+            if (statusText != null) statusText.text = "已发送清除卡壳";
+            Log("clearbtn called");
+        } catch (Exception e) {
+            if (statusText != null) statusText.text = "Error: " + e.GetType().Name;
+            Log("clearbtn FAIL " + e);
+        }
+    }
+
     private void AddItem(int itemId)
     {
         Log("AddItem clicked id=" + itemId);
@@ -398,13 +451,78 @@ public class ItemPanel : MonoBehaviour
         try {
             var data = new ItemData();
             data.itemId = itemId;
+            ItemAttr attr0 = null;
             try {
-                var attr0 = ItemManager.instance.GetItemAttrById(itemId);
+                attr0 = ItemManager.instance.GetItemAttrById(itemId);
                 data.itemNumberFloat = (attr0 != null && attr0.stackNumber > 0) ? attr0.stackNumber : 1;
             } catch { data.itemNumberFloat = 1; }
+            string extra = string.Empty;
+            Log("wdiag attr=" + (attr0 == null ? "null" : attr0.GetType().FullName));
+            if (attr0 != null) {
+                try {
+                    var rw = attr0.TryCast<ItemAttr_RangedWeapon>();
+                    Log("wdiag TryCast Ranged=" + (rw == null ? "null" : "ok"));
+                    if (rw != null) {
+                        // durability is PERCENT 0-100 (all natural guns census at dur=100
+                        // regardless of attrhp 150/350/360). Writing attr.hp (e.g. 120)
+                        // overflows it -> displays 0 + malfunction.
+                        Log("wdiag rw.hp=" + rw.hp + " durBefore=" + data.durability);
+                        data.durability = 100;
+                        ItemManager.EnsureRangedWeaponProperties(data);
+                        extra = " dur=100";
+                        try {
+                            if (rw.defaultMagazineId > 0) {
+                                var mag = new ItemData();
+                                mag.itemId = rw.defaultMagazineId;
+                                mag.itemNumberFloat = rw.magazineSize > 0 ? rw.magazineSize : 1;
+                                var old = ItemAttr_RangedWeapon.SwapMagazineIntoWeapon(data, mag);
+                                Log("wdiag magswap magId=" + rw.defaultMagazineId + " old=" + (old == null ? "null" : ("id" + old.itemId)));
+                                extra += " +mag";
+                            }
+                        } catch (Exception e2) { Log("wdiag magswap FAIL " + e2.GetType().Name); }
+                        if (rw.ammoId > 0 && rw.magazineSize > 0) {
+                            try {
+                                var ammoAttr = ItemManager.instance.GetItemAttrById(rw.ammoId);
+                                var ammo = new ItemData();
+                                ammo.itemId = rw.ammoId;
+                                int give = rw.magazineSize;
+                                if (ammoAttr != null && ammoAttr.stackNumber > 0 && ammoAttr.stackNumber < give)
+                                    give = ammoAttr.stackNumber;
+                                ammo.itemNumberFloat = give;
+                                if (gc.AddItemToPlayer(ammo, true)) extra += " +ammo" + give;
+                            } catch { }
+                        }
+                    } else {
+                        var mw = attr0.TryCast<ItemAttr_MeleeWeapon>();
+                        Log("wdiag TryCast Melee=" + (mw == null ? "null" : "ok"));
+                        if (mw != null) { data.durability = 100; extra = " dur=100"; }
+                    }
+                } catch { }
+            }
             string via = string.Empty;
             bool ok = false;
             try { ok = gc.AddItemToPlayer(data, true); via = "AddItemToPlayer"; } catch { }
+            if (ok && (data.durability > 0)) {
+                try {
+                    var got = inv.GetItemListById(itemId);
+                    ItemData last = null;
+                    if (got != null) { foreach (var it in got) { last = it; } }
+                    Log("wdiag storedCount=" + (got == null ? -1 : got.Count) + " storedDur=" + (last == null ? -1f : last.durability));
+                    if (last != null && last.durability <= 0) {
+                        last.durability = data.durability;
+                        Log("wdiag forced storedDur=" + last.durability);
+                        extra += " fixed";
+                    }
+                } catch (Exception e) { Log("wdiag stored FAIL " + e.GetType().Name); }
+                try {
+                    var invs = new Il2CppSystem.Collections.Generic.List<InventoryData>();
+                    invs.Add(inv);
+                    float restored = InventoryData.RestoreItemDurability(itemId, 99999f, invs);
+                    Log("wdiag restorecall ret=" + restored);
+                    extra += " rep" + restored;
+                } catch (Exception e) { Log("wdiag restorecall FAIL " + e.GetType().Name); }
+            }
+            if (ok) { CensusWeapons(); }
             if (!ok && inv != null) {
                 try {
                     var data2 = new ItemData();
@@ -420,7 +538,7 @@ public class ItemPanel : MonoBehaviour
                 } catch { }
             }
             if (statusText != null)
-                statusText.text = ok ? ("已添加 x" + data.itemNumberFloat + " [" + via + "]") : "背包满/添加失败";
+                statusText.text = ok ? ("已添加 x" + data.itemNumberFloat + extra + " [" + via + "]") : "背包满/添加失败";
             Log("AddItem id=" + itemId + " ok=" + ok + " via=" + via);
         } catch (Exception e) {
             if (statusText != null) statusText.text = "Error: " + e.GetType().Name;

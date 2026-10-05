@@ -49,7 +49,7 @@
 | 自研 v0.3.6 字体诊断版 | ✅ 定位成功（2026-10-05，用户截图） | 游戏自带 `SourceHanSans-VF-AllLanguage.ttf`（思源黑体，CJK！）；OS 动态字体全被裁（YaHei/SimHei/SimSun/Arial 全 `TypeLoadException`）→ 这就是为什么找不到字体 |
 | 自研 v0.3.7 游戏字体直用版 | ❌ GUIStyle.font 赋值被裁（2026-10-05，用户截图） | `PickupFont FAIL NotSupportedException` 刷屏（无节流，每帧进一次）； Cecil 复查：`set_font` 实例方法存在但 unstrip 失败；`GUIStyle.SetDefaultFont(Font)`（static，全局默认字体）在 interop 里带原生注入指针，理论上能用 |
 | 自研 v0.3.8 SetDefaultFont 版 | ❌ 中文仍 tofu（2026-10-05，用户截图） | `SetDefaultFont OK` 但无效 → 启动调用太早或 VF 烘焙无声失败 |
-| 自研 v0.3.9 完整面板+皮肤字体双修版 | ⚠️ 待验证（已被 v0.4.0 取代，未实际测试） | `GUI.skin.font` 是最后一招，未验证 |
+| 自研 v0.3.9 完整面板+皮肤字体双修版 | ⚠️ 已被 v0.4.0 取代（未实际测试） | 诊断面板换回完整物品面板；`ApplyFontEarly` 追加 `GUI.skin.font` |
 | 自研 v0.4.0 uGUI 版 | ❌ 空面板（2026-10-05，用户截图+后台日志） | `NullReferenceException at ItemPanel.RT`：`AddComponent<RectTransform>` 在已有 Transform 的对象上返回 null（运行时转换被拒）；同链 `AddComponent<Text>` 成功 → 只有这一个转换点坏 |
 | 自研 v0.4.1 uGUI 转换修复版 | ✅ 面板出来了（2026-10-05，用户截图） | 中文/开关/分类/列表全渲染；两问题：① 无拖动（v0.4.0 压根没做）；② 列表行重叠（行缺 `LayoutElement.preferredHeight`，VLG 按 0 高堆叠） |
 | 自研 v0.4.2 对齐+拖动版 | ⚠️ 半通过（2026-10-05，用户截图） | 拖动 OK，行不叠了；但滚动区整体掉到面板下方（`anchoredPosition=(10, y-380)` 重复减）、滚动条巨大（handle 没尺寸）、[+] 被挡住 |
@@ -57,7 +57,18 @@
 | 自研 v0.4.4 按钮可见性诊断版 | ✅ 定位成功（2026-10-05，后台日志） | `listdiag r0kids=2 [T@(0,0) (536,20)] [B@(536,0) (64,0)]` → 按钮存在、位置正确，**高度=0**（行 HLG 只认 LayoutElement 高度，按钮只有宽没有高） |
 | 自研 v0.4.5 行按钮高度修复版 | ⚠️ 半通过（2026-10-05） | [+] 可见可点，但一律 `背包满/添加失败` → `TryAddItemWithoutChangeItem` 拒绝裸 ItemData（缺游戏侧初始化） |
 | 自研 v0.4.6 入包路径切换版 | ✅ 通过（2026-10-05，用户确认+日志） | `GameController.AddItemToPlayer` 一次过（id=2/514，via=AddItemToPlayer）；裸 ItemData 只需 itemId+数量，游戏侧自补初始化 |
-| 自研 v0.4.7 最大堆叠版 | 🆕 已编译待安装 | 主路径数量改 `max(1, stackNumber)`（对齐 Jim97“默认最大堆叠”）；待验：武器满耐久/满弹匣 |
+| 自研 v0.4.7 最大堆叠版 | ⚠️ 半通过（2026-10-05） | 入包 OK 但武器是坏的：耐久 0、弹药 0/4+1。根因：主路径没写 `durability`、没调 `EnsureRangedWeaponProperties`、没配弹药 |
+| 自研 v0.4.8 武器满状态版 | ❌ 方向错了（2026-10-05） | `attr.hp`（120/320/800）是备用参考值不是耐久！写入后显示仍 0 + 故障；散装弹药 OK |
+| 自研 v0.4.9 耐久诊断版 | ✅ 定位成功（2026-10-05） | `wdiag rw.hp=120 durBefore=0` + 入库 `storedDur=120`，但显示 0 → 显示≠`ItemData.durability` 写入值，或写入后被重置 |
+| 自研 v0.4.10 入库直写版 | ❌ 无效（2026-10-05） | 入库后按住背包实例重写耐久，显示仍 0 |
+| 自研 v0.4.11 背包普查版 | ✅ 立功（2026-10-05） | 普查 natural 枪（M2R/求生霰弹/S&W929）：**全部 `dur=100`，与 attrhp（350/150/360）无关** → 耐久是**百分比**！之前写超量值溢出 → 显示 0 + 故障；维修包按百分比修（→83）也对上了 |
+| 自研 v0.4.12 零件耐久版 | ✅ 定位成功（2026-10-05） | `GetGunPartDurability` 返回值恒等于 attrhp（零件缺失时回退），与显示无关；排除零件理论 |
+| 自研 v0.4.13 出厂弹匣版 | ⚠️ 半通过（2026-10-05） | `SwapMagazineIntoWeapon` 静态确认并调用，但管状供弹枪（Remington，defaultMagazineId=0）无匣可链；耐久/故障依旧 |
+| 自研 v0.4.14 原生修复版 | ❌ 无效（2026-10-05） | `InventoryData.RestoreItemDurability(itemId, 99999, [inv])` 返回 0，参数语义不对 |
+| 自研 v0.4.15 普查按钮版 | ✅ 工具化（2026-10-05） | 普查逻辑独立成面板按钮（标题栏“普查武器”），不再依赖 AddItem 触发 |
+| 自研 v0.4.16 百分比修复版 | ❌ 方向错了（2026-10-05） | 写 `100` 后显示仍 0 + 故障。但 natural 枪普查 `dur=100` 实锤百分比语义，错的是别处 |
+| 自研 v0.4.17 卡壳抑制版 | ⚠️ 半通过（2026-10-05） | 首个 Harmony 补丁（`WeaponMalfunction` Prefix false，单重载，加载成功）；`partsprice=0`（spawned）；显示依旧 |
+| 自研 v0.4.18 实弹验证版 | ✅ 功能通过，显示存疑（2026-10-05） | live 枪 `isMalfunction=False`；用户实测：**刷的枪显示 0/故障，但装弹后一直能正常开火** → 纯显示层 artifact，功能无碍 |
 | 无限耐久 | ⏸️ 待插件加载后测 | |
 | 无限子弹 | ⏸️ 待插件加载后测 | |
 | 不卡壳 | ⏸️ 待插件加载后测 | |

@@ -42,9 +42,7 @@ GameController.instance
 | `..._WeaponMalfunction` | `BasicRangedWeapon.WeaponMalfunction` Prefix false | 去卡壳 |
 | `Scripts` | `AddSkillPoint/AddPerkPoint/AddAttrPoint`、`MaxBackpackSize`、`ZeroBackpackWeight`、`AddCar`（经 `InGameController+BasicVehicle+MapController`）、`Cure`（遍历 `CharacterBodyPartsData` + `CharacterStatusData`） | |
 
-## 本游戏被裁剪（stripped）的 API（实测）
-
-- IMGUI：`GUILayout.FlexibleSpace`、`GUILayout.Begin/EndScrollView`、`GUIStyle.font` setter
+## 本游戏被裁剪（stripped）的 API（实测）- IMGUI：`GUILayout.FlexibleSpace`、`GUILayout.Begin/EndScrollView`、`GUIStyle.font` setter
   → `NotSupportedException: Method unstripping failed`（共 1228 个复活失败方法）
 - OS 字体：`Font.CreateDynamicFontFromOSFont` 全灭（`TypeLoadException`）
   → 用游戏自带 `SourceHanSans-VF-AllLanguage.ttf`（`FindObjectsOfTypeAll` + name 匹配，
@@ -55,3 +53,17 @@ GameController.instance
 - 注入类型的方法签名不能含 `System.Action`/`System.Exception` 等（注册 warning）；
   回调统一 `new Action(..)` 隐式转 Il2Cpp 委托（编译期验证）
 - 直接编辑混淆 DLL 必死：ConfuserEx anti-tamper 在 module `.cctor` 自毁
+
+## 耐久语义与刷枪显示问题（v0.4.7→v0.4.18 实测结论）
+
+- `ItemData.durability` 是**百分比 0-100**：natural 枪（M2R/求生霰弹/S&W929/多功能斧，
+  attrhp 各为 350/150/360）普查**全部 dur=100**。写 `attr.hp`（120/320/800）会超量溢出。
+- 刷出的枪即使 `durability=100` 也显示 0 + 故障标签，但**装弹后一直能正常开火**
+  （live `BasicRangedWeapon.isMalfunction=False`）→ 纯显示层 artifact，功能无碍。
+- 维修包按百分比修（0→83 实测一次）。`InventoryData.RestoreItemDurability(itemId, 99999, …)`
+  返回 0（参数语义不对，非正确修复入口）。
+- `GetGunPartDurability` 对 natural 枪恒返回 attrhp，对刷出的枪返回 0；
+  `GetInstalledGunPartsPrice` 刷出的枪为 0。零件组装链未补（open）。
+- `HumanCharacterController.rangedWeapon` 可拿到 live 枪；
+  `ClearWeaponMalfunction(gun)` 为游戏原生清除动作。
+- `WeaponMalfunction` 为单重载，Harmony Prefix false 全禁无歧义（`NoMalfunction.cs` 已应用）。

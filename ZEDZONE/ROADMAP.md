@@ -19,10 +19,12 @@ Game/runtime:
 - Stamina lock (`energy→maxEnergy`, `fatigue→0`): verified, direction confirmed in-game
 - F1 uGUI panel (runtime-built, draggable, dark, CJK via bundled SourceHanSans): verified
 - Item browser: 17 categories + search + real ScrollRect + paged add at `stackNumber` via `GameController.AddItemToPlayer`: verified (`via=AddItemToPlayer` in logs)
+- Spawned guns: **fire normally once loaded** (user-verified sustained fire); malfunction suppressed via Harmony (`WeaponMalfunction` Prefix false)
+- Display-only artifact (open): spawned ranged weapons show durability 0 + fault label while fully functional; `ItemData.durability` is percent 0-100 (all natural guns census at exactly 100); replenish path for the display value still unknown
 
 ## Needs Smoke Test
 
-- Added ranged weapons: full durability + full magazine check (v0.4.7 installed, awaiting user test)
+- Long-term: does a spawned gun ever actually break/stop firing (wear accumulation path)
 - Behavior after a ZED ZONE game update (interop Sandbox: `BepInEx/interop` regenerates; explicit-signature patches only)
 
 ## Next (user wishlist, in order discussed)

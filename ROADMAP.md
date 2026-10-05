@@ -20,7 +20,7 @@ This root roadmap is an index and cross-project priority view. Detailed status, 
 | `Satisfactory/` | External C# trainer, UE5.3 (build 493833) | Code complete + 20 tests pass; PDB-sourced offsets. Instant Manual Craft (F2) + Achievement Enable (F1) await in-game smoke. | `Satisfactory/ROADMAP.md` |
 | `Football Manager 26/` | External C# trainer, macOS Unity IL2CPP | Mac realtime memory I/O base added; CE target families identified for fitness, injuries, and happiness; live pointer resolution pending. | `Football Manager 26/ROADMAP.md` |
 | `Valheim/` | EasySpawner zh-localization fork, BepInEx + Harmony Unity Mono | v1.7.0-zh.1 build-verified; UI + in-game messages + CJK font done; in-game layout smoke pending. | `Valheim/ROADMAP.md` |
-| `ZEDZONE/` | BepInEx 6 + uGUI IL2CPP mod | v0.4.7 HP/stamina lock + item browser verified; weapon durability/ammo-full smoke pending. | `ZEDZONE/ROADMAP.md` |
+| `ZEDZONE/` | BepInEx 6 + uGUI IL2CPP mod | v0.4.18 HP/stamina lock + item browser + firing spawned guns verified; spawned-gun display value open issue. | `ZEDZONE/ROADMAP.md` |
 
 ## Cross-Project Priorities
 

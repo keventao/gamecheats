@@ -21,6 +21,10 @@ public class Plugin : BasePlugin
         go.AddComponent<HpLock>();
         go.AddComponent<StaminaLock>();
         go.AddComponent<Panel>();
-        Log.LogInfo("ZedZoneHpLock v0.4.7 loaded: primary path adds max stack");
+        try {
+            new HarmonyLib.Harmony("com.keventao.zedzone.hplock").PatchAll();
+            Log.LogInfo("Harmony patches applied (NoMalfunction)");
+        } catch (Exception e) { Log.LogError("Harmony PatchAll failed: " + e.GetType().Name + " " + e.Message); }
+        Log.LogInfo("ZedZoneHpLock v0.4.18 loaded: clear-malfunction button + live gun state");
     }
 }
